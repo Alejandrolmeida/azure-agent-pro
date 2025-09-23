@@ -26,13 +26,16 @@ on:
 env:
   # Configure these values for your environment
   PROJECT_NAME: azure-agent-pro # Azure Agent Pro project name
-  AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
+  # Note: These would be configured in a real Azure environment
+  # AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
+  AZURE_LOCATION: 'eastus'
 
 jobs:
   deploy-dev:
     name: Deploy to Development
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # DISABLED for educational project - requires real Azure credentials and resources
+    if: false  # Change to 'true' and configure Azure secrets to enable
     environment: development
 
     steps:
@@ -76,7 +79,8 @@ jobs:
   deploy-environment:
     name: Deploy to Selected Environment
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    # DISABLED for educational project - requires real Azure credentials and resources
+    if: false  # Change to 'true' and configure Azure secrets to enable
     environment: ${{ inputs.environment }}
 
     steps:

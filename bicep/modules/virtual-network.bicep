@@ -40,75 +40,77 @@ param tags object = {
 }
 
 // Network Security Groups para cada subnet
-resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-09-01' = [for subnet in subnets: if (subnet.networkSecurityGroup) {
-  name: 'nsg-${subnet.name}'
-  location: location
-  tags: tags
-  properties: {
-    securityRules: [
-      {
-        name: 'AllowHttpsInbound'
-        properties: {
-          description: 'Allow HTTPS inbound traffic'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '443'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 1000
-          direction: 'Inbound'
+resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-09-01' = [
+  for subnet in subnets: if (subnet.networkSecurityGroup) {
+    name: 'nsg-${subnet.name}'
+    location: location
+    tags: tags
+    properties: {
+      securityRules: [
+        {
+          name: 'AllowHttpsInbound'
+          properties: {
+            description: 'Allow HTTPS inbound traffic'
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            destinationPortRange: '443'
+            sourceAddressPrefix: '*'
+            destinationAddressPrefix: '*'
+            access: 'Allow'
+            priority: 1000
+            direction: 'Inbound'
+          }
         }
-      }
-      {
-        name: 'AllowHttpInbound'
-        properties: {
-          description: 'Allow HTTP inbound traffic'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '80'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 1001
-          direction: 'Inbound'
+        {
+          name: 'AllowHttpInbound'
+          properties: {
+            description: 'Allow HTTP inbound traffic'
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            destinationPortRange: '80'
+            sourceAddressPrefix: '*'
+            destinationAddressPrefix: '*'
+            access: 'Allow'
+            priority: 1001
+            direction: 'Inbound'
+          }
         }
-      }
-      {
-        name: 'AllowSSHInbound'
-        properties: {
-          description: 'Allow SSH inbound traffic from private networks only'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '22'
-          sourceAddressPrefixes: [
-            '10.0.0.0/8'
-            '172.16.0.0/12'
-            '192.168.0.0/16'
-          ]
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 1002
-          direction: 'Inbound'
+        {
+          name: 'AllowSSHInbound'
+          properties: {
+            description: 'Allow SSH inbound traffic from private networks only'
+            protocol: 'Tcp'
+            sourcePortRange: '*'
+            destinationPortRange: '22'
+            sourceAddressPrefixes: [
+              '10.0.0.0/8'
+              '172.16.0.0/12'
+              '192.168.0.0/16'
+            ]
+            destinationAddressPrefix: '*'
+            access: 'Allow'
+            priority: 1002
+            direction: 'Inbound'
+          }
         }
-      }
-      {
-        name: 'DenyAllInbound'
-        properties: {
-          description: 'Deny all other inbound traffic'
-          protocol: '*'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Deny'
-          priority: 4096
-          direction: 'Inbound'
+        {
+          name: 'DenyAllInbound'
+          properties: {
+            description: 'Deny all other inbound traffic'
+            protocol: '*'
+            sourcePortRange: '*'
+            destinationPortRange: '*'
+            sourceAddressPrefix: '*'
+            destinationAddressPrefix: '*'
+            access: 'Deny'
+            priority: 4096
+            direction: 'Inbound'
+          }
         }
-      }
-    ]
+      ]
+    }
   }
-}]
+]
 
 // Virtual Network
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' = {
@@ -122,15 +124,19 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' = {
       ]
     }
     enableDdosProtection: enableDdosProtection
-    subnets: [for (subnet, index) in subnets: {
-      name: subnet.name
-      properties: {
-        addressPrefix: subnet.addressPrefix
-        networkSecurityGroup: subnet.networkSecurityGroup ? {
-          id: networkSecurityGroups[index].id
-        } : null
+    subnets: [
+      for (subnet, index) in subnets: {
+        name: subnet.name
+        properties: {
+          addressPrefix: subnet.addressPrefix
+          networkSecurityGroup: subnet.networkSecurityGroup
+            ? {
+                id: networkSecurityGroups[index].id
+              }
+            : null
+        }
       }
-    }]
+    ]
   }
 }
 
@@ -163,14 +169,20 @@ output virtualNetworkName string = virtualNetwork.name
 output addressSpace array = virtualNetwork.properties.addressSpace.addressPrefixes
 
 @description('IDs de las subredes creadas')
-output subnetIds array = [for (subnet, index) in subnets: {
-  name: subnet.name
-  id: virtualNetwork.properties.subnets[index].id
-  addressPrefix: virtualNetwork.properties.subnets[index].properties.addressPrefix
-}]
+output subnetIds array = [
+  for (subnet, index) in subnets: {
+    name: subnet.name
+    id: virtualNetwork.properties.subnets[index].id
+    addressPrefix: virtualNetwork.properties.subnets[index].properties.addressPrefix
+  }
+]
 
 @description('IDs de los Network Security Groups')
-output networkSecurityGroupIds array = [for (subnet, index) in subnets: subnet.networkSecurityGroup ? {
-  name: subnet.name
-  nsgId: networkSecurityGroups[index].id
-} : {}]
+output networkSecurityGroupIds array = [
+  for (subnet, index) in subnets: subnet.networkSecurityGroup
+    ? {
+        name: subnet.name
+        nsgId: networkSecurityGroups[index].id
+      }
+    : {}
+]

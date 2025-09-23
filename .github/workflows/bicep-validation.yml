@@ -15,8 +15,11 @@ on:
 env:
   # Configure these values for your environment
   PROJECT_NAME: azure-agent-pro # Azure Agent Pro project name
-  AZURE_RESOURCE_GROUP: ${{ vars.CI_RESOURCE_GROUP || 'azure-agent-pro-ci' }}
-  AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
+  # Note: These variables would be configured in a real Azure environment
+  # AZURE_RESOURCE_GROUP: ${{ vars.CI_RESOURCE_GROUP || 'azure-agent-pro-ci' }}
+  # AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
+  AZURE_RESOURCE_GROUP: 'azure-agent-pro-ci'
+  AZURE_LOCATION: 'eastus'
 
 jobs:
   bicep-validation:
