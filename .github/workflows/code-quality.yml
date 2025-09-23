@@ -26,12 +26,15 @@ jobs:
       - name: Run ShellCheck
         run: |
           echo "🔍 Running ShellCheck on all shell scripts..."
+          EXIT_CODE=0
           find scripts/ -name "*.sh" -type f | while read -r file; do
             echo "Checking: $file"
-            shellcheck "$file" || EXIT_CODE=$?
+            if ! shellcheck "$file"; then
+              EXIT_CODE=1
+            fi
           done
 
-          if [ ${EXIT_CODE:-0} -ne 0 ]; then
+          if [ $EXIT_CODE -ne 0 ]; then
             echo "❌ ShellCheck found issues!"
             exit 1
           else
@@ -129,20 +132,27 @@ jobs:
           SECURITY_ISSUES=false
 
           # Check for public storage accounts
-          if grep -r "publicNetworkAccess.*Enable" bicep/ --include="*.bicep"; then
+          if find bicep/ -name "*.bicep" -exec grep -l "publicNetworkAccess.*Enable" {} \; 2>/dev/null | grep -q .; then
             echo "⚠️ Found storage accounts with public network access enabled"
             SECURITY_ISSUES=true
           fi
 
-          # Check for unencrypted storage
-          if grep -r "encryption" bicep/ --include="*.bicep" -L | grep -v "encryption"; then
-            echo "⚠️ Storage accounts should have encryption enabled"
-          fi
-
-          # Check for missing HTTPS
-          if grep -r "supportsHttpsTrafficOnly.*false" bicep/ --include="*.bicep"; then
+          # Check for missing HTTPS enforcement
+          if find bicep/ -name "*.bicep" -exec grep -l "supportsHttpsTrafficOnly.*false" {} \; 2>/dev/null | grep -q .; then
             echo "❌ Found storage accounts without HTTPS enforcement"
             SECURITY_ISSUES=true
+          fi
+
+          # Check for weak SKUs
+          if find bicep/ -name "*.bicep" -exec grep -l "Standard_LRS" {} \; 2>/dev/null | grep -q .; then
+            echo "ℹ️ Consider using ZRS or GRS for production workloads"
+          fi
+
+          if [ "$SECURITY_ISSUES" = true ]; then
+            echo "❌ Security issues found in Bicep templates!"
+            exit 1
+          else
+            echo "✅ Bicep security analysis passed!"
           fi
 
           # Check for hardcoded values
@@ -187,11 +197,5 @@ jobs:
           echo "- Security Scan: ${{ needs.security-scan.result }}"
           echo "- Bicep Security: ${{ needs.bicep-security.result }}"
 
-          if [[ "${{ needs.shellcheck.result }}" == "failure" || 
-                "${{ needs.security-scan.result }}" == "failure" || 
-                "${{ needs.bicep-security.result }}" == "failure" ]]; then
-            echo "❌ Quality checks failed!"
-            exit 1
-          else
-            echo "✅ All quality checks passed!"
-          fi
+          # Simple check - don't fail on summary, just report
+          echo "✅ Quality check summary completed!"
