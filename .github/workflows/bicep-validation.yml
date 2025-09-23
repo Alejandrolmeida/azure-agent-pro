@@ -28,12 +28,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Azure CLI
-        uses: azure/setup-azure-cli@v1
+        uses: azure/setup-azure-cli@v2
         with:
           version: "latest"
 
       - name: Azure Login using OIDC
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -89,7 +89,7 @@ jobs:
           echo "✅ Security checks passed!"
 
       - name: Upload Bicep Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bicep-compiled-templates
           path: temp/*.json
@@ -106,10 +106,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Azure CLI
-        uses: azure/setup-azure-cli@v1
+        uses: azure/setup-azure-cli@v2
 
       - name: Azure Login using OIDC
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
