@@ -54,7 +54,7 @@ param tags object = {
 }
 
 // Recurso de Storage Account
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -99,7 +99,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 }
 
 // Contenedor de blob por defecto
-resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
   parent: storageAccount
   name: 'default'
   properties: {
@@ -113,7 +113,7 @@ resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01'
   }
 }
 
-resource defaultContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+resource defaultContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   parent: blobService
   name: 'default'
   properties: {
@@ -134,5 +134,5 @@ output primaryBlobEndpoint string = storageAccount.properties.primaryEndpoints.b
 @description('Endpoint principal de file')
 output primaryFileEndpoint string = storageAccount.properties.primaryEndpoints.file
 
-@description('Key de acceso primaria')
-output primaryAccessKey string = storageAccount.listKeys().keys[0].value
+// Nota: Para obtener las claves de acceso, usar el comando Azure CLI:
+// az storage account keys list --resource-group <rg-name> --account-name <storage-name>

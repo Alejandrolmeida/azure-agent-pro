@@ -40,7 +40,7 @@ param tags object = {
 }
 
 // Network Security Groups para cada subnet
-resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-05-01' = [for subnet in subnets: if (subnet.networkSecurityGroup) {
+resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-09-01' = [for subnet in subnets: if (subnet.networkSecurityGroup) {
   name: 'nsg-${subnet.name}'
   location: location
   tags: tags
@@ -77,11 +77,15 @@ resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-05-
       {
         name: 'AllowSSHInbound'
         properties: {
-          description: 'Allow SSH inbound traffic'
+          description: 'Allow SSH inbound traffic from private networks only'
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '22'
-          sourceAddressPrefix: '*'
+          sourceAddressPrefixes: [
+            '10.0.0.0/8'
+            '172.16.0.0/12'
+            '192.168.0.0/16'
+          ]
           destinationAddressPrefix: '*'
           access: 'Allow'
           priority: 1002
@@ -107,7 +111,7 @@ resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2023-05-
 }]
 
 // Virtual Network
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-05-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' = {
   name: vnetName
   location: location
   tags: tags

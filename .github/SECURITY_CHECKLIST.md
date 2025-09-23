@@ -179,7 +179,7 @@ grep -r -E "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" .
 
 ### Contact Information
 - **Security Team**: security@example.com
-- **Project Maintainer**: Alejandro López Meida
+- **Project Maintainer**: Project Maintainer
 - **GitHub Support**: https://support.github.com/
 
 ---

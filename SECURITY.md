@@ -171,7 +171,7 @@ Tracking público de nuestras métricas de seguridad:
 ## 📞 Contact Information
 
 - **Security Team**: security@example.com
-- **Project Maintainer**: Alejandro López Meida (security@example.com)
+- **Project Maintainer**: Project Maintainer (security@example.com)
 - **GitHub**: [@Alejandrolmeida](https://github.com/Alejandrolmeida)
 
 **Última actualización**: 2025-09-22
