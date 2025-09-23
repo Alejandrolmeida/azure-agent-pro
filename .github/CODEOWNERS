@@ -1,0 +1,64 @@
+# Global owners - Default reviewers for everything
+# Azure Agent Pro - Educational Research Project
+* @alejandrolmeida
+
+# Bicep Infrastructure Templates
+# Require infrastructure/DevOps team review for all Bicep changes
+bicep/ @alejandrolmeida
+bicep/**/*.bicep @alejandrolmeida
+bicep/**/*.json @alejandrolmeida
+
+# Security-sensitive Bicep modules require additional security review
+bicep/modules/key-vault.bicep @alejandrolmeida
+bicep/modules/storage-account.bicep @alejandrolmeida
+
+# CI/CD and GitHub Actions
+# DevOps team should review all workflow changes
+.github/workflows/ @alejandrolmeida
+.github/workflows/*.yml @alejandrolmeida
+
+# Deployment workflows require extra scrutiny
+.github/workflows/deploy-azure.yml @alejandrolmeida
+.github/workflows/bicep-validation.yml @alejandrolmeida
+
+# Scripts and Automation
+# Script maintainers should review bash scripts
+scripts/ @alejandrolmeida
+scripts/**/*.sh @alejandrolmeida
+
+# Critical deployment scripts need additional review
+scripts/deploy/ @alejandrolmeida
+scripts/login/ @alejandrolmeida
+
+# Documentation and Educational Content
+# Documentation team can review docs changes
+docs/ @alejandrolmeida
+docs/**/*.md @alejandrolmeida
+*.md @alejandrolmeida
+
+# Learning materials require educational review
+LEARNING_OBJECTIVES.md @alejandrolmeida
+docs/learning-paths/ @alejandrolmeida
+docs/tutorials/ @alejandrolmeida
+
+# Project configuration files
+PROJECT_CONTEXT.md @alejandrolmeida
+README.md @alejandrolmeida
+CONTRIBUTING.md @alejandrolmeida
+.gitignore @alejandrolmeida
+
+# GitHub configuration
+.github/ @alejandrolmeida
+.github/ISSUE_TEMPLATE/ @alejandrolmeida
+.github/pull_request_template.md @alejandrolmeida
+
+# Security and sensitive configuration
+SECURITY.md @alejandrolmeida
+.github/BRANCH_PROTECTION.md @alejandrolmeida
+
+# Environment-specific parameters may need environment owners
+bicep/parameters/prod.parameters.json @alejandrolmeida
+bicep/parameters/stage.parameters.json @alejandrolmeida
+
+# GitHub Copilot specific configurations
+.github/chatmodes/ @alejandrolmeida

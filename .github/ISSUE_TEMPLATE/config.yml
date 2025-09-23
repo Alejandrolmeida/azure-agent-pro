@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discusiones del Proyecto
+    url: https://github.com/alejandrolmeida/azure-agent-pro/discussions
+    about: Para preguntas generales, ideas y discusiones sobre el proyecto educativo
+  - name: 📚 Documentación de Azure
+    url: https://docs.microsoft.com/en-us/azure/
+    about: Documentación oficial de Microsoft Azure
+  - name: 🔧 Documentación de Bicep
+    url: https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/
+    about: Documentación oficial de Azure Bicep
+  - name: 🤖 GitHub Copilot Docs
+    url: https://docs.github.com/en/copilot
+    about: Documentación oficial de GitHub Copilot

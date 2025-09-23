@@ -1,0 +1,130 @@
+# Configuración .gitignore para proyecto Azure con GitHub Actions
+
+# Azure CLI y configuración local
+.azure/
+.azurerc
+config/azure-config.env
+azure-session.json
+
+# Credenciales y secretos
+*.key
+*.pem
+*.crt
+*.csr
+*.pfx
+secrets/
+*.secret
+*secrets.json
+service-principal.json
+
+# Archivos de log
+*.log
+logs/
+*.log.*
+debug.log
+
+# Archivos temporales
+*.tmp
+*.temp
+temp/
+.tmp/
+
+# Archivos de backup
+*.bak
+*.backup
+*.orig
+
+# Variables de entorno locales
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+
+# Archivos de IDE
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.vs/
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Bicep compilado y archivos generados
+**/*.compiled.json
+**/*.generated.json
+main.json
+*.parameters.local.json
+
+# Node modules y dependencias de JavaScript/TypeScript
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+
+# Archivos de deployment temporales
+deployment-output.json
+deployment-results.json
+*.deployment.json
+arm-outputs.json
+bicep-outputs.json
+deployment-*.json
+
+# Terraform (si se usa)
+*.tfstate
+*.tfstate.backup
+.terraform/
+terraform.tfvars
+.terraformrc
+
+# Cache y archivos temporales de herramientas
+.cache/
+*.cache
+.nyc_output/
+coverage/
+
+# Archivos específicos de GitHub Actions
+.github/secrets/
+.actrc
+
+# Outputs de Azure Resource Manager
+*.azuredeploy.json
+*.azuredeploy.parameters.json
+
+# Archivos de monitoreo y diagnóstico
+diagnostics/
+*.diag
+
+# Archivos de configuración local que pueden contener datos sensibles
+config/local-*.json
+config/personal-*.json
+*.local.bicepparam
+*.personal.bicepparam
+
+# Archivos de conexión y sesiones
+*.session
+*-session.json
+connection-strings.json
+
+# Certificados y archivos de autenticación
+*.p12
+*.jks
+*.keystore
+*.truststore
+auth-config.json
