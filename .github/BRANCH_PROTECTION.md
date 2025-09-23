@@ -88,11 +88,11 @@ bicep/ @alejandrolmeida @infrastructure-team
 # CI/CD workflows require DevOps review
 .github/workflows/ @alejandrolmeida @devops-team
 
-# Scripts require approval from script maintainers
-scripts/ @alejandrolmeida @script-maintainers
+# Scripts require approval from maintainer
+scripts/ @alejandrolmeida
 
-# Documentation can be reviewed by docs team
-docs/ @alejandrolmeida @docs-team
+# Documentation can be reviewed by maintainer
+docs/ @alejandrolmeida
 *.md @alejandrolmeida @docs-team
 
 # Security-sensitive files require security review
