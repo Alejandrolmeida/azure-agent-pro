@@ -178,8 +178,8 @@ grep -r -E "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" .
    - [ ] Document incident for learning
 
 ### Contact Information
-- **Security Team**: security@[your-domain]
-- **Emergency**: [emergency-contact]
+- **Security Team**: alejandrolmeida@gmail.com
+- **Project Maintainer**: Alejandro López Meida
 - **GitHub Support**: https://support.github.com/
 
 ---

@@ -6,14 +6,15 @@ Si encuentras una vulnerabilidad de seguridad en el proyecto Azure Agent, por fa
 
 ### 📧 Contacto de Seguridad
 
-- **Email principal**: security@[your-domain.com]
+- **Email principal**: alejandrolmeida@gmail.com
+- **GitHub**: [@Alejandrolmeida](https://github.com/Alejandrolmeida)
 - **Tiempo de respuesta**: 48 horas máximo
 - **Disponibilidad**: Lunes a Viernes, 9:00-18:00 UTC
 
 ### 🔍 Proceso de Reporte
 
 1. **NO** abras un issue público para vulnerabilidades de seguridad
-2. Envía un email detallado al contacto de seguridad
+2. Envía un email detallado al contacto de seguridad (alejandrolmeida@gmail.com)
 3. Incluye toda la información necesaria para reproducir el issue
 4. Permite tiempo razonable para la corrección antes de disclosure público
 
@@ -169,8 +170,8 @@ Tracking público de nuestras métricas de seguridad:
 
 ## 📞 Contact Information
 
-- **Security Team**: security@[your-domain.com]
-- **Project Maintainer**: maintainer@[your-domain.com]
-- **Emergency Contact**: [Para issues críticos fuera de horario]
+- **Security Team**: alejandrolmeida@gmail.com
+- **Project Maintainer**: Alejandro López Meida (alejandrolmeida@gmail.com)
+- **GitHub**: [@Alejandrolmeida](https://github.com/Alejandrolmeida)
 
 **Última actualización**: 2025-09-22
