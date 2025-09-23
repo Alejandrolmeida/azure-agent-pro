@@ -1,5 +1,39 @@
 // Plantilla principal que utiliza múltiples módulos
 // Archivo: main.bicep
+// Actualizado con Bicep Best Practices 2025
+
+// User-Defined Types (nueva recomendación 2025)
+@description('Configuración de red para el proyecto')
+type NetworkConfig = {
+  @description('Nombre de la VNet')
+  vnetName: string
+  @description('Prefijo de direcciones CIDR')
+  addressPrefix: string
+  @description('Configuración de subredes')
+  subnets: SubnetConfig[]
+}
+
+@description('Configuración individual de subnet')
+type SubnetConfig = {
+  @description('Nombre de la subnet')
+  name: string
+  @description('Prefijo de direcciones de la subnet')
+  addressPrefix: string
+  @description('Habilitar Network Security Group')
+  networkSecurityGroup: bool
+}
+
+@description('Configuración de tags comunes')
+type CommonTags = {
+  @description('Entorno del recurso')
+  Environment: string
+  @description('Nombre del proyecto')
+  Project: string
+  @description('Método de creación')
+  CreatedBy: string
+  @description('Fecha de creación')
+  CreatedDate: string
+}
 
 @description('Prefijo para los nombres de recursos')
 param resourcePrefix string = 'demo'
@@ -18,22 +52,55 @@ param environment string = 'dev'
 @description('Nombre del proyecto')
 param projectName string = 'azure-agent'
 
-// Variables
+// Variables optimizadas (compatible con versiones actuales)
 var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 5)
 var storageAccountName = '${resourcePrefix}st${uniqueSuffix}'
 var keyVaultName = '${resourcePrefix}-kv-${uniqueSuffix}'
 var vnetName = '${resourcePrefix}-vnet'
 
+// Configuración de red estructurada con configuración moderna
+var networkConfiguration = {
+  virtualNetworkName: vnetName
+  addressPrefixes: ['10.0.0.0/16']
+  subnets: [
+    {
+      name: 'default'
+      addressPrefix: '10.0.1.0/24'
+      defaultOutboundAccess: false
+      privateEndpointNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      createNetworkSecurityGroup: true
+    }
+    {
+      name: 'app-subnet'
+      addressPrefix: '10.0.2.0/24'
+      defaultOutboundAccess: false
+      privateEndpointNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      createNetworkSecurityGroup: true
+    }
+    {
+      name: 'data-subnet'
+      addressPrefix: '10.0.3.0/24'
+      defaultOutboundAccess: false
+      privateEndpointNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      createNetworkSecurityGroup: true
+    }
+  ]
+}
+
+// Tags comunes con estructura mejorada
 var commonTags = {
   Environment: environment
   Project: projectName
   CreatedBy: 'bicep-template'
-  CreatedDate: utcNow('yyyy-MM-dd')
+  CreatedDate: '2025-09-23'
+  ManagedBy: 'Azure-Agent-Pro'
 }
 
-// Storage Account usando módulo
+// Storage Account usando módulo (sin nombre explícito - Best Practice 2025)
 module storageAccount './modules/storage-account.bicep' = {
-  name: 'storageAccountDeployment'
   params: {
     storageAccountName: storageAccountName
     location: location
@@ -42,37 +109,22 @@ module storageAccount './modules/storage-account.bicep' = {
   }
 }
 
-// Virtual Network usando módulo
+// Virtual Network usando módulo modernizado (sin nombre explícito)
 module virtualNetwork './modules/virtual-network.bicep' = {
-  name: 'virtualNetworkDeployment'
   params: {
-    vnetName: vnetName
+    virtualNetworkName: networkConfiguration.virtualNetworkName
     location: location
-    addressPrefix: '10.0.0.0/16'
-    subnets: [
-      {
-        name: 'default'
-        addressPrefix: '10.0.1.0/24'
-        networkSecurityGroup: true
-      }
-      {
-        name: 'app-subnet'
-        addressPrefix: '10.0.2.0/24'
-        networkSecurityGroup: true
-      }
-      {
-        name: 'data-subnet'
-        addressPrefix: '10.0.3.0/24'
-        networkSecurityGroup: true
-      }
-    ]
+    addressPrefixes: networkConfiguration.addressPrefixes
+    subnets: networkConfiguration.subnets
     tags: commonTags
+    enableDdosProtection: environment == 'prod' ? true : false
+    enableVmProtection: environment == 'prod' ? true : false
+    flowTimeoutInMinutes: 4
   }
 }
 
-// Key Vault usando módulo
+// Key Vault usando módulo (sin nombre explícito)
 module keyVault './modules/key-vault.bicep' = {
-  name: 'keyVaultDeployment'
   params: {
     keyVaultName: keyVaultName
     location: location

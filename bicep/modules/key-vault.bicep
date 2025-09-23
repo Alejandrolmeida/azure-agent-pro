@@ -1,59 +1,75 @@
-// Módulo Bicep para crear un Key Vault
-// Archivo: key-vault.bicep
+// Modern Key Vault module for Azure Agent project
+// Updated with 2025 best practices and latest API version
 
-@description('Nombre del Key Vault (debe ser único globalmente)')
+metadata author = 'Alejandro Almeida'
+metadata version = '2.0.0'
+metadata description = 'Creates a secure Key Vault with RBAC authorization and advanced security features'
+
+// User-Defined Types for enhanced validation
+@export()
+type KeyVaultSkuType = 'standard' | 'premium'
+
+@export()
+type NetworkDefaultActionType = 'Allow' | 'Deny'
+
+@export()
+type PublicNetworkAccessType = 'enabled' | 'disabled'
+
+// Parameters with modern decorators and security defaults
+@description('Key Vault name - must be globally unique, 3-24 chars, alphanumeric and hyphens only')
+@minLength(3)
+@maxLength(24)
 param keyVaultName string
 
-@description('Ubicación donde se creará el Key Vault')
+@description('Azure region for resource deployment')
 param location string = resourceGroup().location
 
-@description('SKU del Key Vault')
-@allowed([
-  'standard'
-  'premium'
-])
-param sku string = 'standard'
+@description('Key Vault pricing tier - Premium provides HSM-backed keys')
+param sku KeyVaultSkuType = 'premium'
 
-@description('ID del tenant de Azure AD')
+@description('Azure AD tenant ID for authentication')
 param tenantId string = subscription().tenantId
 
-@description('Habilitar el acceso desde Azure Virtual Machines')
+@description('Enable RBAC authorization for data plane operations (recommended)')
+param enableRbacAuthorization bool = true
+
+@description('Enable access for Azure Virtual Machines (certificate deployment)')
 param enabledForDeployment bool = false
 
-@description('Habilitar el acceso desde Azure Resource Manager para deployments de plantillas')
+@description('Enable access for Azure Resource Manager template deployments')
 param enabledForTemplateDeployment bool = true
 
-@description('Habilitar el acceso desde Azure Disk Encryption')
+@description('Enable access for Azure Disk Encryption scenarios')
 param enabledForDiskEncryption bool = false
 
-@description('Habilitar el soft delete')
+@description('Enable soft delete protection (default: true, cannot be disabled once enabled)')
 param enableSoftDelete bool = true
 
-@description('Días de retención para soft delete')
+@description('Soft delete retention period in days (7-90 days)')
+@minValue(7)
+@maxValue(90)
 param softDeleteRetentionInDays int = 90
 
-@description('Habilitar purge protection')
+@description('Enable purge protection (irreversible, prevents permanent deletion)')
 param enablePurgeProtection bool = true
 
-@description('Configuración de acceso a la red')
-@allowed([
-  'Allow'
-  'Deny'
-])
-param networkAclsDefaultAction string = 'Allow'
+@description('Public network access configuration')
+param publicNetworkAccess PublicNetworkAccessType = 'disabled'
 
-@description('Tags para aplicar a los recursos')
+@description('Default action for network ACLs when public access is enabled')
+param networkAclsDefaultAction NetworkDefaultActionType = 'Deny'
+
+@description('Resource tags for organization and governance')
 param tags object = {
   Environment: 'dev'
   Project: 'azure-agent'
   CreatedBy: 'bicep-template'
+  Purpose: 'secure-secrets-management'
+  Security: 'rbac-enabled'
 }
 
-@description('Políticas de acceso para usuarios/aplicaciones')
-param accessPolicies array = []
-
-// Key Vault
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+// Key Vault resource with 2025 API version and RBAC authorization
+resource keyVault 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
   name: keyVaultName
   location: location
   tags: tags
@@ -63,49 +79,52 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
       name: sku
     }
     tenantId: tenantId
+    
+    // Enhanced security features
+    enableRbacAuthorization: enableRbacAuthorization
+    enableSoftDelete: enableSoftDelete
+    softDeleteRetentionInDays: softDeleteRetentionInDays
+    enablePurgeProtection: enablePurgeProtection
+    publicNetworkAccess: publicNetworkAccess
+    
+    // Service integration settings
     enabledForDeployment: enabledForDeployment
     enabledForTemplateDeployment: enabledForTemplateDeployment
     enabledForDiskEncryption: enabledForDiskEncryption
-    enableSoftDelete: enableSoftDelete
-    softDeleteRetentionInDays: softDeleteRetentionInDays
-    enablePurgeProtection: enablePurgeProtection ? true : null
+    
+    // Network access controls
     networkAcls: {
       defaultAction: networkAclsDefaultAction
       bypass: 'AzureServices'
       ipRules: []
       virtualNetworkRules: []
     }
-    accessPolicies: accessPolicies
+    
+    // Access policies (empty when RBAC is enabled - recommended approach)
+    accessPolicies: []
   }
 }
 
-// Secrets de ejemplo (comentados por seguridad)
-/*
-resource exampleSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'example-secret'
-  properties: {
-    value: 'example-secret-value'
-    contentType: 'text/plain'
-    attributes: {
-      enabled: true
-    }
-  }
-}
-*/
-
-// Diagnostic Settings para logging
+// Enhanced diagnostic settings for comprehensive monitoring
 resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'diag-${keyVaultName}'
   scope: keyVault
   properties: {
     logs: [
       {
-        category: 'AuditEvent'
+        categoryGroup: 'allLogs'
         enabled: true
         retentionPolicy: {
           enabled: true
-          days: 30
+          days: 90 // Extended retention for compliance
+        }
+      }
+      {
+        categoryGroup: 'audit'
+        enabled: true
+        retentionPolicy: {
+          enabled: true
+          days: 365 // Long-term audit retention
         }
       }
     ]
@@ -115,22 +134,44 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
         enabled: true
         retentionPolicy: {
           enabled: true
-          days: 30
+          days: 90
         }
       }
     ]
   }
 }
 
-// Outputs
-@description('ID del recurso de Key Vault')
+// Outputs with comprehensive information for downstream resources
+@description('Key Vault resource ID for ARM template references')
 output keyVaultId string = keyVault.id
 
-@description('Nombre del Key Vault')
+@description('Key Vault name for application configuration')
 output keyVaultName string = keyVault.name
 
-@description('URI del Key Vault')
+@description('Key Vault URI for SDK and REST API access')
 output keyVaultUri string = keyVault.properties.vaultUri
 
-@description('Tenant ID del Key Vault')
+@description('Azure AD tenant ID associated with this Key Vault')
 output tenantId string = keyVault.properties.tenantId
+
+@description('Key Vault location for regional compliance requirements')
+output location string = keyVault.location
+
+@description('Key Vault SKU tier for cost tracking and feature availability')
+output sku string = keyVault.properties.sku.name
+
+@description('RBAC authorization status - true indicates modern security model')
+output rbacAuthorizationEnabled bool = keyVault.properties.enableRbacAuthorization
+
+@description('Soft delete protection status')
+output softDeleteEnabled bool = keyVault.properties.enableSoftDelete
+
+@description('Purge protection status (irreversible security feature)')
+output purgeProtectionEnabled bool = keyVault.properties.enablePurgeProtection
+
+// Security note: Access to Key Vault should be managed through Azure RBAC roles:
+// - Key Vault Administrator: Full access to keys, secrets, and certificates
+// - Key Vault Secrets Officer: Manage secrets (excluding keys and certificates)
+// - Key Vault Secrets User: Read secret contents
+// - Key Vault Crypto Officer: Manage keys (excluding certificates and secrets)
+// - Key Vault Crypto User: Perform cryptographic operations with keys
