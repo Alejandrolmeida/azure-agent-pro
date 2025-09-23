@@ -1,0 +1,197 @@
+name: Code Quality and Security
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security scan weekly on Sundays at 02:00 UTC
+    - cron: "0 2 * * 0"
+
+jobs:
+  shellcheck:
+    name: Shell Script Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          echo "🔍 Running ShellCheck on all shell scripts..."
+          find scripts/ -name "*.sh" -type f | while read -r file; do
+            echo "Checking: $file"
+            shellcheck "$file" || EXIT_CODE=$?
+          done
+
+          if [ ${EXIT_CODE:-0} -ne 0 ]; then
+            echo "❌ ShellCheck found issues!"
+            exit 1
+          else
+            echo "✅ All shell scripts passed ShellCheck!"
+          fi
+
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Run Markdown Lint
+        run: |
+          echo "📝 Running Markdown linting..."
+          markdownlint "**/*.md" --ignore node_modules || true
+          echo "✅ Markdown linting completed"
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Credential Scanning
+        run: |
+          echo "🔒 Scanning for potential credentials..."
+
+          # Basic credential patterns
+          PATTERNS=(
+            "password\s*=\s*['\"][^'\"]+['\"]"
+            "api_key\s*=\s*['\"][^'\"]+['\"]"
+            "secret\s*=\s*['\"][^'\"]+['\"]"
+            "token\s*=\s*['\"][^'\"]+['\"]"
+            "AKIA[0-9A-Z]{16}"  # AWS Access Key
+            "AIza[0-9A-Za-z\\-_]{35}"  # Google API Key
+            "sk-[a-zA-Z0-9]{48}"  # OpenAI API Key
+          )
+
+          FOUND_ISSUES=false
+
+          for pattern in "${PATTERNS[@]}"; do
+            if grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules; then
+              echo "❌ Potential credential found with pattern: $pattern"
+              FOUND_ISSUES=true
+            fi
+          done
+
+          if [ "$FOUND_ISSUES" = true ]; then
+            echo "⚠️ Please review the potential credentials found above"
+            # Don't fail the build, just warn
+          else
+            echo "✅ No obvious credentials found"
+          fi
+
+  bicep-security:
+    name: Bicep Security Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Bicep Security Checks
+        run: |
+          echo "🔒 Running Bicep security analysis..."
+
+          # Check for common security issues
+          SECURITY_ISSUES=false
+
+          # Check for public storage accounts
+          if grep -r "publicNetworkAccess.*Enable" bicep/ --include="*.bicep"; then
+            echo "⚠️ Found storage accounts with public network access enabled"
+            SECURITY_ISSUES=true
+          fi
+
+          # Check for unencrypted storage
+          if grep -r "encryption" bicep/ --include="*.bicep" -L | grep -v "encryption"; then
+            echo "⚠️ Storage accounts should have encryption enabled"
+          fi
+
+          # Check for missing HTTPS
+          if grep -r "supportsHttpsTrafficOnly.*false" bicep/ --include="*.bicep"; then
+            echo "❌ Found storage accounts without HTTPS enforcement"
+            SECURITY_ISSUES=true
+          fi
+
+          # Check for hardcoded values
+          if grep -r -E "password|secret|key" bicep/ --include="*.bicep" | grep -v "@secure\|KeyVault\|secureString"; then
+            echo "❌ Potential hardcoded secrets found"
+            SECURITY_ISSUES=true
+          fi
+
+          if [ "$SECURITY_ISSUES" = true ]; then
+            echo "❌ Security issues found! Please review above"
+            exit 1
+          else
+            echo "✅ Bicep security checks passed"
+          fi
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: moderate
+
+  code-quality-summary:
+    name: Code Quality Summary
+    runs-on: ubuntu-latest
+    needs: [shellcheck, markdown-lint, security-scan, bicep-security]
+    if: always()
+
+    steps:
+      - name: Quality Summary
+        run: |
+          echo "📊 Code Quality Summary:"
+          echo "- ShellCheck: ${{ needs.shellcheck.result }}"
+          echo "- Markdown Lint: ${{ needs.markdown-lint.result }}"
+          echo "- Security Scan: ${{ needs.security-scan.result }}"
+          echo "- Bicep Security: ${{ needs.bicep-security.result }}"
+
+          if [[ "${{ needs.shellcheck.result }}" == "failure" || 
+                "${{ needs.security-scan.result }}" == "failure" || 
+                "${{ needs.bicep-security.result }}" == "failure" ]]; then
+            echo "❌ Quality checks failed!"
+            exit 1
+          else
+            echo "✅ All quality checks passed!"
+          fi
