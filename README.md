@@ -463,7 +463,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 👥 Autores
 
-- **Alejandro López Meida** ([@Alejandrolmeida](https://github.com/Alejandrolmeida)) - Creador y desarrollador principal
+- **Alejandro Almeida** ([@Alejandrolmeida](https://github.com/Alejandrolmeida)) - Creador y desarrollador principal
 
 ## 🙏 Agradecimientos
 

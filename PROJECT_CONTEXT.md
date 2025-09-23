@@ -3,7 +3,7 @@
 **Last Updated**: 2025-09-22  
 **Version**: 3.0 - Educational Research Project  
 **Project Type**: Open Source Educational Research  
-**Author**: Alejandro López Meida (@alejandrolmeida)
+**Author**: Alejandro Almeida (@alejandrolmeida)
 
 ## 🎯 Project Vision & Mission
 
