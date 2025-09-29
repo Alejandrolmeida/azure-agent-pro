@@ -79,19 +79,19 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
       name: sku
     }
     tenantId: tenantId
-    
+
     // Enhanced security features
     enableRbacAuthorization: enableRbacAuthorization
     enableSoftDelete: enableSoftDelete
     softDeleteRetentionInDays: softDeleteRetentionInDays
     enablePurgeProtection: enablePurgeProtection
     publicNetworkAccess: publicNetworkAccess
-    
+
     // Service integration settings
     enabledForDeployment: enabledForDeployment
     enabledForTemplateDeployment: enabledForTemplateDeployment
     enabledForDiskEncryption: enabledForDiskEncryption
-    
+
     // Network access controls
     networkAcls: {
       defaultAction: networkAclsDefaultAction
@@ -99,7 +99,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-12-01-preview' = {
       ipRules: []
       virtualNetworkRules: []
     }
-    
+
     // Access policies (empty when RBAC is enabled - recommended approach)
     accessPolicies: []
   }

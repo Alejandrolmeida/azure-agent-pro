@@ -7,7 +7,21 @@ metadata description = 'Creates a secure Storage Account with modern configurati
 
 // User-Defined Types for enhanced validation
 @export()
-type StorageSkuType = 'Standard_LRS' | 'Standard_GRS' | 'Standard_RAGRS' | 'Standard_ZRS' | 'Premium_LRS' | 'Premium_ZRS' | 'Standard_GZRS' | 'Standard_RAGZRS' | 'StandardV2_LRS' | 'StandardV2_GRS' | 'StandardV2_ZRS' | 'StandardV2_GZRS' | 'PremiumV2_LRS' | 'PremiumV2_ZRS'
+type StorageSkuType =
+  | 'Standard_LRS'
+  | 'Standard_GRS'
+  | 'Standard_RAGRS'
+  | 'Standard_ZRS'
+  | 'Premium_LRS'
+  | 'Premium_ZRS'
+  | 'Standard_GZRS'
+  | 'Standard_RAGZRS'
+  | 'StandardV2_LRS'
+  | 'StandardV2_GRS'
+  | 'StandardV2_ZRS'
+  | 'StandardV2_GZRS'
+  | 'PremiumV2_LRS'
+  | 'PremiumV2_ZRS'
 
 @export()
 type StorageKindType = 'Storage' | 'StorageV2' | 'BlobStorage' | 'FileStorage' | 'BlockBlobStorage'
@@ -87,7 +101,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     defaultToOAuthAuthentication: defaultToOAuthAuthentication
     isHnsEnabled: isHnsEnabled
     allowCrossTenantReplication: false
-    
+
     // Enhanced network security
     networkAcls: {
       defaultAction: 'Deny'
@@ -96,7 +110,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
       virtualNetworkRules: []
       resourceAccessRules: []
     }
-    
+
     // Advanced encryption configuration
     encryption: {
       requireInfrastructureEncryption: true
@@ -120,7 +134,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
         }
       }
     }
-    
+
     // SAS token security policy
     sasPolicy: {
       sasExpirationPeriod: '00.01:00:00' // 1 hour max
