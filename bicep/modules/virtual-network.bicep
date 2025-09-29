@@ -129,13 +129,17 @@ param privateEndpointVNetPolicies string = 'Basic'
 param createRouteTable bool = false
 
 // Variables
-var dhcpOptions = !empty(dnsServers) ? {
-  dnsServers: dnsServers
-} : null
+var dhcpOptions = !empty(dnsServers)
+  ? {
+      dnsServers: dnsServers
+    }
+  : null
 
-var ddosProtectionPlan = enableDdosProtection && ddosProtectionPlanId != null ? {
-  id: ddosProtectionPlanId!
-} : null
+var ddosProtectionPlan = enableDdosProtection && ddosProtectionPlanId != null
+  ? {
+      id: ddosProtectionPlanId!
+    }
+  : null
 
 // Secure Network Security Groups with modern rules
 resource networkSecurityGroups 'Microsoft.Network/networkSecurityGroups@2024-05-01' = [
@@ -257,33 +261,39 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
     }
 
     // Enhanced subnet configuration with modern security defaults
-    subnets: [for (subnet, index) in subnets: {
-      name: subnet.name
-      properties: {
-        addressPrefix: subnet.addressPrefix
-        
-        // Modern security defaults
-        defaultOutboundAccess: subnet.?defaultOutboundAccess ?? false
-        privateEndpointNetworkPolicies: subnet.?privateEndpointNetworkPolicies ?? 'Enabled'
-        privateLinkServiceNetworkPolicies: subnet.?privateLinkServiceNetworkPolicies ?? 'Enabled'
-        
-        // Network Security Group association
-        networkSecurityGroup: (subnet.?createNetworkSecurityGroup ?? false) ? {
-          id: networkSecurityGroups[index].id
-        } : null
+    subnets: [
+      for (subnet, index) in subnets: {
+        name: subnet.name
+        properties: {
+          addressPrefix: subnet.addressPrefix
 
-        // Route table association
-        routeTable: createRouteTable ? {
-          id: routeTable.id
-        } : null
-        
-        // Service endpoints if specified 
-        serviceEndpoints: subnet.?serviceEndpoints
+          // Modern security defaults
+          defaultOutboundAccess: subnet.?defaultOutboundAccess ?? false
+          privateEndpointNetworkPolicies: subnet.?privateEndpointNetworkPolicies ?? 'Enabled'
+          privateLinkServiceNetworkPolicies: subnet.?privateLinkServiceNetworkPolicies ?? 'Enabled'
 
-        // Sharing scope for advanced scenarios
-        sharingScope: subnet.?sharingScope
+          // Network Security Group association
+          networkSecurityGroup: (subnet.?createNetworkSecurityGroup ?? false)
+            ? {
+                id: networkSecurityGroups[index].id
+              }
+            : null
+
+          // Route table association
+          routeTable: createRouteTable
+            ? {
+                id: routeTable.id
+              }
+            : null
+
+          // Service endpoints if specified 
+          serviceEndpoints: subnet.?serviceEndpoints
+
+          // Sharing scope for advanced scenarios
+          sharingScope: subnet.?sharingScope
+        }
       }
-    }]
+    ]
 
     // DNS configuration
     dhcpOptions: dhcpOptions
@@ -323,17 +333,23 @@ output addressSpace string[] = virtualNetwork.properties.addressSpace.addressPre
 output subnetIds string[] = [for (subnet, i) in subnets: virtualNetwork.properties.subnets[i].id]
 
 @description('Array of subnet names and their IDs for easy reference')
-output subnetDetails array = [for (subnet, i) in subnets: {
-  name: subnet.name
-  id: virtualNetwork.properties.subnets[i].id
-  addressPrefix: subnet.addressPrefix
-}]
+output subnetDetails array = [
+  for (subnet, i) in subnets: {
+    name: subnet.name
+    id: virtualNetwork.properties.subnets[i].id
+    addressPrefix: subnet.addressPrefix
+  }
+]
 
 @description('Array of Network Security Group IDs')
-output networkSecurityGroupIds array = [for (subnet, index) in subnets: (subnet.?createNetworkSecurityGroup ?? false) ? {
-  name: subnet.name
-  nsgId: networkSecurityGroups[index].id
-} : {}]
+output networkSecurityGroupIds array = [
+  for (subnet, index) in subnets: (subnet.?createNetworkSecurityGroup ?? false)
+    ? {
+        name: subnet.name
+        nsgId: networkSecurityGroups[index].id
+      }
+    : {}
+]
 
 @description('Route table ID if created')
 output routeTableId string = createRouteTable ? routeTable.id : ''
