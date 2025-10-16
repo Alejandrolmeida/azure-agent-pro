@@ -7,14 +7,25 @@
 [![Azure CLI](https://img.shields.io/badge/Azure%20CLI-2.55%2B-blue.svg)](https://docs.microsoft.com/en-us/cli/azure/)
 [![Bicep](https://img.shields.io/badge/Bicep-0.23%2B-orange.svg)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
 [![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Enhanced-purple.svg)](https://github.com/features/copilot)
+[![MCP Servers](https://img.shields.io/badge/MCP%20Servers-Enabled-blueviolet.svg)](#)
 [![Research Project](https://img.shields.io/badge/Project-Research%20%26%20Education-green.svg)](#)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> **Proyecto de Investigación Educativo**: Enseñando a desarrolladores y administradores de IT cómo usar GitHub Copilot con mejoras profesionales para gestionar suscripciones de Azure como un experto.
+> **Proyecto de Investigación Educativo**: Enseñando a administradores de Azure especializados en Networking (AZ-104 y AZ-700) cómo usar GitHub Copilot potenciado con MCP Servers para gestionar infraestructura de red en Azure como un experto.
 
 ## 🎯 Propósito del Proyecto
 
-**Azure Agent Pro** es un proyecto de investigación educativo diseñado para demostrar y enseñar cómo GitHub Copilot puede ser potenciado con configuraciones avanzadas, scripts personalizados y workflows automatizados para gestionar infraestructura de Azure de manera profesional.
+**Azure Agent Pro** es un proyecto de investigación educativo diseñado para demostrar y enseñar cómo GitHub Copilot puede ser potenciado con **Model Context Protocol (MCP) Servers**, scripts personalizados y workflows automatizados para gestionar infraestructura de red en Azure de manera profesional.
+
+### 🔌 ¿Qué son los MCP Servers?
+
+Los **Model Context Protocol (MCP) Servers** son servicios que proporcionan contexto adicional a GitHub Copilot, permitiéndole:
+
+- 🔍 Acceder a recursos de Azure en tiempo real
+- 📊 Analizar configuraciones de red y sugerir optimizaciones
+- 🧪 Consultar documentación actualizada de Azure
+- 📝 Buscar en repositorios y código
+- 💾 Mantener contexto entre sesiones
 
 ### 🎓 ¿Qué Aprenderás?
 
