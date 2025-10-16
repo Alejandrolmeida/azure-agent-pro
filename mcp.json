@@ -1,0 +1,85 @@
+{
+  "mcpServers": {
+    "azure-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure/mcp-server-azure"
+      ],
+      "env": {
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}"
+      },
+      "metadata": {
+        "description": "Acceso a recursos de Azure (VNETs, NSGs, VPN Gateway, Azure Firewall, etc.)",
+        "category": "cloud",
+        "requiredEnvVars": ["AZURE_SUBSCRIPTION_ID", "AZURE_TENANT_ID"]
+      }
+    },
+    "bicep-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-bicep"
+      ],
+      "metadata": {
+        "description": "Asistencia con plantillas Bicep para infraestructura como código",
+        "category": "iac"
+      }
+    },
+    "github-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "metadata": {
+        "description": "Acceso a repositorios GitHub, issues, PRs y documentación",
+        "category": "version-control",
+        "requiredEnvVars": ["GITHUB_TOKEN"]
+      }
+    },
+    "filesystem-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "metadata": {
+        "description": "Navegación optimizada del proyecto local",
+        "category": "filesystem"
+      }
+    },
+    "brave-search-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "metadata": {
+        "description": "Búsqueda web para documentación de Azure Networking",
+        "category": "search",
+        "requiredEnvVars": ["BRAVE_API_KEY"],
+        "optional": true
+      }
+    },
+    "memory-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "metadata": {
+        "description": "Contexto persistente entre sesiones de Copilot",
+        "category": "memory"
+      }
+    }
+  }
+}
