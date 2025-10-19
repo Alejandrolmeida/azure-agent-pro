@@ -1,0 +1,54 @@
+// Deallocate Candidates Detection
+// Identifies session hosts that should be deallocated due to inactivity
+
+let idleThresholdMinutes = 30;
+
+// Get last user activity per session host
+let lastUserActivity = WVDConnections
+    | where TimeGenerated > ago(idleThresholdMinutes * 2)
+    | where State in ("Connected", "Completed")
+    | summarize 
+        LastConnection = max(TimeGenerated),
+        LastDisconnection = max(TimeGenerated),
+        TotalSessions = count()
+        by SessionHostName;
+
+// Get current heartbeat and power state
+let currentState = Heartbeat
+    | where TimeGenerated > ago(15m)
+    | where ResourceType == "virtualMachines"
+        and ResourceGroup startswith "rg-avd"
+    | summarize 
+        LastHeartbeat = max(TimeGenerated),
+        HeartbeatCount = count()
+        by Computer, ResourceId, ResourceGroup;
+
+// Combine data and identify candidates
+currentState
+| join kind=leftouter (lastUserActivity) on $left.Computer == $right.SessionHostName
+| extend 
+    LastActivity = coalesce(LastConnection, LastHeartbeat),
+    IdleMinutes = datetime_diff('minute', now(), coalesce(LastConnection, LastHeartbeat)),
+    HasRecentSessions = TotalSessions > 0
+| where IdleMinutes >= idleThresholdMinutes
+| project 
+    SessionHost = Computer,
+    ResourceId,
+    ResourceGroup,
+    IdleMinutes = round(IdleMinutes, 0),
+    LastActivity,
+    LastHeartbeat,
+    HasRecentSessions,
+    HeartbeatCount,
+    Recommendation = case(
+        IdleMinutes > 60, "Immediate Deallocate",
+        IdleMinutes > 30, "Deallocate Soon",
+        "Monitor"
+    ),
+    EstimatedCostSaving = case(
+        IdleMinutes > 60, "High",
+        IdleMinutes > 30, "Medium",
+        "Low"
+    )
+| order by IdleMinutes desc
+

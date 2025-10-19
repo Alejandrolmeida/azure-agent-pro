@@ -1,0 +1,93 @@
+// Cost Showback by Owner and Course
+// Calculates estimated costs per user/student for chargeback reporting
+// Note: This requires Cost Management data to be exported to Log Analytics
+
+// This is a template query - adjust table name based on your cost export setup
+// If using Azure Cost Export to Storage + ingestion to LAW, the table might be:
+// - AzureCostManagement_CL (custom log)
+// - Or a custom table you create
+
+// Option 1: Using exported cost data (if available in LAW)
+/*
+AzureCostManagement_CL
+| where UsageDate_t >= startofmonth(now())
+| where Tags_s contains "env" and Tags_s contains "lab"
+| extend 
+    Owner = extract(@'"owner":"([^"]+)"', 1, Tags_s),
+    CourseId = extract(@'"courseId":"([^"]+)"', 1, Tags_s),
+    CostCenter = extract(@'"costCenter":"([^"]+)"', 1, Tags_s)
+| where isnotempty(Owner)
+| summarize 
+    TotalCost = sum(CostInBillingCurrency_d),
+    ResourceCount = dcount(ResourceId_s),
+    UsageDays = dcount(UsageDate_t)
+    by Owner, CourseId, CostCenter, ResourceType = ResourceType_s
+| extend 
+    AvgDailyCost = round(TotalCost / UsageDays, 2),
+    CostPerResource = round(TotalCost / ResourceCount, 2)
+| order by TotalCost desc
+| project 
+    Owner,
+    CourseId,
+    CostCenter,
+    ResourceType,
+    TotalCost = round(TotalCost, 2),
+    ResourceCount,
+    UsageDays,
+    AvgDailyCost,
+    CostPerResource
+*/
+
+// Option 2: Estimation based on VM running time and SKU pricing
+// This provides an approximation when cost data is not yet in LAW
+let skuPricing = datatable(VmSize:string, HourlyCostEUR:real) [
+    "Standard_NV12ads_A10_v5", 1.224,
+    "Standard_NV18ads_A10_v5", 1.836,
+    "Standard_NV36ads_A10_v5", 3.672
+];
+
+// Calculate running time per VM
+let vmRunningTime = Heartbeat
+    | where TimeGenerated >= startofmonth(now())
+    | where ResourceType == "virtualMachines"
+        and ResourceGroup startswith "rg-avd"
+    | extend 
+        VmSize = tostring(split(Computer, '-')[2]),  // Extract from naming convention
+        Owner = tostring(Tags['owner']),
+        CourseId = tostring(Tags['courseId'])
+    | summarize 
+        HeartbeatCount = count(),
+        FirstSeen = min(TimeGenerated),
+        LastSeen = max(TimeGenerated)
+        by Computer, ResourceId, VmSize, Owner, CourseId, ResourceGroup
+    | extend 
+        EstimatedRunningHours = HeartbeatCount / 60.0,  // Assuming 1 heartbeat/minute
+        DaysInMonth = datetime_diff('day', now(), startofmonth(now()))
+    | join kind=inner (skuPricing) on VmSize
+    | extend 
+        EstimatedCostEUR = round(EstimatedRunningHours * HourlyCostEUR, 2),
+        AvgHoursPerDay = round(EstimatedRunningHours / DaysInMonth, 2);
+
+// Aggregate by owner
+vmRunningTime
+| summarize 
+    TotalEstimatedCost = sum(EstimatedCostEUR),
+    TotalRunningHours = sum(EstimatedRunningHours),
+    VMCount = dcount(Computer),
+    ResourceGroups = make_set(ResourceGroup)
+    by Owner, CourseId
+| extend 
+    AvgCostPerVM = round(TotalEstimatedCost / VMCount, 2),
+    AvgHoursPerVM = round(TotalRunningHours / VMCount, 2)
+| order by TotalEstimatedCost desc
+| project 
+    Owner,
+    CourseId,
+    VMCount,
+    TotalRunningHours = round(TotalRunningHours, 0),
+    TotalEstimatedCost,
+    AvgCostPerVM,
+    AvgHoursPerVM,
+    MonthProgress = round(100.0 * datetime_diff('day', now(), startofmonth(now())) / 30, 0),
+    ResourceGroups
+

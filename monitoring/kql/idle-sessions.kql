@@ -1,0 +1,34 @@
+// Idle Sessions Detection
+// Identifies users with idle or disconnected sessions
+
+// Get session state and duration
+WVDConnections
+| where TimeGenerated > ago(2h)
+| where State in ("Connected", "Completed", "Pending", "Active")
+| extend SessionDuration = datetime_diff('minute', now(), TimeGenerated)
+| summarize 
+    SessionStart = min(TimeGenerated),
+    SessionEnd = max(TimeGenerated),
+    CurrentState = arg_max(TimeGenerated, State),
+    ConnectionCount = count()
+    by UserName, SessionHostName, CorrelationId
+| extend 
+    TotalSessionMinutes = datetime_diff('minute', SessionEnd, SessionStart),
+    IdleMinutes = datetime_diff('minute', now(), SessionEnd)
+| where IdleMinutes > 15  // Sessions idle for more than 15 minutes
+| project 
+    UserName,
+    SessionHostName,
+    SessionState = CurrentState,
+    SessionStart,
+    SessionEnd,
+    TotalSessionMinutes = round(TotalSessionMinutes, 0),
+    IdleMinutes = round(IdleMinutes, 0),
+    ConnectionCount,
+    IdleStatus = case(
+        IdleMinutes > 60, "Long Idle (>1h)",
+        IdleMinutes > 30, "Medium Idle (>30m)",
+        "Short Idle (>15m)"
+    )
+| order by IdleMinutes desc
+

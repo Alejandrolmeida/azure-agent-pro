@@ -1,0 +1,21 @@
+// AVD Activity and Connection Monitoring
+// Shows active sessions, connection quality, and user activity
+
+// Active sessions by session host
+WVDConnections
+| where TimeGenerated > ago(1h)
+| where State == "Connected"
+| summarize 
+    ActiveSessions = dcount(UserName),
+    UniqueUsers = make_set(UserName),
+    LastActivity = max(TimeGenerated)
+    by SessionHostName, HostPoolName
+| order by ActiveSessions desc
+| project 
+    SessionHostName,
+    HostPoolName,
+    ActiveSessions,
+    UniqueUsers,
+    LastActivity,
+    IdleMinutes = datetime_diff('minute', now(), LastActivity)
+

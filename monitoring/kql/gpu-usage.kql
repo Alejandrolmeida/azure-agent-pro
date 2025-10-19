@@ -1,0 +1,23 @@
+// GPU Usage Monitoring
+// Tracks GPU utilization, memory usage, and identifies performance issues
+
+// GPU utilization over time
+Perf
+| where TimeGenerated > ago(1h)
+| where ObjectName == "GPU Engine"
+    and CounterName == "Utilization Percentage"
+| summarize 
+    AvgUtilization = avg(CounterValue),
+    MaxUtilization = max(CounterValue),
+    MinUtilization = min(CounterValue),
+    P95Utilization = percentile(CounterValue, 95)
+    by Computer, InstanceName, bin(TimeGenerated, 5m)
+| order by TimeGenerated desc
+| project 
+    TimeGenerated,
+    Computer,
+    GPUInstance = InstanceName,
+    AvgUtilization = round(AvgUtilization, 2),
+    MaxUtilization = round(MaxUtilization, 2),
+    P95Utilization = round(P95Utilization, 2)
+
