@@ -94,11 +94,72 @@
 - Service Principal con permisos para crear recursos
 - Cuota disponible para **NVads A10 v5** en la región elegida
 
-### Herramientas Locales
+### Entorno de Desarrollo (Miniconda/Conda Recomendado)
+
+Este proyecto está optimizado para funcionar en entornos **Conda/Miniconda** y es completamente multiplataforma (Linux, macOS, Windows).
+
+#### Setup Rápido con Script Automatizado
+
+```bash
+# Clonar repositorio
+git clone https://github.com/alejandrolmeida/azure-agent-pro.git
+cd azure-agent-pro
+git checkout feature/avd-pix4d-lab
+
+# Crear entorno conda (recomendado)
+conda create -n avd-pix4d python=3.11
+conda activate avd-pix4d
+
+# Ejecutar script de setup automatizado
+./setup-dev-env.sh
+```
+
+Este script instala automáticamente:
+- ✅ Azure CLI (>= 2.50.0)
+- ✅ Bicep CLI (>= 0.20.0)
+- ✅ jq (procesamiento JSON)
+- ✅ Git
+- ✅ Extensiones Azure necesarias
+- ✅ PowerShell (opcional, para scripts .ps1)
+
+#### Setup Manual
+
+```bash
+# Activar entorno conda
+conda activate avd-pix4d
+
+# Instalar dependencias
+conda install -c conda-forge azure-cli jq git
+az bicep install
+az extension add --name desktopvirtualization
+
+# (Opcional) Instalar PowerShell si quieres usar scripts .ps1
+conda install -c conda-forge powershell
+```
+
+#### Usando environment.yml
+
+```bash
+# Crear entorno desde archivo
+conda env create -f environment.yml
+conda activate avd-pix4d
+
+# Completar instalación
+az bicep install
+az extension add --name desktopvirtualization
+```
+
+### Herramientas Locales (Alternativa sin Conda)
+
+Si no usas Conda, puedes instalar manualmente:
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) >= 2.50.0
 - [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) >= 0.20.0
-- [PowerShell 7+](https://learn.microsoft.com/powershell/scripting/install/installing-powershell)
+- [Bash](https://www.gnu.org/software/bash/) >= 4.0 (Linux/macOS) o [Git Bash](https://git-scm.com/) (Windows)
+- [jq](https://stedolan.github.io/jq/download/) >= 1.6
+- [PowerShell 7+](https://learn.microsoft.com/powershell/scripting/install/installing-powershell) (opcional)
 - [Git](https://git-scm.com/)
+
+📖 **[Ver Guía Completa de Configuración del Entorno](../docs/ENVIRONMENT_SETUP.md)**
 
 ### Configuración GitHub
 - Repositorio con **GitHub Actions** habilitado
@@ -206,25 +267,49 @@ _*Precios aproximados, consulta [Azure Pricing Calculator](https://azure.microso
 - 📦 **Instalar PIX4Dmatic** - Deployment de aplicación
 - 🖼️ **Crear Imagen Custom** - Azure Image Builder workflow
 
-## 🧪 Testing
+## 🧪 Tests
+
+Los tests están disponibles en dos formatos para máxima compatibilidad:
 
 ### Smoke Tests
+
+**Linux/macOS (Recomendado en Conda):**
+
 ```bash
-pwsh tests/smoke/az-smoke.ps1 -Environment lab
+# Validar que todos los recursos existen
+cd tests/smoke
+./az-smoke.sh -g "rg-avd-pix4d" -l "westeurope"
+```
+
+**Windows/PowerShell:**
+
+```bash
+cd tests/smoke
+pwsh -File ./az-smoke.ps1 -ResourceGroupPrefix "rg-avd-pix4d" -Location "westeurope"
 ```
 
 ### E2E Tests
+
+**Linux/macOS (Recomendado en Conda):**
+
 ```bash
-pwsh tests/e2e/check-start-stop.ps1 -Environment lab
+# Test del ciclo start-stop-deallocate
+cd tests/e2e
+./check-start-stop.sh -g "rg-avd-pix4d-lab" -p "avd-sh"
+```
+
+**Windows/PowerShell:**
+
+```bash
+cd tests/e2e
+pwsh -File ./check-start-stop.ps1 -ResourceGroupBase "rg-avd-pix4d-lab" -SessionHostPrefix "avd-sh"
 ```
 
 ### Linting
-```bash
-# Bicep
-az bicep lint --file infra/bicep/main.bicep
 
-# PowerShell
-pwsh -Command "Invoke-ScriptAnalyzer -Path ops/ -Recurse"
+```bash
+# Lint all Bicep files
+az bicep lint --file bicep/main.bicep
 ```
 
 ## 🤝 Contribuir

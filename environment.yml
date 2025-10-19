@@ -1,0 +1,19 @@
+name: avd-pix4d
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - azure-cli>=2.50.0
+  - git>=2.30
+  - jq>=1.6
+  - curl
+  - wget
+  # Optional: PowerShell for cross-platform script execution
+  # - powershell>=7.0
+  - pip
+  - pip:
+    - azure-mgmt-desktopvirtualization
+    - azure-identity
+    - azure-mgmt-monitor
+    - azure-mgmt-automation
