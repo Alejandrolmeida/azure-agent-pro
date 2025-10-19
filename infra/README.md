@@ -1,0 +1,256 @@
+# Azure Virtual Desktop para PIX4Dmatic - Laboratorio Docente
+
+> 🚀 **Infraestructura como Código** para un laboratorio de Azure Virtual Desktop optimizado para cargas de trabajo de **PIX4Dmatic** con GPU NVIDIA A10, **pago por uso** estricto y **automatización completa**.
+
+[![Deploy](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/deploy.yml/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/deploy.yml)
+[![Lint](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/lint.yml/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/lint.yml)
+
+## 📋 Tabla de Contenidos
+
+- [Características Principales](#-características-principales)
+- [Arquitectura](#-arquitectura)
+- [Requisitos Previos](#-requisitos-previos)
+- [Inicio Rápido](#-inicio-rápido)
+- [Costes](#-costes)
+- [Documentación](#-documentación)
+- [Contribuir](#-contribuir)
+
+## ✨ Características Principales
+
+### 💰 Optimizado para Pago por Uso
+- **Start VM on Connect**: Las VMs arrancan automáticamente al conectarse
+- **Auto-deallocate**: Apagado y deasignación automática tras inactividad o fuera de horario
+- **Zero-cost cuando no se usa**: Solo pagas por compute cuando las VMs están en ejecución
+
+### 🎮 GPU NVIDIA A10 vGPU
+- Serie **NVads A10 v5** (12/18/36 cores)
+- Hasta **24 GB VRAM** para datasets grandes
+- Drivers NVIDIA instalados automáticamente
+- Optimizado para **fotogrametría** y procesamiento intensivo
+
+### 🔄 Automatización Completa
+- Despliegue con **Bicep** (IaC)
+- CI/CD con **GitHub Actions**
+- Azure Image Builder para imagen dorada
+- Runbooks de mantenimiento automático
+
+### 📊 Observabilidad y Governance
+- **Log Analytics** + Azure Monitor
+- **Cost Management** con alertas
+- **Azure Policy** para compliance
+- **Dashboards** de utilización
+
+### 🎓 Diseñado para Formación
+- Escritorios **personales** (1 VM por alumno)
+- Perfiles **FSLogix** en Azure Files Premium
+- Configuración por perfiles de potencia
+- Documentación operativa completa
+
+## 🏗️ Arquitectura
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      Azure Virtual Desktop                       │
+│  ┌─────────────┐    ┌──────────────────────────────────────┐   │
+│  │   Gateway   │───▶│  Host Pool Personal (NVads A10 v5)   │   │
+│  │   Broker    │    │  ┌────────────┐  ┌────────────┐      │   │
+│  └─────────────┘    │  │ Session    │  │ Session    │      │   │
+│                     │  │ Host VM    │  │ Host VM    │ ...  │   │
+│                     │  │ (GPU A10)  │  │ (GPU A10)  │      │   │
+│                     │  └────────────┘  └────────────┘      │   │
+│                     │         │               │             │   │
+│                     └─────────┼───────────────┼─────────────┘   │
+└───────────────────────────────┼───────────────┼─────────────────┘
+                                │               │
+                    ┌───────────▼───────────────▼──────────┐
+                    │   FSLogix Profiles (Azure Files)     │
+                    │        Premium / Zone Redundant       │
+                    └──────────────────────────────────────┘
+                                │
+                    ┌───────────▼──────────────────────────┐
+                    │  Monitoring & Automation             │
+                    │  • Log Analytics                     │
+                    │  • Azure Monitor Alerts              │
+                    │  • Automation Account (Auto-shutdown)│
+                    │  • Cost Management                   │
+                    └──────────────────────────────────────┘
+```
+
+### Componentes Clave
+
+| Componente | Descripción | SKU/Tier |
+|------------|-------------|----------|
+| **Session Hosts** | VMs con GPU para PIX4D | NV12/18/36ads A10 v5 |
+| **Storage** | Perfiles FSLogix | Azure Files Premium |
+| **Networking** | VNet con subnets aisladas | Standard |
+| **Monitoring** | Observabilidad completa | Log Analytics |
+| **Automation** | Auto-shutdown/deallocate | Automation Account |
+| **Image** | Imagen dorada con drivers | Azure Image Builder |
+
+## 🔧 Requisitos Previos
+
+### En Azure
+- Suscripción de Azure con permisos de **Owner** o **Contributor**
+- Service Principal con permisos para crear recursos
+- Cuota disponible para **NVads A10 v5** en la región elegida
+
+### Herramientas Locales
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) >= 2.50.0
+- [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) >= 0.20.0
+- [PowerShell 7+](https://learn.microsoft.com/powershell/scripting/install/installing-powershell)
+- [Git](https://git-scm.com/)
+
+### Configuración GitHub
+- Repositorio con **GitHub Actions** habilitado
+- Secrets configurados:
+  - `AZURE_CLIENT_ID`
+  - `AZURE_TENANT_ID`
+  - `AZURE_SUBSCRIPTION_ID`
+  - `AVD_ADMIN_PASSWORD`
+
+## 🚀 Inicio Rápido
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/alejandrolmeida/azure-agent-pro.git
+cd azure-agent-pro
+git checkout feature/avd-pix4d-lab
+```
+
+### 2. Configurar parámetros
+
+Edita `infra/bicep/parameters/lab.bicepparam`:
+
+```bicep
+param notificationEmail = 'tu-email@example.com'
+param sessionHostCount = 5  // Número de alumnos
+param vmSku = 'Standard_NV18ads_A10_v5'  // Ajusta según necesidad
+```
+
+### 3. Desplegar vía GitHub Actions
+
+```bash
+# Commit y push para desplegar automáticamente
+git add .
+git commit -m "feat: configure lab parameters"
+git push origin feature/avd-pix4d-lab
+```
+
+O manualmente:
+
+### 4. Desplegar manualmente
+
+```bash
+# Login a Azure
+az login
+
+# Desplegar infraestructura
+az deployment sub create \
+  --name avd-pix4d-lab \
+  --location westeurope \
+  --template-file infra/bicep/main.bicep \
+  --parameters infra/bicep/parameters/lab.bicepparam \
+  --parameters adminPassword='<TU_PASSWORD_SEGURO>'
+```
+
+### 5. Verificar despliegue
+
+```bash
+# Ejecutar smoke tests
+pwsh tests/smoke/az-smoke.ps1 -Environment lab
+```
+
+## 💰 Costes
+
+### Estimación de Costes por Hora (West Europe)
+
+| SKU | vCPU | RAM (GB) | GPU VRAM | Coste/hora* | Uso 8h/día |
+|-----|------|----------|----------|-------------|------------|
+| NV12ads_A10_v5 | 12 | 110 | 8 GB | ~€0.91 | ~€218/mes |
+| NV18ads_A10_v5 | 18 | 220 | 12 GB | ~€1.60 | ~€384/mes |
+| NV36ads_A10_v5 | 36 | 440 | 24 GB | ~€3.20 | ~€768/mes |
+
+_*Precios aproximados, consulta [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)_
+
+### Otros Costes
+
+- **Storage** (Azure Files Premium): ~€0.15/GB/mes
+- **Networking**: Mínimo (<€10/mes)
+- **Log Analytics**: Pay-per-GB (~€2-5/mes)
+
+### 💡 Consejos para Reducir Costes
+
+1. ✅ **Siempre usa deallocate**: 0€ de compute cuando está apagada
+2. ✅ **Configura ventanas de clase**: Auto-apagado fuera de horario
+3. ✅ **Usa NV12/NV18 para labs**: Reserva NV36 para proyectos grandes
+4. ✅ **Monitoriza costes**: Configura alertas de presupuesto
+5. ✅ **Revisa tags**: Todas las VMs deben tener `idleShutdownMinutes`
+
+📖 **[Ver Guía Completa de Costes](docs/costs.md)**
+
+## 📚 Documentación
+
+### Guías de Usuario
+- 📘 [**Guía de Operaciones**](docs/operations.md) - Tareas diarias del operador
+- 🔧 [**Troubleshooting**](docs/troubleshooting.md) - Resolución de problemas comunes
+- 💰 [**Gestión de Costes**](docs/costs.md) - Optimización y monitorización
+
+### Guías Técnicas
+- 🏗️ **Arquitectura Detallada** - Diseño y decisiones técnicas
+- 🔐 **Seguridad y Compliance** - Políticas y RBAC
+- 📊 **Monitorización** - Dashboards y alertas
+
+### Tutoriales
+- 🎓 **Asignar VMs a Alumnos** - Gestión de escritorios personales
+- 📦 **Instalar PIX4Dmatic** - Deployment de aplicación
+- 🖼️ **Crear Imagen Custom** - Azure Image Builder workflow
+
+## 🧪 Testing
+
+### Smoke Tests
+```bash
+pwsh tests/smoke/az-smoke.ps1 -Environment lab
+```
+
+### E2E Tests
+```bash
+pwsh tests/e2e/check-start-stop.ps1 -Environment lab
+```
+
+### Linting
+```bash
+# Bicep
+az bicep lint --file infra/bicep/main.bicep
+
+# PowerShell
+pwsh -Command "Invoke-ScriptAnalyzer -Path ops/ -Recurse"
+```
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas! Por favor:
+
+1. Fork el repositorio
+2. Crea una rama feature (`git checkout -b feature/amazing-feature`)
+3. Commit cambios (`git commit -m 'feat: add amazing feature'`)
+4. Push a la rama (`git push origin feature/amazing-feature`)
+5. Abre un Pull Request
+
+Ver [CONTRIBUTING.md](CONTRIBUTING.md) para más detalles.
+
+## 📝 Licencia
+
+Este proyecto está bajo licencia MIT. Ver [LICENSE](LICENSE) para más información.
+
+## 🙏 Agradecimientos
+
+- **PIX4D** por su software de fotogrametría líder
+- **Microsoft Azure** por la plataforma AVD y GPU compute
+- **Comunidad** de Azure y GitHub Copilot
+
+---
+
+**Maintainer**: [@alejandrolmeida](https://github.com/alejandrolmeida)  
+**Proyecto**: Azure Agent Pro - AVD PIX4D Lab  
+**Status**: ✅ Production Ready

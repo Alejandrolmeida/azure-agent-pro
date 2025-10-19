@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "displayName": "Allowed VM SKUs for AVD PIX4D",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This policy restricts the VM SKUs that can be used for AVD session hosts to NVads A10 v5 series only.",
+    "metadata": {
+      "category": "Compute",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "allowedSKUs": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed SKUs",
+          "description": "The list of SKUs that are allowed for AVD session hosts"
+        },
+        "defaultValue": [
+          "Standard_NV12ads_A10_v5",
+          "Standard_NV18ads_A10_v5",
+          "Standard_NV36ads_A10_v5"
+        ]
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Compute/virtualMachines"
+          },
+          {
+            "field": "tags['sessionHost']",
+            "equals": "true"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Compute/virtualMachines/sku.name",
+              "in": "[parameters('allowedSKUs')]"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+name: Build Azure Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment for image'
+        required: true
+        type: choice
+        options:
+          - lab
+          - prod
+      image_version:
+        description: 'Image version (semver)'
+        required: true
+        type: string
+        default: '1.0.0'
+  push:
+    branches:
+      - feature/avd-pix4d-lab
+    paths:
+      - 'infra/bicep/modules/imagebuilder/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  LOCATION: westeurope
+
+jobs:
+  build-image:
+    name: Build Custom Image
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || 'lab' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Image Builder infrastructure
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          IMAGE_VERSION="${{ github.event.inputs.image_version || '1.0.0' }}"
+          DEPLOYMENT_NAME="aib-deploy-$(date +%Y%m%d-%H%M%S)"
+          RG_NAME="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          
+          # Create resource group if it doesn't exist
+          az group create --name $RG_NAME --location ${{ env.LOCATION }}
+          
+          # Deploy Image Builder template
+          az deployment group create \
+            --name "$DEPLOYMENT_NAME" \
+            --resource-group $RG_NAME \
+            --template-file infra/bicep/modules/imagebuilder/aib.bicep \
+            --parameters imageVersion=$IMAGE_VERSION \
+            --verbose
+
+      - name: Get Image Template Name
+        id: get-template
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          RG_NAME="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          
+          TEMPLATE_NAME=$(az image builder show \
+            --resource-group $RG_NAME \
+            --query "[0].name" -o tsv)
+          
+          echo "TEMPLATE_NAME=$TEMPLATE_NAME" >> $GITHUB_OUTPUT
+          echo "Template name: $TEMPLATE_NAME"
+
+      - name: Start image build
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          RG_NAME="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          TEMPLATE_NAME="${{ steps.get-template.outputs.TEMPLATE_NAME }}"
+          
+          echo "Starting image build for template: $TEMPLATE_NAME"
+          
+          az image builder run \
+            --resource-group $RG_NAME \
+            --name $TEMPLATE_NAME \
+            --no-wait
+
+      - name: Monitor build progress
+        timeout-minutes: 120
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          RG_NAME="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          TEMPLATE_NAME="${{ steps.get-template.outputs.TEMPLATE_NAME }}"
+          
+          echo "Monitoring build progress..."
+          
+          while true; do
+            STATUS=$(az image builder show \
+              --resource-group $RG_NAME \
+              --name $TEMPLATE_NAME \
+              --query "lastRunStatus.runState" -o tsv)
+            
+            echo "Current status: $STATUS"
+            
+            if [ "$STATUS" == "Succeeded" ]; then
+              echo "✅ Image build completed successfully!"
+              break
+            elif [ "$STATUS" == "Failed" ]; then
+              echo "❌ Image build failed!"
+              az image builder show-runs \
+                --resource-group $RG_NAME \
+                --name $TEMPLATE_NAME \
+                --output table
+              exit 1
+            fi
+            
+            sleep 30
+          done
+
+      - name: Get image ID
+        id: get-image
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          RG_NAME="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          GALLERY_NAME="sigpix4davd${ENV}"
+          IMAGE_DEF_NAME="pix4d-avd-gpu"
+          
+          IMAGE_ID=$(az sig image-definition show \
+            --resource-group $RG_NAME \
+            --gallery-name $GALLERY_NAME \
+            --gallery-image-definition $IMAGE_DEF_NAME \
+            --query "id" -o tsv)
+          
+          echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_OUTPUT
+          echo "### Image Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Image ID: \`$IMAGE_ID\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Version: ${{ github.event.inputs.image_version || '1.0.0' }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Update parameter file with image ID
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          IMAGE_ID="${{ steps.get-image.outputs.IMAGE_ID }}"
+          
+          echo "Updating parameter file with image ID: $IMAGE_ID"
+          echo ""
+          echo "⚠️ Note: You should update the parameter file manually with:"
+          echo "param customImageId = '$IMAGE_ID'"

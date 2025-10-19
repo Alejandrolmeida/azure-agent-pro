@@ -1,0 +1,45 @@
+{
+  "properties": {
+    "displayName": "Enforce auto-shutdown tags on VMs",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "This policy enforces that all session host VMs have idle shutdown configuration tags.",
+    "metadata": {
+      "category": "Compute",
+      "version": "1.0.0"
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Compute/virtualMachines"
+          },
+          {
+            "field": "tags['sessionHost']",
+            "equals": "true"
+          },
+          {
+            "field": "tags['idleShutdownMinutes']",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "modify",
+        "details": {
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "operations": [
+            {
+              "operation": "addOrReplace",
+              "field": "tags['idleShutdownMinutes']",
+              "value": "30"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

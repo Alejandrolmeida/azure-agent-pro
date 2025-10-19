@@ -1,0 +1,116 @@
+name: Destroy AVD Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to destroy'
+        required: true
+        type: choice
+        options:
+          - lab
+          - prod
+      confirmation:
+        description: 'Type "DESTROY" to confirm'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  LOCATION: westeurope
+
+jobs:
+  validate-confirmation:
+    name: Validate Destruction Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirmation }}" != "DESTROY" ]; then
+            echo "❌ Confirmation failed. You must type 'DESTROY' to proceed."
+            exit 1
+          fi
+          echo "✅ Confirmation validated"
+
+  destroy:
+    name: Destroy Infrastructure
+    runs-on: ubuntu-latest
+    needs: validate-confirmation
+    environment:
+      name: ${{ github.event.inputs.environment }}-destroy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: List resources to be deleted
+        run: |
+          ENV="${{ github.event.inputs.environment }}"
+          RG_MAIN="rg-pix4d-avd-${ENV}-${{ env.LOCATION }}"
+          RG_NETWORKING="rg-pix4d-avd-networking-${ENV}-${{ env.LOCATION }}"
+          RG_IMAGES="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          RG_MONITORING="rg-pix4d-avd-monitoring-${ENV}-${{ env.LOCATION }}"
+          
+          echo "### Resources to be deleted:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for RG in $RG_MAIN $RG_NETWORKING $RG_IMAGES $RG_MONITORING; do
+            if az group exists --name $RG | grep -q true; then
+              echo "#### Resource Group: $RG" >> $GITHUB_STEP_SUMMARY
+              az resource list --resource-group $RG --query "[].{Name:name, Type:type}" -o table >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Delete resource groups
+        run: |
+          ENV="${{ github.event.inputs.environment }}"
+          RG_MAIN="rg-pix4d-avd-${ENV}-${{ env.LOCATION }}"
+          RG_NETWORKING="rg-pix4d-avd-networking-${ENV}-${{ env.LOCATION }}"
+          RG_IMAGES="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          RG_MONITORING="rg-pix4d-avd-monitoring-${ENV}-${{ env.LOCATION }}"
+          
+          echo "🗑️ Deleting resource groups..."
+          
+          for RG in $RG_MAIN $RG_NETWORKING $RG_IMAGES $RG_MONITORING; do
+            if az group exists --name $RG | grep -q true; then
+              echo "Deleting $RG..."
+              az group delete --name $RG --yes --no-wait
+            else
+              echo "Resource group $RG does not exist, skipping"
+            fi
+          done
+          
+          echo "✅ Deletion initiated for all resource groups"
+          echo "Note: Actual deletion will complete in the background"
+
+      - name: Verify deletion
+        run: |
+          echo "Waiting 60 seconds before verification..."
+          sleep 60
+          
+          ENV="${{ github.event.inputs.environment }}"
+          RG_MAIN="rg-pix4d-avd-${ENV}-${{ env.LOCATION }}"
+          RG_NETWORKING="rg-pix4d-avd-networking-${ENV}-${{ env.LOCATION }}"
+          RG_IMAGES="rg-pix4d-avd-images-${ENV}-${{ env.LOCATION }}"
+          RG_MONITORING="rg-pix4d-avd-monitoring-${ENV}-${{ env.LOCATION }}"
+          
+          echo "### Deletion Status:" >> $GITHUB_STEP_SUMMARY
+          
+          for RG in $RG_MAIN $RG_NETWORKING $RG_IMAGES $RG_MONITORING; do
+            if az group exists --name $RG | grep -q true; then
+              echo "- ⏳ $RG: Still deleting..." >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ✅ $RG: Deleted" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

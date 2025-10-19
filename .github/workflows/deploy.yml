@@ -1,0 +1,223 @@
+name: Deploy AVD Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - lab
+          - prod
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - validate
+          - what-if
+          - deploy
+  push:
+    branches:
+      - feature/avd-pix4d-lab
+    paths:
+      - 'infra/**'
+      - '.github/workflows/deploy.yml'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  LOCATION: westeurope
+
+jobs:
+  lint:
+    name: Lint Bicep Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Azure CLI
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Lint Bicep files
+        run: |
+          az bicep build --file infra/bicep/main.bicep
+          az bicep lint --file infra/bicep/main.bicep
+
+      - name: Run PSRule for Azure
+        uses: microsoft/ps-rule@v2
+        with:
+          modules: PSRule.Rules.Azure
+          inputPath: infra/bicep
+
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Validate Bicep deployment
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          
+          az deployment sub validate \
+            --name "avd-validation-$(date +%s)" \
+            --location ${{ env.LOCATION }} \
+            --template-file infra/bicep/main.bicep \
+            --parameters infra/bicep/parameters/${ENV}.bicepparam \
+            --parameters adminPassword='${{ secrets.AVD_ADMIN_PASSWORD }}' \
+            --verbose
+
+  what-if:
+    name: What-If Analysis
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event.inputs.action != 'validate'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run What-If
+        id: whatif
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          
+          az deployment sub what-if \
+            --name "avd-whatif-$(date +%s)" \
+            --location ${{ env.LOCATION }} \
+            --template-file infra/bicep/main.bicep \
+            --parameters infra/bicep/parameters/${ENV}.bicepparam \
+            --parameters adminPassword='${{ secrets.AVD_ADMIN_PASSWORD }}' \
+            --result-format FullResourcePayloads \
+            > whatif-output.txt
+          
+          cat whatif-output.txt
+
+      - name: Comment What-If on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const whatif = fs.readFileSync('whatif-output.txt', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## What-If Analysis\n\n\`\`\`\n${whatif}\n\`\`\``
+            });
+
+  deploy:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    needs: [validate, what-if]
+    if: github.event.inputs.action == 'deploy' || (github.event_name == 'push' && github.ref == 'refs/heads/feature/avd-pix4d-lab')
+    environment:
+      name: ${{ github.event.inputs.environment || 'lab' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Bicep template
+        id: deploy
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          DEPLOYMENT_NAME="avd-deploy-$(date +%Y%m%d-%H%M%S)"
+          
+          echo "Deploying to environment: $ENV"
+          echo "Deployment name: $DEPLOYMENT_NAME"
+          
+          az deployment sub create \
+            --name "$DEPLOYMENT_NAME" \
+            --location ${{ env.LOCATION }} \
+            --template-file infra/bicep/main.bicep \
+            --parameters infra/bicep/parameters/${ENV}.bicepparam \
+            --parameters adminPassword='${{ secrets.AVD_ADMIN_PASSWORD }}' \
+            --verbose \
+            --output json > deployment-output.json
+          
+          cat deployment-output.json
+
+      - name: Extract outputs
+        id: outputs
+        run: |
+          HOST_POOL_NAME=$(jq -r '.properties.outputs.hostPoolName.value' deployment-output.json)
+          WORKSPACE_NAME=$(jq -r '.properties.outputs.workspaceName.value' deployment-output.json)
+          STORAGE_ACCOUNT=$(jq -r '.properties.outputs.storageAccountName.value' deployment-output.json)
+          
+          echo "HOST_POOL_NAME=$HOST_POOL_NAME" >> $GITHUB_OUTPUT
+          echo "WORKSPACE_NAME=$WORKSPACE_NAME" >> $GITHUB_OUTPUT
+          echo "STORAGE_ACCOUNT=$STORAGE_ACCOUNT" >> $GITHUB_OUTPUT
+          
+          echo "### Deployment Outputs" >> $GITHUB_STEP_SUMMARY
+          echo "- Host Pool: \`$HOST_POOL_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Workspace: \`$WORKSPACE_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Storage Account: \`$STORAGE_ACCOUNT\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-output-${{ github.event.inputs.environment || 'lab' }}
+          path: deployment-output.json
+          retention-days: 30
+
+  post-deploy-verification:
+    name: Post-Deployment Verification
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run smoke tests
+        run: |
+          pwsh -File tests/smoke/az-smoke.ps1
+
+      - name: Check resource health
+        run: |
+          ENV="${{ github.event.inputs.environment || 'lab' }}"
+          RG_NAME="rg-pix4d-avd-${ENV}-westeurope"
+          
+          echo "Checking resources in $RG_NAME..."
+          az resource list --resource-group $RG_NAME --output table

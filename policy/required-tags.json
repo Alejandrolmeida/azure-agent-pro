@@ -1,0 +1,47 @@
+{
+  "properties": {
+    "displayName": "Require specific tags on resources",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "This policy requires specific tags on all resources in the AVD PIX4D lab.",
+    "metadata": {
+      "category": "Tags",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "requiredTags": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Required Tags",
+          "description": "List of tags that must be present on all resources"
+        },
+        "defaultValue": [
+          "env",
+          "project",
+          "costCenter"
+        ]
+      }
+    },
+    "policyRule": {
+      "if": {
+        "anyOf": [
+          {
+            "field": "[concat('tags[', parameters('requiredTags')[0], ']')]",
+            "exists": "false"
+          },
+          {
+            "field": "[concat('tags[', parameters('requiredTags')[1], ']')]",
+            "exists": "false"
+          },
+          {
+            "field": "[concat('tags[', parameters('requiredTags')[2], ']')]",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

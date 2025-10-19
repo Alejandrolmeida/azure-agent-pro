@@ -1,0 +1,167 @@
+name: Lint and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/**
+    paths:
+      - 'infra/**'
+      - 'ops/**'
+      - 'tests/**'
+  push:
+    branches:
+      - feature/avd-pix4d-lab
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  bicep-lint:
+    name: Lint Bicep Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bicep
+        run: |
+          az bicep install
+          az bicep version
+
+      - name: Lint all Bicep files
+        run: |
+          echo "### Bicep Lint Results" >> $GITHUB_STEP_SUMMARY
+          
+          EXIT_CODE=0
+          
+          for file in $(find infra/bicep -name "*.bicep"); do
+            echo "Linting: $file"
+            if az bicep lint --file "$file" 2>&1 | tee lint-output.txt; then
+              echo "- ✅ $file: OK" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ❌ $file: FAILED" >> $GITHUB_STEP_SUMMARY
+              cat lint-output.txt >> $GITHUB_STEP_SUMMARY
+              EXIT_CODE=1
+            fi
+          done
+          
+          exit $EXIT_CODE
+
+      - name: Build Bicep files
+        run: |
+          for file in $(find infra/bicep -name "*.bicep" -not -path "*/modules/*"); do
+            echo "Building: $file"
+            az bicep build --file "$file"
+          done
+
+  powershell-lint:
+    name: Lint PowerShell Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+
+      - name: Lint PowerShell files
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -Path ops, tests -Include *.ps1 -Recurse
+          
+          $results = @()
+          foreach ($file in $files) {
+            Write-Host "Analyzing: $($file.FullName)"
+            $analysis = Invoke-ScriptAnalyzer -Path $file.FullName -Severity Error,Warning
+            if ($analysis) {
+              $results += $analysis
+              Write-Host "Issues found in $($file.Name):"
+              $analysis | Format-Table -AutoSize
+            }
+          }
+          
+          if ($results.Count -gt 0) {
+            Write-Host "❌ Found $($results.Count) issues"
+            exit 1
+          } else {
+            Write-Host "✅ All PowerShell scripts passed linting"
+          }
+
+  psrule-azure:
+    name: PSRule for Azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run PSRule for Azure
+        uses: microsoft/ps-rule@v2
+        continue-on-error: true
+        with:
+          modules: PSRule.Rules.Azure
+          inputPath: infra/bicep
+          outputFormat: Markdown
+          outputPath: psrule-output.md
+
+      - name: Upload PSRule results
+        uses: actions/upload-artifact@v4
+        with:
+          name: psrule-results
+          path: psrule-output.md
+
+      - name: Comment PSRule results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            if (fs.existsSync('psrule-output.md')) {
+              const psrule = fs.readFileSync('psrule-output.md', 'utf8');
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## PSRule for Azure Analysis\n\n${psrule}`
+              });
+            }
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: 'infra'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [bicep-lint, powershell-lint, psrule-azure, security-scan]
+    if: always()
+    steps:
+      - name: Create summary
+        run: |
+          echo "## Lint and Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Bicep Lint: ${{ needs.bicep-lint.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- PowerShell Lint: ${{ needs.powershell-lint.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- PSRule Azure: ${{ needs.psrule-azure.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Security Scan: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
