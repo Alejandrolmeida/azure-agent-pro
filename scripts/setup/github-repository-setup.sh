@@ -14,9 +14,9 @@ NC='\033[0m' # No Color
 
 # Variables del proyecto
 PROJECT_NAME="azure-agent-pro"
-GITHUB_USERNAME="alejandrolmeida"
+GITHUB_USERNAME="${GITHUB_USERNAME:-$(git config user.name)}"  # Use git config or set manually
 PROJECT_DESCRIPTION="🤖 Educational research project teaching GitHub Copilot enhanced Azure professional management"
-PROJECT_DIR="/home/alejandrolmeida/source/github/alejandrolmeida/azure-agent"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"  # Auto-detect project root
 
 # Función para logging
 log() {

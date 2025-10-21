@@ -128,3 +128,12 @@ connection-strings.json
 *.keystore
 *.truststore
 auth-config.json
+
+# Archivos markdown temporales con datos sensibles
+*SUPPORT_TICKET*.md
+*QUOTA_REQUEST*.md
+*DEPLOYMENT_GUIDE*.md
+*DEPLOY_NOW*.md
+*PARAMETER_REVIEW*.md
+*DEPLOYMENT_PLAN*.md
+*DUAL_SUBSCRIPTION*.md
