@@ -2,6 +2,9 @@
 @description('Location for all resources')
 param location string = resourceGroup().location
 
+@description('Registration token expiration time')
+param tokenExpirationTime string = dateTimeAdd(utcNow(), 'P7D')
+
 @description('Name of the Host Pool')
 param hostPoolName string
 
@@ -16,7 +19,7 @@ param hostPoolDescription string = 'Azure Virtual Desktop Host Pool for PIX4Dmat
   'Personal'
   'Pooled'
 ])
-param hostPoolType string = 'Personal'
+param hostPoolType string = 'Pooled'
 
 @description('Personal Desktop Assignment Type')
 @allowed([
@@ -31,7 +34,7 @@ param personalDesktopAssignmentType string = 'Automatic'
   'DepthFirst'
   'Persistent'
 ])
-param loadBalancerType string = 'Persistent'
+param loadBalancerType string = 'DepthFirst'
 
 @description('Max Session Limit')
 param maxSessionLimit int = 1
@@ -53,7 +56,7 @@ param preferredAppGroupType string = 'Desktop'
 param tags object = {}
 
 @description('Custom RDP Properties')
-param customRdpProperty string = 'drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:0;devicestoredirect:s:*;redirectcomports:i:0;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;use multimon:i:1;targetisaadjoined:i:1;audiocapturemode:i:1;encode redirected video capture:i:1;redirected video capture encoding quality:i:1'
+param customRdpProperty string = 'drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:0;devicestoredirect:s:*;redirectcomports:i:0;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;use multimon:i:1;targetisaadjoined:i:1;enablerdsaadauth:i:1;audiocapturemode:i:1;encode redirected video capture:i:1;redirected video capture encoding quality:i:1'
 
 // Host Pool
 resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2023-09-05' = {
@@ -72,7 +75,7 @@ resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2023-09-05' = {
     preferredAppGroupType: preferredAppGroupType
     customRdpProperty: customRdpProperty
     registrationInfo: {
-      expirationTime: dateTimeAdd(utcNow('u'), 'P7D') // 7 days from now
+      expirationTime: tokenExpirationTime
       registrationTokenOperation: 'Update'
     }
   }
@@ -85,4 +88,5 @@ output hostPoolId string = hostPool.id
 output hostPoolName string = hostPool.name
 
 @description('Registration Token')
-output registrationToken string = hostPool.properties.registrationInfo.token
+@secure()
+output registrationToken string = hostPool.listRegistrationTokens().value[0].token

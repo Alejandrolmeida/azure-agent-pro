@@ -8,13 +8,20 @@ param sessionHostNamePrefix string
 @description('Number of Session Hosts')
 param sessionHostCount int = 1
 
-@description('VM Size for Session Hosts - NVads A10 v5 series for GPU workloads')
+@description('VM Size for Session Hosts - GPU-enabled VMs (AMD MI25, M60 and A10)')
 @allowed([
+  'Standard_NV4as_v4'
+  'Standard_NV8as_v4'
+  'Standard_NV16as_v4'
+  'Standard_NV32as_v4'
+  'Standard_NV6s_v2'
+  'Standard_NV12s_v2'
+  'Standard_NV24s_v2'
   'Standard_NV12ads_A10_v5'
   'Standard_NV18ads_A10_v5'
   'Standard_NV36ads_A10_v5'
 ])
-param vmSize string = 'Standard_NV36ads_A10_v5'
+param vmSize string = 'Standard_NV4as_v4'
 
 @description('Virtual Network Resource Group')
 param vnetResourceGroup string
@@ -55,6 +62,9 @@ param adminUsername string
 @description('Admin Password')
 @secure()
 param adminPassword string
+
+@description('Host Pool Name')
+param hostPoolName string
 
 @description('Host Pool Registration Token')
 @secure()
@@ -116,10 +126,7 @@ resource sessionHost 'Microsoft.Compute/virtualMachines@2023-09-01' = [for i in 
       windowsConfiguration: {
         enableAutomaticUpdates: true
         patchSettings: {
-          patchMode: 'AutomaticByPlatform'
-          automaticByPlatformSettings: {
-            rebootSetting: 'IfRequired'
-          }
+          patchMode: 'AutomaticByOS'
         }
       }
     }
@@ -190,13 +197,13 @@ resource avdAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2023-09
   properties: {
     publisher: 'Microsoft.Powershell'
     type: 'DSC'
-    typeHandlerVersion: '2.73'
+    typeHandlerVersion: '2.83'
     autoUpgradeMinorVersion: true
     settings: {
-      modulesUrl: 'https://wvdportalstorageblob.blob.${environment().suffixes.storage}/galleryartifacts/Configuration_01-20-2023.zip'
+      modulesUrl: 'https://wvdportalstorageblob.blob.${environment().suffixes.storage}/galleryartifacts/Configuration_09-08-2022.zip'
       configurationFunction: 'Configuration.ps1\\AddSessionHost'
       properties: {
-        hostPoolName: split(hostPoolToken, '.')[0] // Extract from token
+        hostPoolName: hostPoolName
         registrationInfoToken: hostPoolToken
         aadJoin: enableAADJoin
       }
@@ -249,8 +256,12 @@ resource domainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2023-
   ]
 }]
 
-// NVIDIA GPU Driver Extension
-resource nvidiaExtension 'Microsoft.Compute/virtualMachines/extensions@2023-09-01' = [for i in range(0, sessionHostCount): {
+// NVIDIA GPU Driver Extension (only for NVIDIA-based VMs)
+// Compatible SKUs: Standard_NV*s_v2 (Tesla M60), Standard_NV*ads_A10_v5 (NVIDIA A10)
+// NOT compatible with: Standard_NV*as_v4 (AMD Radeon Instinct MI25)
+var isNvidiaVM = contains(vmSize, '_v2') || contains(vmSize, '_A10_')
+
+resource nvidiaExtension 'Microsoft.Compute/virtualMachines/extensions@2023-09-01' = [for i in range(0, sessionHostCount): if (isNvidiaVM) {
   parent: sessionHost[i]
   name: 'NvidiaGpuDriverWindows'
   location: location
