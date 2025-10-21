@@ -15,13 +15,20 @@ param environment string = 'lab'
 @description('Project name prefix')
 param projectName string = 'pix4d-avd'
 
-@description('VM SKU for Session Hosts - NVads A10 v5 series')
+@description('VM SKU for Session Hosts - GPU-enabled VMs')
 @allowed([
+  'Standard_NV4as_v4'
+  'Standard_NV8as_v4'
+  'Standard_NV16as_v4'
+  'Standard_NV32as_v4'
+  'Standard_NV6s_v2'
+  'Standard_NV12s_v2'
+  'Standard_NV24s_v2'
   'Standard_NV12ads_A10_v5'
   'Standard_NV18ads_A10_v5'
   'Standard_NV36ads_A10_v5'
 ])
-param vmSku string = 'Standard_NV36ads_A10_v5'
+param vmSku string = 'Standard_NV4as_v4'
 
 @description('Number of Session Hosts')
 @minValue(1)
@@ -175,17 +182,34 @@ module vnet './modules/virtual-network.bicep' = {
   }
 }
 
-// Monitoring
-module monitoring './modules/monitoring/insights.bicep' = {
-  scope: rgMonitoring
-  name: 'deploy-monitoring'
+// Azure Bastion for secure RDP access
+module bastion './modules/bastion.bicep' = {
+  scope: rgNetworking
+  name: 'deploy-bastion'
   params: {
     location: location
-    workspaceName: lawName
-    notificationEmail: notificationEmail
+    bastionName: '${projectName}-bastion-${environment}'
+    bastionPublicIpName: '${projectName}-bastion-pip-${environment}'
+    vnetName: vnetName
     tags: tags
   }
+  dependsOn: [
+    vnet
+  ]
 }
+
+// Monitoring - TEMPORARILY DISABLED due to DCR table issues
+// TODO: Fix Microsoft-Perf and Microsoft-Event table references in DCR
+// module monitoring './modules/monitoring/insights.bicep' = {
+//   scope: rgMonitoring
+//   name: 'deploy-monitoring'
+//   params: {
+//     location: location
+//     workspaceName: lawName
+//     notificationEmail: notificationEmail
+//     tags: tags
+//   }
+// }
 
 // Azure Files for FSLogix
 module storage './modules/storage/azurefiles.bicep' = {
@@ -279,6 +303,7 @@ module sessionHosts './modules/avd/sessionhost.bicep' = {
     dataDiskSizeGB: dataDiskSizeGB
     adminUsername: adminUsername
     adminPassword: adminPassword
+    hostPoolName: hostPoolName
     hostPoolToken: hostPool.outputs.registrationToken
     enableAADJoin: enableAADJoin
     domainToJoin: domainToJoin
@@ -294,45 +319,49 @@ module sessionHosts './modules/avd/sessionhost.bicep' = {
 }
 
 // Automation Account for auto-shutdown
-module automation './modules/automation/auto-shutdown.bicep' = {
-  scope: rgMain
-  name: 'deploy-automation'
-  params: {
-    location: location
-    automationAccountName: automationAccountName
-    workspaceId: monitoring.outputs.workspaceId
-    hostPoolResourceGroup: resourceGroupName
-    hostPoolName: hostPoolName
-    classWindow: classWindow
-    idleDeallocateMinutes: idleDeallocateMinutes
-    tags: tags
-  }
-  dependsOn: [
-    hostPool
-  ]
-}
+// Automation - TEMPORARILY DISABLED (depends on monitoring module)
+// TODO: Re-enable after fixing monitoring DCR issues
+// module automation './modules/automation/auto-shutdown.bicep' = {
+//   scope: rgMain
+//   name: 'deploy-automation'
+//   params: {
+//     location: location
+//     automationAccountName: automationAccountName
+//     workspaceId: monitoring.outputs.workspaceId
+//     hostPoolResourceGroup: resourceGroupName
+//     hostPoolName: hostPoolName
+//     classWindow: classWindow
+//     idleDeallocateMinutes: idleDeallocateMinutes
+//     tags: tags
+//   }
+//   dependsOn: [
+//     hostPool
+//   ]
+// }
 
 // Role Assignment: Automation Account needs Contributor on RG
-module roleAssignmentAutomation './modules/role-assignment.bicep' = {
-  scope: rgMain
-  name: 'deploy-role-automation'
-  params: {
-    principalId: automation.outputs.principalId
-    roleDefinitionId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor
-    principalType: 'ServicePrincipal'
-  }
-}
+// TEMPORARILY DISABLED (depends on automation module)
+// module roleAssignmentAutomation './modules/role-assignment.bicep' = {
+//   scope: rgMain
+//   name: 'deploy-role-automation'
+//   params: {
+//     principalId: automation.outputs.principalId
+//     roleDefinitionId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor
+//     principalType: 'ServicePrincipal'
+//   }
+// }
 
 // Role Assignment: Automation Account needs Power On/Off on Start VM on Connect
-module roleAssignmentVMContributor './modules/role-assignment.bicep' = {
-  scope: rgMain
-  name: 'deploy-role-vm-contributor'
-  params: {
-    principalId: automation.outputs.principalId
-    roleDefinitionId: '9980e02c-c2be-4d73-94e8-173b1dc7cf3c' // Virtual Machine Contributor
-    principalType: 'ServicePrincipal'
-  }
-}
+// TEMPORARILY DISABLED (depends on automation module)
+// module roleAssignmentVMContributor './modules/role-assignment.bicep' = {
+//   scope: rgMain
+//   name: 'deploy-role-vm-contributor'
+//   params: {
+//     principalId: automation.outputs.principalId
+//     roleDefinitionId: '9980e02c-c2be-4d73-94e8-173b1dc7cf3c' // Virtual Machine Contributor
+//     principalType: 'ServicePrincipal'
+//   }
+// }
 
 // Outputs
 @description('Resource Group Name')
@@ -350,11 +379,11 @@ output storageAccountName string = storage.outputs.storageAccountName
 @description('FSLogix Profile Path')
 output fslogixProfilePath string = storage.outputs.fslogixProfilePath
 
-@description('Log Analytics Workspace Name')
-output logAnalyticsWorkspaceName string = monitoring.outputs.workspaceName
+// @description('Log Analytics Workspace Name')
+// output logAnalyticsWorkspaceName string = monitoring.outputs.workspaceName
 
-@description('Automation Account Name')
-output automationAccountName string = automation.outputs.automationAccountName
+// @description('Automation Account Name')
+// output automationAccountName string = automation.outputs.automationAccountName
 
 @description('Session Host Names')
 output sessionHostNames array = sessionHosts.outputs.sessionHostNames
