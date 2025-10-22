@@ -1,7 +1,7 @@
 using '../main.bicep'
 
 // Environment configuration
-param location = 'westeurope'
+param location = 'westcentralus'
 param environment = 'prod'
 param projectName = 'pix4d-avd'
 
