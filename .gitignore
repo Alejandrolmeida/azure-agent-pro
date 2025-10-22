@@ -16,6 +16,10 @@ secrets/
 *.secret
 *secrets.json
 service-principal.json
+**/config/user-config.sh
+**/config/user-config.json
+**/config/*.local.*
+user-config.*
 
 # Archivos de log
 *.log
