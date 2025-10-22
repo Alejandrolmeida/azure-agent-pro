@@ -51,13 +51,13 @@ resource law 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
 
 // AVD Insights Solution
 resource avdInsights 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = if (enableAVDInsights) {
-  name: 'AVDInsights(${law.name})'
+  name: 'WVDInsights(${law.name})'
   location: location
   tags: tags
   plan: {
-    name: 'AVDInsights(${law.name})'
+    name: 'WVDInsights(${law.name})'
     publisher: 'Microsoft'
-    product: 'OMSGallery/AVDInsights'
+    product: 'WVDInsights'
     promotionCode: ''
   }
   properties: {

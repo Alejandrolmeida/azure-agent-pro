@@ -106,7 +106,7 @@ resource alertVMRunningTooLong 'Microsoft.Insights/scheduledQueryRules@2023-03-1
     scopes: [
       workspace.id
     ]
-    windowSize: 'PT12H'
+    windowSize: 'PT360M'
     criteria: {
       allOf: [
         {

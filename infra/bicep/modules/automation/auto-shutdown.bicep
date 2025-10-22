@@ -121,7 +121,7 @@ resource runbook 'Microsoft.Automation/automationAccounts/runbooks@2023-11-01' =
     logProgress: true
     description: 'Automatically deallocate stopped VMs and shut down VMs outside class window'
     publishContentLink: {
-      uri: 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.compute/vm-automatic-shutdown/azuredeploy.json'
+      uri: 'https://raw.githubusercontent.com/alejandrolmeida/azure-agent-pro/main/ops/runbooks/auto-deallocate.ps1'
       version: '1.0.0.0'
     }
   }
