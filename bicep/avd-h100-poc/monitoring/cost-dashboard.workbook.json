@@ -1,0 +1,423 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "## 💰 AVD H100 POC - Dashboard de Costos\n---\n\n📊 Dashboard de análisis de costos con control presupuestario para infraestructura AVD con GPU H100\n\n**Presupuestos:**\n- 🏗️ Infraestructura: €20/mes (Tag: `workload-type=infrastructure`)\n- 🖥️ Workload (VM): €50/día = €1,500/mes (Tag: `workload-type=session-host`)\n\n**Última actualización:** {TimeRange:label}"
+      },
+      "name": "text - header"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "8c4e17d8-b098-4a58-8e2c-f7d9db3e0292",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "label": "Rango de Tiempo",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 2592000000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            }
+          },
+          {
+            "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+            "version": "KqlParameterItem/1.0",
+            "name": "ResourceGroup",
+            "label": "Resource Group",
+            "type": 2,
+            "isRequired": true,
+            "query": "Resources\n| where type =~ 'microsoft.resources/subscriptions/resourcegroups'\n| where name contains 'avd-h100'\n| project value = name, label = name\n| order by label asc",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": "rg-avd-h100-poc"
+          }
+        ],
+        "style": "pills",
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
+      },
+      "name": "parameters - time range"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| extend WorkloadType = tostring(tags_s['workload-type'])\n| where isnotempty(WorkloadType)\n| summarize TotalCost = sum(todouble(Cost_d)) by WorkloadType\n| extend BudgetLimit = iff(WorkloadType == 'infrastructure', 20.0, 1500.0)\n| extend PercentUsed = (TotalCost / BudgetLimit) * 100\n| extend Status = iff(PercentUsed > 100, '🔴 Excedido', iff(PercentUsed > 90, '🟠 Alerta', iff(PercentUsed > 80, '🟡 Advertencia', '🟢 Normal')))\n| project WorkloadType, TotalCost, BudgetLimit, PercentUsed, Status",
+        "size": 0,
+        "title": "📊 Resumen Presupuestario",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "TotalCost",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "20ch"
+              },
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "BudgetLimit",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "PercentUsed",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "100",
+                    "representation": "redBright",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "90",
+                    "representation": "orange",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "80",
+                    "representation": "yellow",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "green",
+                    "text": "{0}{1}"
+                  }
+                ]
+              },
+              "numberFormat": {
+                "unit": 1,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "name": "query - budget summary"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| extend WorkloadType = tostring(tags_s['workload-type'])\n| where isnotempty(WorkloadType)\n| summarize DailyCost = sum(todouble(Cost_d)) by bin(TimeGenerated, 1d), WorkloadType\n| render timechart",
+        "size": 0,
+        "title": "📈 Costo Diario por Tipo de Workload",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "areachart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 0,
+              "options": {
+                "style": "currency",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "customWidth": "50",
+      "name": "query - daily cost by workload"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| extend WorkloadType = tostring(tags_s['workload-type'])\n| where WorkloadType == 'session-host'\n| summarize DailyCost = sum(todouble(Cost_d)) by bin(TimeGenerated, 1d)\n| extend BudgetLimit = 50.0\n| extend Status = iff(DailyCost > BudgetLimit, 'Over Budget', 'Within Budget')\n| project TimeGenerated, DailyCost, BudgetLimit, Status\n| render columnchart",
+        "size": 0,
+        "title": "🖥️ Uso VM vs Presupuesto Diario (€50/día)",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "barchart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 0,
+              "options": {
+                "style": "currency",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "customWidth": "50",
+      "name": "query - vm daily budget"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureActivity\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| where OperationNameValue == 'Microsoft.Compute/virtualMachines/start/action' \n    or OperationNameValue == 'Microsoft.Compute/virtualMachines/deallocate/action'\n| where ResourceId contains 'vm-avdh100'\n| summarize StartTime = minif(TimeGenerated, OperationNameValue contains 'start'),\n            StopTime = maxif(TimeGenerated, OperationNameValue contains 'deallocate')\n    by bin(TimeGenerated, 1d)\n| extend RuntimeHours = datetime_diff('hour', StopTime, StartTime)\n| project Date = format_datetime(TimeGenerated, 'yyyy-MM-dd'), RuntimeHours\n| render columnchart",
+        "size": 0,
+        "title": "⏱️ Horas de Ejecución VM por Día",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "barchart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 26,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true
+              }
+            }
+          }
+        }
+      },
+      "customWidth": "50",
+      "name": "query - vm runtime hours"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| extend WorkloadType = tostring(tags_s['workload-type'])\n| where WorkloadType == 'infrastructure'\n| summarize MonthlyCost = sum(todouble(Cost_d))\n| extend BudgetLimit = 20.0\n| extend DaysInMonth = 30\n| extend CurrentDay = dayofmonth(now())\n| extend Projection = MonthlyCost * (DaysInMonth / CurrentDay)\n| project MonthlyCost, Projection, BudgetLimit\n| extend Status = iff(Projection > BudgetLimit, '🔴 Proyección excede presupuesto', '🟢 Dentro de presupuesto')",
+        "size": 0,
+        "title": "🏗️ Proyección Mensual Infraestructura (€20/mes)",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "MonthlyCost",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "Projection",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "BudgetLimit",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "customWidth": "50",
+      "name": "query - infrastructure projection"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= startofday(now())\n| extend WorkloadType = tostring(tags_s['workload-type'])\n| where WorkloadType == 'session-host'\n| summarize CurrentCost = sum(todouble(Cost_d))\n| extend DailyBudget = 50.0\n| extend PercentageUsed = (CurrentCost / DailyBudget) * 100\n| where PercentageUsed > 80\n| project CurrentCost, DailyBudget, PercentageUsed, \n         Alert = iff(PercentageUsed > 100, '🔴 CRITICAL: Presupuesto excedido', \n                iff(PercentageUsed > 90, '🟠 WARNING: 90% alcanzado', \n                '🟡 ALERT: 80% alcanzado'))",
+        "size": 0,
+        "title": "🚨 Alertas Presupuestarias Activas HOY",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "CurrentCost",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "DailyBudget",
+              "formatter": 0,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "currency",
+                  "currency": "EUR"
+                }
+              }
+            },
+            {
+              "columnMatch": "PercentageUsed",
+              "formatter": 18,
+              "formatOptions": {
+                "thresholdsOptions": "colors",
+                "thresholdsGrid": [
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "100",
+                    "representation": "redBright",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": ">=",
+                    "thresholdValue": "90",
+                    "representation": "orange",
+                    "text": "{0}{1}"
+                  },
+                  {
+                    "operator": "Default",
+                    "thresholdValue": null,
+                    "representation": "yellow",
+                    "text": "{0}{1}"
+                  }
+                ]
+              },
+              "numberFormat": {
+                "unit": 1,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "name": "query - active alerts"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureDiagnostics\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| extend ResourceName = tostring(Resource_s)\n| where isnotempty(ResourceName)\n| summarize Cost = sum(todouble(Cost_d)) by ResourceName\n| order by Cost desc\n| take 10",
+        "size": 0,
+        "title": "💸 Top 10 Recursos por Costo",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "piechart",
+        "chartSettings": {
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 0,
+              "options": {
+                "style": "currency",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "customWidth": "50",
+      "name": "query - top resources cost"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AzureActivity\n| where ResourceGroup == '{ResourceGroup}'\n| where TimeGenerated >= {TimeRange:start} and TimeGenerated <= {TimeRange:end}\n| where ResourceProviderValue == 'Microsoft.Compute'\n| where OperationNameValue contains 'virtualMachines'\n| summarize Count = count() by OperationNameValue\n| order by Count desc\n| take 10",
+        "size": 0,
+        "title": "🔧 Operaciones VM más Frecuentes",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "visualization": "table"
+      },
+      "customWidth": "50",
+      "name": "query - vm operations"
+    }
+  ],
+  "fallbackResourceIds": [],
+  "fromTemplateId": "sentinel-UserWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
