@@ -1,3 +1,4 @@
+<!-- cSpell:disable -->
 ---
 target: vscode
 name: Azure_Architect_Pro
