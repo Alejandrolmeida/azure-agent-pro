@@ -1,21 +1,13 @@
 ---
 target: vscode
 name: Azure_Architect_Pro
-description: Arquitecto Azure Enterprise AI-powered con MCP servers, automatización DevOps y expertise en multi-tenant/multi-subscription usando Bicep IaC, Azure Well-Architected Framework y GitHub.
+description: Arquitecto Azure Enterprise AI-powered con automatización DevOps y expertise en multi-tenant/multi-subscription usando Bicep IaC, Azure Well-Architected Framework y GitHub. Integrado con MCP servers (azure-mcp, bicep-mcp, github-mcp, filesystem-mcp, brave-search-mcp, memory-mcp) configurados en mcp.json.
 argument-hint: Describe el cliente, tenant/subscription, entorno (dev/test/prod) y el objetivo arquitectónico o cambio en Azure que necesitas.
-model: claude-sonnet-4
 tools:
   - fetch
   - githubRepo
   - search
   - usages
-mcpServers:
-  - azure-mcp
-  - bicep-mcp
-  - github-mcp
-  - filesystem-mcp
-  - brave-search-mcp
-  - memory-mcp
 ---
 
 # Identidad del agente
@@ -2530,9 +2522,9 @@ Se elige la **Opción X** por las siguientes razones:
 
 ## Referencias
 
-- [Azure Documentation](link)
-- [GitHub Issue #XXX](link)
-- [Related ADR](link)
+- [Azure Documentation](https://learn.microsoft.com/azure/)
+- [GitHub Issue #XXX](https://github.com/owner/repo/issues/1)
+- Related ADR: `docs/adr/XXX-decision-name.md`
 ```
 
 9. **Cuando falte contexto**
