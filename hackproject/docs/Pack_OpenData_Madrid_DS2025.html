@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pack de Datasets y APIs públicos — Hackathon DataSaturday Madrid 2025</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --card: #121822;
+    --ink: #e6eef7;
+    --muted: #a8b3c7;
+    --accent: #5cc8ff;
+    --border: #1f2a3a;
+  }
+  html, body {background: var(--bg); color: var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; line-height: 1.45;}
+  .wrap {max-width: 1060px; margin: 32px auto; padding: 0 20px;}
+  header {margin-bottom: 18px;}
+  h1 {font-size: 28px; margin: 0 0 6px; letter-spacing: .2px;}
+  h2 {font-size: 22px; margin: 28px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px;}
+  h3 {font-size: 18px; margin: 18px 0 8px;}
+  p {margin: 10px 0; color: var(--muted);}
+  a {color: var(--accent); text-decoration: none;}
+  a:hover {text-decoration: underline;}
+  .badge {display:inline-block; font-size:12px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; color:#b9c6dc; background:#0e1420;}
+  .grid {display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px;}
+  .card {background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 14px;}
+  .span-12 {grid-column: span 12;}
+  .span-6 {grid-column: span 6;}
+  .muted {color: var(--muted);}
+  table {width: 100%; border-collapse: collapse; background: var(--card); border:1px solid var(--border);}
+  th, td {text-align: left; padding: 10px; border-top:1px solid var(--border);}
+  th {background: #0f1622; font-weight: 600;}
+  code, .mono {font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 13px;}
+  ul {margin: 10px 0 10px 20px;}
+  .kicker {display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .footer {margin: 28px 0 60px; font-size: 12px; color: var(--muted);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">
+        <span class="badge">DataSaturday Madrid 2025</span>
+        <span class="badge">Hackathon</span>
+      </div>
+      <h1>Pack de Datasets y APIs públicos para el hackathon</h1>
+      <p class="muted">Documento de trabajo para la organización. Última actualización: 27/10/2025 09:47 (hora local).</p>
+    </header>
+
+    <section class="grid">
+      <div class="card span-12">
+        <h2>1) Fuentes oficiales — Comunidad y Ayuntamiento</h2>
+        <div class="grid">
+          <div class="span-6">
+            <h3>Comunidad de Madrid</h3>
+            <ul>
+              <li>Portal Datos Abiertos: <a href="https://www.comunidad.madrid/gobierno/datos-abiertos" target="_blank" rel="noopener">comunidad.madrid/gobierno/datos-abiertos</a></li>
+              <li>Catálogo (CKAN): <a href="https://datos.comunidad.madrid/catalogo/" target="_blank" rel="noopener">datos.comunidad.madrid/catalogo</a></li>
+              <li>API del catálogo (CKAN): 
+                <div class="mono">
+                  <a href="https://datos.comunidad.madrid/catalogo/api/3/action/package_list" target="_blank" rel="noopener">/api/3/action/package_list</a> · 
+                  <a href="https://datos.comunidad.madrid/catalogo/api/3/action/package_search?q=aire" target="_blank" rel="noopener">/api/3/action/package_search</a>
+                </div>
+              </li>
+              <li>Calidad del aire (histórico / mensual / día): 
+                <ul>
+                  <li>Datos horarios desde 2005: <a href="https://datos.comunidad.madrid/dataset/?groups=medio-ambiente" target="_blank" rel="noopener">Listado medio ambiente</a></li>
+                  <li>Estaciones (con <em>API de datos</em>): <a href="https://datos.comunidad.madrid/catalogo/dataset/calidad_aire_estaciones/resource/c05f6436-783e-4b04-b0d2-47848daea984" target="_blank" rel="noopener">Estaciones (CSV/JSON)</a></li>
+                  <li>Meteo horarios desde 2020: <a href="https://datos.comunidad.madrid/dataset/calidad_aire_datos_meteo_historico" target="_blank" rel="noopener">Datos meteo horarios</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="span-6">
+            <h3>Ayuntamiento de Madrid</h3>
+            <ul>
+              <li>Portal Datos Abiertos: <a href="https://datos.madrid.es/portal/site/egob" target="_blank" rel="noopener">datos.madrid.es</a></li>
+              <li>API REST oficial: <a href="https://datos.madrid.es/portal/site/egob/menuitem.214413fe61bdd68a53318ba0a8a409a0/?vgnextchannel=b07e0f7c5ff9e510VgnVCM1000008a4a900aRCRD&vgnextfmt=default&vgnextoid=b07e0f7c5ff9e510VgnVCM1000008a4a900aRCRD" target="_blank" rel="noopener">documentación API</a></li>
+              <li>Catálogo completo: <a href="https://datos.madrid.es/portal/site/egob/menuitem.9e1e2f6404558187cf35cf3584f1a5a0/?vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default&vgnextoid=374512b9ace9f310VgnVCM100000171f5a0aRCRD" target="_blank" rel="noopener">listado datasets</a></li>
+              <li>Calidad del aire (diario/horario/tiempo real):
+                <ul>
+                  <li>Diario desde 2001: <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextoid=aecb88a7e2b73410VgnVCM2000000c205a0aRCRD" target="_blank" rel="noopener">dataset diario</a></li>
+                  <li>Horario desde 2001: <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=defaultURL&vgnextoid=f3c0f7d512273410VgnVCM2000000c205a0aRCRD" target="_blank" rel="noopener">dataset horario</a></li>
+                  <li>Tiempo real (cada 20 min): <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextoid=41e01e007c9db410VgnVCM2000000c205a0aRCRD" target="_blank" rel="noopener">dataset tiempo real</a></li>
+                </ul>
+              </li>
+              <li>Ejemplo directo (JSON): <a href="https://datos.madrid.es/egob/catalogo/300261-0-bicimad-disponibilidad.json" target="_blank" rel="noopener">BiciMAD — disponibilidad</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <h2>2) Movilidad / Transporte</h2>
+        <div class="grid">
+          <div class="span-6">
+            <h3>EMT Madrid</h3>
+            <ul>
+              <li>Portal Open Data: <a href="https://datos.emtmadrid.es/" target="_blank" rel="noopener">datos.emtmadrid.es</a></li>
+              <li>API (docs): <a href="https://apidocs.emtmadrid.es/" target="_blank" rel="noopener">apidocs.emtmadrid.es</a> (registro gratuito en MobilityLabs)</li>
+              <li>MobilityLabs: <a href="https://mobilitylabs.emtmadrid.es/en" target="_blank" rel="noopener">mobilitylabs.emtmadrid.es</a></li>
+            </ul>
+          </div>
+          <div class="span-6">
+            <h3>CRTM (Consorcio Regional de Transportes de Madrid)</h3>
+            <ul>
+              <li>Portal Open Data: <a href="https://data-crtm.opendata.arcgis.com/" target="_blank" rel="noopener">data-crtm.opendata.arcgis.com</a></li>
+              <li>GTFS Cercanías (ejemplo): <a href="https://datos.crtm.es/datasets/1a25440bf66f499bae2657ec7fb40144" target="_blank" rel="noopener">dataset GTFS</a></li>
+              <li>GTFS Metro (ejemplo): <a href="https://hub.arcgis.com/datasets/5c7f2951962540d69ffe8f640d94c246" target="_blank" rel="noopener">dataset GTFS</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <h2>3) Otros catálogos estatales útiles</h2>
+        <ul>
+          <li>Catálogo nacional: <a href="https://datos.gob.es/es" target="_blank" rel="noopener">datos.gob.es</a></li>
+          <li>AEMET OpenData (API): <a href="https://opendata.aemet.es/" target="_blank" rel="noopener">opendata.aemet.es</a></li>
+          <li>INE — API JSON (estadísticas): <a href="https://www.ine.es/dyngs/DAB/index.htm?cid=1099" target="_blank" rel="noopener">documentación</a></li>
+        </ul>
+      </div>
+
+      <div class="card span-12">
+        <h2>4) Datasets espejo en Kaggle (rápidos para prototipos)</h2>
+        <table>
+          <thead>
+            <tr><th>Nombre</th><th>Periodo</th><th>Enlace</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Air Quality in Madrid</td>
+              <td>2001–2018</td>
+              <td><a href="https://www.kaggle.com/datasets/decide-soluciones/air-quality-madrid" target="_blank" rel="noopener">Kaggle</a></td>
+            </tr>
+            <tr>
+              <td>Air Quality in Madrid</td>
+              <td>2001–2020</td>
+              <td><a href="https://www.kaggle.com/datasets/raulperula/air-quality-in-madrid-20012020" target="_blank" rel="noopener">Kaggle</a></td>
+            </tr>
+            <tr>
+              <td>Air Quality in Madrid</td>
+              <td>2020–2022</td>
+              <td><a href="https://www.kaggle.com/datasets/rasieira/air-quality-madrid-2020-2022" target="_blank" rel="noopener">Kaggle</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted">Sugerencia: arrancar con Kaggle para reducir fricción y luego cambiar origen a APIs oficiales (Ayto/CRTM/EMT) para una demo “pro”.</p>
+      </div>
+
+      <div class="card span-12">
+        <h2>5) Ideas de retos (copy & paste para las bases)</h2>
+        <ol>
+          <li>Predicción de ocupación en líneas/estaciones (GTFS + histórico EMT/Ayto).</li>
+          <li>Rutas multimodales <em>low‑emissions</em> cruzando Metro/Bus + calidad del aire por tramo.</li>
+          <li>Panel de puntualidad y tiempos de espera “reales vs. planificados”.</li>
+          <li>Mapa de calor de incidencias de movilidad para priorizar inversiones.</li>
+          <li>Copilot/Q&amp;A sobre el catálogo de datos abiertos de Madrid.</li>
+          <li>Score de accesibilidad a hospitales/colegios con transporte público.</li>
+          <li>Alertas de episodios de contaminación con recomendaciones de movilidad.</li>
+          <li>Optimización de paradas/frecuencias en horas punta (simulación simple).</li>
+          <li>Turismo responsable: rutas que eviten <em>hotspots</em> y reduzcan ruido.</li>
+          <li>Observabilidad de costes y calidad del dato en un pipeline analítico.</li>
+        </ol>
+      </div>
+
+      <div class="card span-12">
+        <h2>6) Iniciativas recientes para alinear el hackathon</h2>
+        <ul>
+          <li><strong>IV Plan de Gobierno Abierto (2024–2027)</strong> — Ayuntamiento de Madrid. 
+            <a href="https://transparencia.madrid.es/portales/transparencia/es/Portada/IV-Plan-de-Gobierno-Abierto-del-Ayuntamiento-de-Madrid-2024-2027/?vgnextchannel=b8e8508929a56510VgnVCM1000008a4a900aRCRD&vgnextfmt=default&vgnextoid=db2c0aaefa73e810VgnVCM1000001d4a900aRCRD" target="_blank" rel="noopener">ver plan</a></li>
+          <li><strong>Premios a la Reutilización de Datos Abiertos 2025</strong> — Ayuntamiento de Madrid. 
+            <a href="https://sede.madrid.es/portal/site/tramites/menuitem.62876cb64654a55e2dbd7003a8a409a0/?vgnextchannel=5d8737c190180210VgnVCM100000c90da8c0RCRD&vgnextfmt=pd&vgnextoid=4c0731b003027910VgnVCM1000001d4a900aRCRD" target="_blank" rel="noopener">convocatoria</a></li>
+          <li><strong>BOCM: herramienta de “derecho al olvido” + nuevos formatos</strong> — Comunidad de Madrid. 
+            <a href="https://cadenaser.com/cmadrid/2025/03/03/el-bocm-incorpora-una-herramienta-para-garantizar-el-derecho-al-olvido-de-la-ciudadania-ser-madrid-norte/" target="_blank" rel="noopener">noticia</a></li>
+        </ul>
+        <p class="muted">Estas iniciativas refuerzan la narrativa de reutilización, transparencia y valor público de los datos.</p>
+      </div>
+
+      <div class="card span-12">
+        <h2>7) Anexos útiles</h2>
+        <ul>
+          <li>Formatos del portal de datos (Ayto): <a href="https://datos.madrid.es/portal/site/egob/menuitem.400a817358ce98c34e937436a8a409a0/?vgnextchannel=b07512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default&vgnextoid=b07512b9ace9f310VgnVCM100000171f5a0aRCRD" target="_blank" rel="noopener">ver guía</a></li>
+          <li>INE — API JSON (referencia en inglés): <a href="https://www.ine.es/dyngs/DAB/en/index.htm?cid=1100" target="_blank" rel="noopener">API Reference</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="footer">
+      <p>Autor: Alejandro Almeida · Uso interno de la organización de DataSaturday Madrid 2025. Puedes editar este HTML libremente.</p>
+    </section>
+  </div>
+</body>
+</html>
