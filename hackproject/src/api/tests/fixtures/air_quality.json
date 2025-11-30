@@ -1,0 +1,574 @@
+{
+  "description": "Mock data de calidad del aire para estaciones de monitoreo de Madrid con valores realistas según normativa WHO",
+  "last_updated": "2025-11-30T12:00:00Z",
+  "timestamp": "2025-11-30T12:00:00Z",
+  "total_stations": 12,
+  "data_source": "Red de Calidad del Aire del Ayuntamiento de Madrid (simulado)",
+  "stations": [
+    {
+      "station_id": "28079004",
+      "station_name": "Plaza de España",
+      "latitude": 40.4238,
+      "longitude": -3.7122,
+      "pollutants": {
+        "NO2": {
+          "value": 35.5,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 22.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 12.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 45.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.4,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 28,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079008",
+      "station_name": "Escuelas Aguirre",
+      "latitude": 40.4215,
+      "longitude": -3.6823,
+      "pollutants": {
+        "NO2": {
+          "value": 42.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 28.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 15.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 52.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.5,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 35,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079011",
+      "station_name": "Av. Ramón y Cajal",
+      "latitude": 40.4514,
+      "longitude": -3.6773,
+      "pollutants": {
+        "NO2": {
+          "value": 58.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "moderate"
+        },
+        "PM10": {
+          "value": 35.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 18.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 38.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.7,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 48,
+      "level": "moderate",
+      "color": "#84cc16"
+    },
+    {
+      "station_id": "28079016",
+      "station_name": "Arturo Soria",
+      "latitude": 40.4402,
+      "longitude": -3.6394,
+      "pollutants": {
+        "NO2": {
+          "value": 38.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 24.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 13.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 62.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.3,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 32,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079018",
+      "station_name": "Urbanización Embajada",
+      "latitude": 40.4564,
+      "longitude": -3.6119,
+      "pollutants": {
+        "NO2": {
+          "value": 28.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 18.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 9.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 75.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.2,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 22,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079024",
+      "station_name": "Casa de Campo",
+      "latitude": 40.4192,
+      "longitude": -3.7473,
+      "pollutants": {
+        "NO2": {
+          "value": 25.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 15.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 8.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 88.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.2,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 18,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079027",
+      "station_name": "Barajas Pueblo",
+      "latitude": 40.4739,
+      "longitude": -3.5804,
+      "pollutants": {
+        "NO2": {
+          "value": 45.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 30.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 16.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 42.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.6,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 38,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079035",
+      "station_name": "Plaza del Carmen",
+      "latitude": 40.4195,
+      "longitude": -3.7032,
+      "pollutants": {
+        "NO2": {
+          "value": 65.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "moderate"
+        },
+        "PM10": {
+          "value": 38.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 20.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 32.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.8,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 52,
+      "level": "moderate",
+      "color": "#84cc16"
+    },
+    {
+      "station_id": "28079036",
+      "station_name": "Moratalaz",
+      "latitude": 40.4077,
+      "longitude": -3.6453,
+      "pollutants": {
+        "NO2": {
+          "value": 48.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 32.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 17.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 58.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.5,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 42,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079038",
+      "station_name": "Cuatro Caminos",
+      "latitude": 40.4458,
+      "longitude": -3.7064,
+      "pollutants": {
+        "NO2": {
+          "value": 72.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "moderate"
+        },
+        "PM10": {
+          "value": 42.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "moderate"
+        },
+        "PM2.5": {
+          "value": 22.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 28.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 1.0,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 58,
+      "level": "moderate",
+      "color": "#84cc16"
+    },
+    {
+      "station_id": "28079039",
+      "station_name": "Vallecas",
+      "latitude": 40.3881,
+      "longitude": -3.6514,
+      "pollutants": {
+        "NO2": {
+          "value": 52.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "good"
+        },
+        "PM10": {
+          "value": 34.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 18.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 48.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.6,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 45,
+      "level": "good",
+      "color": "#10b981"
+    },
+    {
+      "station_id": "28079040",
+      "station_name": "Villaverde",
+      "latitude": 40.3473,
+      "longitude": -3.7067,
+      "pollutants": {
+        "NO2": {
+          "value": 55.0,
+          "unit": "μg/m³",
+          "who_limit": 200,
+          "status": "moderate"
+        },
+        "PM10": {
+          "value": 36.0,
+          "unit": "μg/m³",
+          "who_limit": 50,
+          "status": "good"
+        },
+        "PM2.5": {
+          "value": 19.0,
+          "unit": "μg/m³",
+          "who_limit": 25,
+          "status": "good"
+        },
+        "O3": {
+          "value": 44.0,
+          "unit": "μg/m³",
+          "who_limit": 100,
+          "status": "good"
+        },
+        "CO": {
+          "value": 0.7,
+          "unit": "mg/m³",
+          "who_limit": 10,
+          "status": "good"
+        }
+      },
+      "aqi": 47,
+      "level": "moderate",
+      "color": "#84cc16"
+    }
+  ],
+  "metadata": {
+    "source": "Red de Calidad del Aire - Ayuntamiento de Madrid",
+    "measurement_period": "Última hora",
+    "who_guidelines": {
+      "NO2": {
+        "limit": 200,
+        "unit": "μg/m³",
+        "reference": "WHO Air Quality Guidelines (1-hour mean)"
+      },
+      "PM10": {
+        "limit": 50,
+        "unit": "μg/m³",
+        "reference": "WHO Air Quality Guidelines (24-hour mean)"
+      },
+      "PM2.5": {
+        "limit": 25,
+        "unit": "μg/m³",
+        "reference": "WHO Air Quality Guidelines (24-hour mean)"
+      },
+      "O3": {
+        "limit": 100,
+        "unit": "μg/m³",
+        "reference": "WHO Air Quality Guidelines (8-hour mean)"
+      },
+      "CO": {
+        "limit": 10,
+        "unit": "mg/m³",
+        "reference": "WHO Air Quality Guidelines (8-hour mean)"
+      }
+    },
+    "aqi_scale": {
+      "good": {
+        "range": "0-50",
+        "color": "#10b981",
+        "health_implications": "Air quality is satisfactory, and air pollution poses little or no risk."
+      },
+      "moderate": {
+        "range": "51-100",
+        "color": "#84cc16",
+        "health_implications": "Air quality is acceptable. However, there may be a risk for some people."
+      },
+      "unhealthy_sensitive": {
+        "range": "101-150",
+        "color": "#f59e0b",
+        "health_implications": "Members of sensitive groups may experience health effects."
+      },
+      "unhealthy": {
+        "range": "151-200",
+        "color": "#ef4444",
+        "health_implications": "Some members of the general public may experience health effects."
+      },
+      "very_unhealthy": {
+        "range": "201-300",
+        "color": "#991b1b",
+        "health_implications": "Health alert: The risk of health effects is increased for everyone."
+      }
+    },
+    "coverage": {
+      "total_stations": 12,
+      "active_stations": 12,
+      "coverage_area": "Ciudad de Madrid y periferia",
+      "data_availability": "Datos disponibles 24/7 con actualización horaria"
+    },
+    "statistics": {
+      "average_no2": 48.6,
+      "average_pm10": 29.5,
+      "average_pm25": 15.6,
+      "average_aqi": 38.1,
+      "stations_good": 8,
+      "stations_moderate": 4,
+      "stations_unhealthy": 0
+    }
+  }
+}
