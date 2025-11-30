@@ -1,0 +1,82 @@
+# ============================================================================
+# GitHub Actions Workflow: Deploy Infrastructure
+# ============================================================================
+# Despliega la infraestructura Azure usando Bicep
+# ============================================================================
+
+name: Deploy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+  push:
+    branches:
+      - datahack4good
+    paths:
+      - 'hackproject/bicep/**'
+      - '.github/workflows/deploy-infrastructure.yml'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Bicep Build
+        run: |
+          az bicep build --file hackproject/bicep/main.bicep
+          echo "✅ Bicep compilation successful"
+
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'dev' }}
+    runs-on: ubuntu-latest
+    needs: validate
+    environment:
+      name: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Bicep
+        uses: azure/arm-deploy@v2
+        with:
+          scope: subscription
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          region: westeurope
+          template: hackproject/bicep/main.bicep
+          parameters: hackproject/bicep/parameters/${{ github.event.inputs.environment || 'dev' }}.bicepparam
+          deploymentName: 'bicimad-${{ github.run_number }}'
+          failOnStdErr: false
+
+      - name: Output Resources
+        run: |
+          echo "✅ Infrastructure deployed successfully"
+          echo "🔍 Listing resources..."
+          az resource list --resource-group rg-bicimad-${{ github.event.inputs.environment || 'dev' }}-westeurope --output table
