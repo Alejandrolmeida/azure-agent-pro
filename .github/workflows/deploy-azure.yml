@@ -1,11 +1,8 @@
 name: Deploy to Azure
 
+# DISABLED: This workflow is for educational purposes only
+# Requires Azure credentials and resources to be configured
 on:
-  push:
-    branches: [main]
-    paths:
-      - "bicep/**"
-      - ".github/workflows/deploy-azure.yml"
   workflow_dispatch:
     inputs:
       environment:
@@ -28,14 +25,14 @@ env:
   PROJECT_NAME: azure-agent-pro # Azure Agent Pro project name
   # Note: These would be configured in a real Azure environment
   # AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
-  AZURE_LOCATION: 'eastus'
+  AZURE_LOCATION: "eastus"
 
 jobs:
   deploy-dev:
     name: Deploy to Development
     runs-on: ubuntu-latest
     # DISABLED for educational project - requires real Azure credentials and resources
-    if: false  # Change to 'true' and configure Azure secrets to enable
+    if: false # Change to 'true' and configure Azure secrets to enable
     environment: development
 
     steps:
@@ -80,7 +77,7 @@ jobs:
     name: Deploy to Selected Environment
     runs-on: ubuntu-latest
     # DISABLED for educational project - requires real Azure credentials and resources
-    if: false  # Change to 'true' and configure Azure secrets to enable
+    if: false # Change to 'true' and configure Azure secrets to enable
     environment: ${{ inputs.environment }}
 
     steps:
