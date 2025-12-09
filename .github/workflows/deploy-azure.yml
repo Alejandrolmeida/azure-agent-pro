@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     # DISABLED for educational project - requires real Azure credentials and resources
     if: false # Change to 'true' and configure Azure secrets to enable
-    environment: development
+    # environment: development  # Commented out to hide deployments section
 
     steps:
       - name: Checkout repository
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     # DISABLED for educational project - requires real Azure credentials and resources
     if: false # Change to 'true' and configure Azure secrets to enable
-    environment: ${{ inputs.environment }}
+    # environment: ${{ inputs.environment }}  # Commented out to hide deployments section
 
     steps:
       - name: Validate Production Deployment
