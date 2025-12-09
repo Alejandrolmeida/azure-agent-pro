@@ -159,6 +159,39 @@ azure-agent-pro/
 └── README.md                       # This file
 ```
 
+## 🎓 Workshop: Aprende Vibe Coding con Azure Agent Pro
+
+### 🐱🚀 Kitten Space Missions API Workshop
+
+¿Quieres aprender **Vibe Coding profesional** con el agente Azure_Architect_Pro? Hemos creado un workshop completo y divertido donde construirás una API de misiones espaciales tripuladas por gatitos astronautas.
+
+**📖 [Comenzar Workshop →](docs/workshop/kitten-space-missions/README.md)**
+
+**Duración**: 3-4 horas | **Nivel**: Básico | **Formato**: Hands-on
+
+#### Lo que aprenderás:
+- 🗣️ Comunicarte eficientemente con agentes IA (Vibe Coding)
+- 🏗️ Diseñar arquitecturas siguiendo Azure Well-Architected Framework
+- 💰 Realizar análisis FinOps con informes HTML antes de desplegar
+- 🔧 Generar código Bicep modular y reutilizable automáticamente
+- 🚀 Crear pipelines CI/CD con GitHub Actions
+- 📊 Configurar monitoreo y observabilidad enterprise
+- ✅ Validar todo siguiendo mejores prácticas de Azure
+
+#### 8 Actividades progresivas:
+1. **Setup Inicial** - Fork repo, clonar, configurar entorno
+2. **Primera Conversación** - Diseñar arquitectura con el agente
+3. **Análisis FinOps** - Generar informe HTML de costos
+4. **Generación Bicep** - Crear módulos IaC automáticamente
+5. **CI/CD Setup** - Workflows con GitHub Actions y OIDC
+6. **Deployment** - Desplegar en Azure y validar
+7. **Monitoreo** - Application Insights, dashboards, alertas
+8. **Testing** - Smoke tests y validación final
+
+**💡 Ideal para**: Desarrolladores, administradores IT, arquitectos cloud y estudiantes que quieren dominar Azure con IA.
+
+---
+
 ## 🚀 Inicio Rápido
 
 ### 1. Configuración Inicial
