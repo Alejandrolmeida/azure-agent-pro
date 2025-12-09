@@ -1,3 +1,5 @@
+![Kitten Space Missions - Workshop Header](./assets/workshop-hero.png)
+
 # 🚀🐱 Workshop: Kitten Space Missions API
 
 **Duración total**: 3-4 horas  
