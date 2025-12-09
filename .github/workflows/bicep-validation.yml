@@ -1,16 +1,18 @@
 name: Bicep Validation and Linting
 
+# Educational project - workflow available for manual runs only
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - "bicep/**"
-      - ".github/workflows/bicep-validation.yml"
-  pull_request:
-    branches: [main, develop]
-    paths:
-      - "bicep/**"
-      - ".github/workflows/bicep-validation.yml"
+  workflow_dispatch:
+  # push:
+  #   branches: [main, develop]
+  #   paths:
+  #     - "bicep/**"
+  #     - ".github/workflows/bicep-validation.yml"
+  # pull_request:
+  #   branches: [main, develop]
+  #   paths:
+  #     - "bicep/**"
+  #     - ".github/workflows/bicep-validation.yml"
 
 env:
   # Configure these values for your environment
@@ -18,8 +20,8 @@ env:
   # Note: These variables would be configured in a real Azure environment
   # AZURE_RESOURCE_GROUP: ${{ vars.CI_RESOURCE_GROUP || 'azure-agent-pro-ci' }}
   # AZURE_LOCATION: ${{ vars.DEFAULT_LOCATION || 'eastus' }}
-  AZURE_RESOURCE_GROUP: 'azure-agent-pro-ci'
-  AZURE_LOCATION: 'eastus'
+  AZURE_RESOURCE_GROUP: "azure-agent-pro-ci"
+  AZURE_LOCATION: "eastus"
 
 jobs:
   bicep-validation:
@@ -36,7 +38,7 @@ jobs:
           version: "latest"
 
       - name: Azure Login using OIDC
-        if: false  # Disabled for educational project - no real Azure credentials
+        if: false # Disabled for educational project - no real Azure credentials
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -59,7 +61,7 @@ jobs:
           done
 
       - name: Bicep Validation - Development
-        if: false  # Disabled for educational project - requires real Azure subscription
+        if: false # Disabled for educational project - requires real Azure subscription
         run: |
           echo "✅ Validating Bicep templates for development environment..."
           az deployment group validate \
@@ -69,7 +71,7 @@ jobs:
             --verbose
 
       - name: Bicep What-If Analysis
-        if: false  # Disabled for educational project - requires real Azure subscription
+        if: false # Disabled for educational project - requires real Azure subscription
         run: |
           echo "📊 Running What-If analysis..."
           az deployment group what-if \
@@ -105,7 +107,7 @@ jobs:
     name: Test Bicep Deployments
     runs-on: ubuntu-latest
     needs: bicep-validation
-    if: false  # Disabled for educational project - requires real Azure subscription and resources
+    if: false # Disabled for educational project - requires real Azure subscription and resources
 
     steps:
       - name: Checkout repository
