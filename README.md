@@ -11,38 +11,56 @@
 [![Research Project](https://img.shields.io/badge/Project-Research%20%26%20Education-green.svg)](#)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> **Proyecto de Investigación Educativo**: Enseñando a administradores de Azure especializados en Networking (AZ-104 y AZ-700) cómo usar GitHub Copilot potenciado con MCP Servers para gestionar infraestructura de red en Azure como un experto.
+> **Proyecto Educativo de Vanguardia**: Aprende a construir infraestructura Azure enterprise usando **Vibe Coding** con el agente personalizado **Azure_Architect_Pro**, potenciado por 6 MCP Servers especializados. Sin escribir código manualmente. Sin memorizar sintaxis.
 
 ## 🎯 Propósito del Proyecto
 
-**Azure Agent Pro** es un proyecto de investigación educativo diseñado para demostrar y enseñar cómo GitHub Copilot puede ser potenciado con **Model Context Protocol (MCP) Servers**, scripts personalizados y workflows automatizados para gestionar infraestructura de red en Azure de manera profesional.
+**Azure Agent Pro** es un proyecto educativo que te enseña el **futuro del desarrollo cloud**: describir lo que necesitas en lenguaje natural y que un agente de IA especializado diseñe, implemente y despliegue infraestructura Azure siguiendo las mejores prácticas. No es Copilot estándar, es **Azure_Architect_Pro**: un agente con miles de líneas de instrucciones especializadas en Azure Well-Architected Framework, FinOps, seguridad y DevOps.
 
 ### 🔌 ¿Qué son los MCP Servers?
 
-Los **Model Context Protocol (MCP) Servers** son servicios que proporcionan contexto adicional a GitHub Copilot, permitiéndole:
+Los **Model Context Protocol (MCP) Servers** son herramientas especializadas que le dan superpoderes a GitHub Copilot. Azure Agent Pro usa **6 MCP Servers**:
 
-- 🔍 Acceder a recursos de Azure en tiempo real
-- 📊 Analizar configuraciones de red y sugerir optimizaciones
-- 🧪 Consultar documentación actualizada de Azure
-- 📝 Buscar en repositorios y código
-- 💾 Mantener contexto entre sesiones
+1. **azure-mcp** - Acceso directo a recursos Azure (VNets, NSGs, Key Vaults...)
+2. **bicep-mcp** - Validación y generación de Bicep siguiendo best practices
+3. **github-mcp** - Gestión de repos, issues, PRs y workflows
+4. **filesystem-mcp** - Navegación inteligente del código del proyecto
+5. **brave-search-mcp** - Búsqueda de documentación oficial y comunidad
+6. **memory-mcp** - Contexto persistente entre sesiones
+
+Es como tener un equipo de especialistas trabajando para ti.
 
 ### 🎓 ¿Qué Aprenderás?
 
-- **🤖 GitHub Copilot Avanzado**: Configuraciones y prompts optimizados para Azure
-- **☁️ Azure Professional**: Mejores prácticas de gestión de suscripciones enterprise
-- **🏗️ Infrastructure as Code**: Bicep templates con patterns avanzados
-- **🔄 DevOps Automation**: CI/CD pipelines para múltiples ambientes
-- **🔒 Security First**: Implementación de seguridad desde el diseño
-- **📊 Monitoring & Governance**: Herramientas de observabilidad y compliance
+- **🗣️ Vibe Coding**: Comunicarte estratégicamente con agentes IA para infraestructura
+- **🤖 Azure_Architect_Pro**: Usar un agente personalizado que actúa como arquitecto senior
+- **🏗️ Well-Architected**: Diseñar arquitecturas siguiendo los 5 pilares de Azure
+- **💰 FinOps**: Análisis de costos ANTES de desplegar (no después)
+- **🔧 Bicep IaC**: Generar código modular sin escribir manualmente
+- **🚀 DevOps**: CI/CD con GitHub Actions y OIDC (secretless)
+- **🔒 Zero Trust**: Security by design con Private Endpoints y Managed Identities
+- **📊 Observability**: Application Insights, KQL queries, dashboards automáticos
 
-### 👥 Audiencia Objetivo
+### 👥 ¿Para Quién es Este Proyecto?
 
-- **Desarrolladores** que quieren dominar Azure con AI
-- **Administradores IT** buscando automatización profesional
-- **DevOps Engineers** interesados en workflows avanzados
-- **Arquitectos Cloud** que necesitan patterns enterprise
-- **Estudiantes** aprendiendo tecnologías cloud modernas
+**Ideal para:**
+- 👨‍💻 **Desarrolladores** que quieren aprender Azure sin memorizar sintaxis
+- 🏢 **IT Admins** que necesitan automatizar infraestructura rápidamente
+- 🎓 **Estudiantes** buscando proyectos prácticos para su portfolio
+- 🚀 **Cloud Architects** explorando IA en Infrastructure as Code
+- 💼 **Equipos enterprise** adoptando Vibe Coding en sus workflows
+
+**NO necesitas:**
+- ❌ Ser experto en Azure
+- ❌ Saber Bicep de memoria
+- ❌ Conocer comandos Azure CLI
+- ❌ Experiencia previa con IaC
+
+**Solo necesitas:**
+- ✅ Curiosidad y ganas de aprender
+- ✅ GitHub Copilot (Individual, Business o Enterprise)
+- ✅ Azure subscription (free trial funciona)
+- ✅ VS Code instalado
 
 ## 🏗️ Arquitectura del Proyecto
 
@@ -112,19 +130,19 @@ azure-agent-pro/
 │       ├── test.parameters.json    # Testing environment
 │       ├── stage.parameters.json   # Staging environment
 │       └── prod.parameters.json    # Production environment
-├── 📚 docs/
-│   ├── learning-paths/             # Educational content
-│   │   ├── github-copilot-azure.md
-│   │   ├── azure-professional-management.md
-│   │   └── bicep-best-practices.md
-│   ├── tutorials/                  # Step-by-step guides
-│   │   ├── ai-enhanced-azure-development.md
-│   │   ├── setup-development-environment.md
-│   │   └── monitoring-and-troubleshooting.md
-│   └── cheatsheets/                # Quick reference guides
-│       ├── azure-cli-cheatsheet.md
-│       ├── bicep-cheatsheet.md
-│       └── mcp-servers-cheatsheet.md
+├── 📚 docs/                        # Documentación completa
+│   ├── README.md                   # 🌟 Índice maestro de documentación
+│   ├── getting-started/            # Setup inicial
+│   │   └── mcp-quickstart.md       # Configurar MCP Servers (10-15 min)
+│   ├── reference/                  # Referencias rápidas
+│   │   ├── azure-cli-cheatsheet.md # Comandos Azure CLI (711 líneas)
+│   │   ├── bicep-cheatsheet.md     # Sintaxis Bicep (1,165 líneas)
+│   │   └── mcp-servers-cheatsheet.md # MCP avanzado (1,059 líneas)
+│   └── workshop/                   # 🎓 Workshop principal
+│       ├── kitten-space-missions/  # ⭐ Workshop estrella (3,511 líneas)
+│       │   ├── 8 actividades progresivas
+│       │   └── assets/workshop-hero.png
+│       └── archived/               # Contenido histórico
 ├── 🔧 .vscode/                     # VS Code optimizations
 │   ├── settings.json               # Optimized settings for Azure development
 │   ├── extensions.json             # Recommended extensions
@@ -159,36 +177,98 @@ azure-agent-pro/
 └── README.md                       # This file
 ```
 
-## 🎓 Workshop: Aprende Vibe Coding con Azure Agent Pro
+## 🎓 Empezar: Workshop Kitten Space Missions
 
-### 🐱🚀 Kitten Space Missions API Workshop
+![Workshop Hero](./docs/workshop/kitten-space-missions/assets/workshop-hero.png)
 
-¿Quieres aprender **Vibe Coding profesional** con el agente Azure_Architect_Pro? Hemos creado un workshop completo y divertido donde construirás una API de misiones espaciales tripuladas por gatitos astronautas.
+### 🐱🚀 Construye Infraestructura Azure SIN Escribir Código
 
-**📖 [Comenzar Workshop →](docs/workshop/kitten-space-missions/README.md)**
+**¿Qué es esto?** Un workshop hands-on donde aprendes **Vibe Coding profesional** construyendo una API de misiones espaciales tripuladas por gatitos astronautas. Sí, suena divertido. Pero la infraestructura Azure que generarás es 100% enterprise.
 
-**Duración**: 3-4 horas | **Nivel**: Básico | **Formato**: Hands-on
+**👉 [Comenzar Workshop →](docs/workshop/kitten-space-missions/)**
 
-#### Lo que aprenderás:
-- 🗣️ Comunicarte eficientemente con agentes IA (Vibe Coding)
-- 🏗️ Diseñar arquitecturas siguiendo Azure Well-Architected Framework
-- 💰 Realizar análisis FinOps con informes HTML antes de desplegar
-- 🔧 Generar código Bicep modular y reutilizable automáticamente
-- 🚀 Crear pipelines CI/CD con GitHub Actions
-- 📊 Configurar monitoreo y observabilidad enterprise
-- ✅ Validar todo siguiendo mejores prácticas de Azure
+---
 
-#### 8 Actividades progresivas:
-1. **Setup Inicial** - Fork repo, clonar, configurar entorno
-2. **Primera Conversación** - Diseñar arquitectura con el agente
-3. **Análisis FinOps** - Generar informe HTML de costos
-4. **Generación Bicep** - Crear módulos IaC automáticamente
-5. **CI/CD Setup** - Workflows con GitHub Actions y OIDC
-6. **Deployment** - Desplegar en Azure y validar
-7. **Monitoreo** - Application Insights, dashboards, alertas
-8. **Testing** - Smoke tests y validación final
+### 📊 Lo que construirás:
 
-**💡 Ideal para**: Desarrolladores, administradores IT, arquitectos cloud y estudiantes que quieren dominar Azure con IA.
+Una **API REST completa** en Azure con:
+- ☁️ **~15 recursos Azure** (App Service, SQL Database, Key Vault, VNet, NSG, Application Insights...)
+- 🔒 **Zero Trust** architecture (Private Endpoints, Managed Identities, NSGs)
+- 🚀 **CI/CD** completo con GitHub Actions y OIDC
+- 📊 **Observabilidad** enterprise (dashboards, alerts, KQL queries)
+- 💰 **FinOps** con análisis de costos antes de desplegar
+
+**Todo generado automáticamente por Azure_Architect_Pro**. Tú solo describes lo que necesitas.
+
+---
+
+### 🎯 Lo que aprenderás:
+
+| Habilidad | Qué dominarás |
+|-----------|---------------|
+| 🗣️ **Vibe Coding** | Comunicarte estratégicamente con agentes IA |
+| 🏗️ **Well-Architected** | Diseñar arquitecturas siguiendo los 5 pilares de Azure |
+| 💰 **FinOps** | Análisis de costos con informes HTML profesionales |
+| 🔧 **Bicep IaC** | Generar código modular sin escribir manualmente |
+| 🚀 **DevOps** | CI/CD con GitHub Actions, OIDC, multi-stage deployments |
+| 🔒 **Security** | Private Endpoints, Managed Identities, Zero Trust |
+| 📊 **Observability** | Application Insights, KQL, dashboards, alertas |
+| ✅ **Testing** | Smoke tests, security validation, health checks |
+
+---
+
+### 📚 8 Actividades Progresivas (3-4 horas):
+
+1. **[Setup](docs/workshop/kitten-space-missions/activity-01-setup.md)** - Fork, clonar, configurar MCP Servers (30 min)
+2. **[Primera Conversación](docs/workshop/kitten-space-missions/activity-02-first-conversation.md)** - Diseñar arquitectura con el agente (30 min)
+3. **[Análisis FinOps](docs/workshop/kitten-space-missions/activity-03-finops-analysis.md)** - Informe HTML de costos antes de desplegar (30 min)
+4. **[Generación Bicep](docs/workshop/kitten-space-missions/activity-04-bicep-generation.md)** - Módulos IaC automáticos (45 min)
+5. **[CI/CD Setup](docs/workshop/kitten-space-missions/activity-05-cicd-setup.md)** - GitHub Actions + OIDC (30 min)
+6. **[Deployment](docs/workshop/kitten-space-missions/activity-06-azure-deployment.md)** - Desplegar en Azure real (45 min)
+7. **[Monitoreo](docs/workshop/kitten-space-missions/activity-07-monitoring.md)** - Application Insights (20 min)
+8. **[Testing](docs/workshop/kitten-space-missions/activity-08-testing.md)** - Validación final (20 min)
+
+**💡 Cada actividad incluye:** Objetivos, pasos detallados, troubleshooting, y entregables verificables.
+
+---
+
+### 🎁 ¿Por qué este workshop es diferente?
+
+| Otros Tutorials | Este Workshop |
+|----------------|---------------|
+| "Copia este código Bicep" | "Describe lo que necesitas, el agente lo genera" |
+| Sintaxis y comandos | Estrategia y comunicación con IA |
+| Un recurso aislado | Arquitectura enterprise completa |
+| Deploy y reza | FinOps ANTES + validación DURANTE |
+| Tema aburrido | Gatitos astronautas 🐱🚀 (memorable!) |
+
+**No aprenderás sintaxis de Bicep. Aprenderás a PENSAR como arquitecto y COMUNICARTE con IA.**
+
+---
+
+### 🚀 Requisitos Mínimos:
+
+- ✅ Cuenta GitHub (para fork del repo)
+- ✅ GitHub Copilot activo (Individual, Business o Enterprise)
+- ✅ Azure subscription (free trial con $200 funciona)
+- ✅ VS Code instalado
+- ✅ Linux, macOS o WSL2 en Windows
+
+**Costo estimado infraestructura:** ~$40-50/mes en dev (puedes eliminar todo al terminar)
+
+---
+
+### 📖 Documentación Completa:
+
+**[📚 Ver Documentación →](docs/README.md)**
+
+Incluye:
+- ⚙️ [Setup MCP Servers](docs/getting-started/mcp-quickstart.md) - 10-15 minutos
+- 📖 [Azure CLI Cheatsheet](docs/reference/azure-cli-cheatsheet.md) - 711 líneas
+- 📗 [Bicep Cheatsheet](docs/reference/bicep-cheatsheet.md) - 1,165 líneas
+- 📙 [MCP Servers Cheatsheet](docs/reference/mcp-servers-cheatsheet.md) - 1,059 líneas
+
+**Total: 10,368 líneas de documentación curada**
 
 ---
 
