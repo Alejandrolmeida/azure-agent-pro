@@ -1,4 +1,4 @@
-# 🚀 Azure Agent Pro
+# ☁️ Azure Agent Pro
 
 [![Bicep Validation](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Bicep%20Validation%20and%20Linting/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/bicep-validation.yml)
 [![Code Quality](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Code%20Quality%20and%20Security/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/code-quality.yml)
