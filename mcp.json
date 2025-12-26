@@ -80,6 +80,23 @@
         "description": "Contexto persistente entre sesiones de Copilot",
         "category": "memory"
       }
+    },
+    "azure-sql-mcp": {
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/mcp-servers/azure-sql/dist/index.js"
+      ],
+      "env": {
+        "AZURE_SQL_SERVER": "${AZURE_SQL_SERVER}",
+        "AZURE_SQL_DATABASE": "${AZURE_SQL_DATABASE}",
+        "AZURE_SQL_AUTH_TYPE": "azure-ad"
+      },
+      "metadata": {
+        "description": "Ejecuta consultas SQL y análisis de rendimiento en Azure SQL Database",
+        "category": "database",
+        "requiredEnvVars": ["AZURE_SQL_SERVER", "AZURE_SQL_DATABASE"],
+        "optional": true
+      }
     }
   }
 }
