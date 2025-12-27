@@ -1,4 +1,4 @@
-{
+                                                                            {
   "mcpServers": {
     "azure-mcp": {
       "command": "npx",
@@ -79,25 +79,6 @@
       "metadata": {
         "description": "Contexto persistente entre sesiones de Copilot",
         "category": "memory"
-      }
-    },
-    "sql-server-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@fabriciofs/mcp-sql-server"
-      ],
-      "env": {
-        "SQL_SERVER": "${SQL_SERVER}",
-        "SQL_DATABASE": "${SQL_DATABASE}",
-        "SQL_USER": "${SQL_USER}",
-        "SQL_PASSWORD": "${SQL_PASSWORD}"
-      },
-      "metadata": {
-        "description": "Ejecuta consultas SQL y análisis en SQL Server/Azure SQL Database",
-        "category": "database",
-        "requiredEnvVars": ["SQL_SERVER", "SQL_DATABASE"],
-        "optional": true
       }
     }
   }
