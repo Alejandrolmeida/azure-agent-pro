@@ -1,4 +1,16 @@
-# 📝 Feature Release Summary
+# 📝 Release Notes
+
+> **Note**: Este archivo contiene notas históricas de releases específicas.  
+> Para el historial completo de cambios, consulta **[CHANGELOG.md](CHANGELOG.md)**.
+
+---
+
+## Latest Releases
+
+- **[v1.1.0](docs/releases/v1.1.0.md)** (2025-12-29) - Azure SQL DBA Agent & Infrastructure Reorganization
+- **[v1.0.0](docs/releases/v1.0.0.md)** (2025-12-09) - Initial Release
+
+---
 
 ## 🎉 Feature: MCP Servers Integration and Azure Networking Workshop
 
