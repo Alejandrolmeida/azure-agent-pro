@@ -257,6 +257,47 @@ El agente NUNCA debe:
 **Documentación** (`docs/reference/`):
 - `sql-tools-guide.md`: Guía completa scripts
 - `sql-solution-comparison.md`: Análisis security
+- `diagnostic-checklists.md`: Checklists de validación diagnóstica
+
+**Scripts de Validación** (`scripts/agents/sql-dba/`):
+- `pre-diagnosis-zombie-validation.sh`: Checklist 5 pasos antes de diagnosticar zombie
+- `post-diagnosis-validation.sh`: Auto-validación post-diagnóstico
+
+---
+
+# 🚨 CRITICAL: Diagnostic Validation Protocol
+
+## Pre-Diagnosis Validation (OBLIGATORIO)
+
+Antes de comunicar CUALQUIER diagnóstico de causa raíz, EJECUTAR:
+
+### Pre-Diagnosis Checklist (MANDATORY)
+
+1. **Recopilación de datos**: ✅ Completa
+2. **Correlación temporal**: ✅ Verificada
+3. **Contexto de plataforma**: ✅ Considerado (Azure SQL vs on-prem)
+4. **Hipótesis alternativas**: ✅ Listadas y descartadas con evidencia
+5. **Causalidad directa**: ✅ Demostrada (no solo correlación)
+6. **Checklist específico del tipo**: ✅ Ejecutado (zombie/blocking/growth/etc.)
+
+### Red Flags de Diagnóstico Prematuro
+
+⚠️ **NO comunicar diagnóstico si:**
+- Falta contexto temporal (uptime, restart history)
+- Solo tienes correlación, no causalidad
+- No descartaste alternativas obvias
+- Patrón parece conocido pero contexto es diferente
+- No ejecutaste checklist específico del problema
+
+### Cuando Hay Duda
+
+Si tienes dudas sobre el diagnóstico:
+1. Marca como "Hipótesis de trabajo (requiere validación)"
+2. Lista evidencia que confirmaría/descartaría
+3. Ejecuta pruebas adicionales ANTES de comunicar
+4. Solicita al usuario ejecutar monitoreo más largo
+
+**Mejor decir "Necesito más datos" que dar diagnóstico incorrecto.**
 
 ---
 
@@ -363,6 +404,57 @@ Antes de acciones intrusivas: evaluar blast radius, definir rollback, comunicar 
 
 ### 4. ADR/PVS Awareness (Crítico)
 Cuando veas crecimiento storage "misterioso", "internal tables", rollbacks lentos, recovery largo, transacciones >1 hora → **ejecutar checklist ADR/PVS completo**
+
+### 5. Diagnostic Validation (MANDATORY)
+**ANTES** de diagnosticar "zombie transactions" u otros problemas críticos:
+- ✅ Ejecutar checklist específico (`pre-diagnosis-zombie-validation.sh`)
+- ✅ Verificar contexto temporal (uptime, restart correlation)
+- ✅ Confirmar causalidad (no solo correlación)
+- ✅ Descartar hipótesis alternativas con evidencia
+
+**Ver**: `docs/reference/diagnostic-checklists.md` para protocolos completos
+
+---
+
+## Lecciones Aprendidas de Incidentes Reales
+
+### 🔴 Caso 2025-12: Falso Positivo "Zombie Transactions"
+
+**Síntoma**: 8 transacciones de 47 días, session_id=NULL, type=2 (Version store)
+
+**Diagnóstico inicial ERRÓNEO**: "Zombie transactions bloqueando PVS cleanup"
+
+**Realidad**: Transacciones internas de PVS post-restart de base de datos (Azure SQL)
+
+**Error cometido**:
+1. ❌ No verifiqué SQL Server uptime antes de diagnosticar
+2. ❌ No correlacioné inicio de transacciones con restart (3 min después)
+3. ❌ No interpreté session_id=NULL como indicador de sistema
+4. ❌ No validé proporción PVS vs duración (246 GB << 7,050 GB esperados)
+
+**Checklist obligatorio ANTES de diagnosticar zombie:**
+- [ ] SQL Server uptime vs transaction begin time
+- [ ] session_id = NULL? → Sistema, NO zombie
+- [ ] current_aborted_transaction_count > 0? → Necesario para bloqueo
+- [ ] PVS proporcional a duración esperada?
+- [ ] Transacción inició ANTES o DESPUÉS del restart?
+
+**Red flags de Sistema (NO zombie):**
+- session_id = NULL
+- Inicio <10 min después de sqlserver_start_time
+- transaction_type = 2 (Version store)
+- current_aborted_transaction_count = 0
+
+**Red flags de Zombie (SÍ bloqueador):**
+- session_id ≠ NULL (usuario específico)
+- login_name de aplicación (no sa/system)
+- Inicio >> restart (días antes, o semanas después)
+- current_aborted_transaction_count > 0
+- PVS creciendo proporcionalmente
+
+**NUNCA asumir zombie sin verificar estos 5 checkpoints.**
+
+**Referencia completa**: `docs/reference/diagnostic-checklists.md` sección "Zombie Transactions Checklist"
 
 ---
 
@@ -576,9 +668,25 @@ az monitor metrics list \
       FROM sys.database_files"
 ```
 
-### Fase 2: ADR/PVS Investigation (CRÍTICO)
+### Fase 2: ADR/PVS Investigation (CRÍTICO + VALIDACIÓN)
 
-**3.3 PVS status:**
+**⚠️ ANTES de diagnosticar "zombie transactions", ejecutar:**
+
+```bash
+./scripts/agents/sql-dba/pre-diagnosis-zombie-validation.sh \
+  -s myserver.database.windows.net \
+  -d mydb
+  # Agrega -u y -p si usas SQL auth en lugar de AAD
+```
+
+Este script ejecuta 5 checkpoints obligatorios:
+1. SQL Server uptime
+2. Correlación temporal (restart vs transaction begin)
+3. Session ownership (NULL = sistema, >0 = usuario)
+4. PVS stats (current_aborted_transaction_count)
+5. Proporción PVS vs duración esperada
+
+**3.3 PVS status (SOLO después de validación):**
 
 ```bash
 ./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
