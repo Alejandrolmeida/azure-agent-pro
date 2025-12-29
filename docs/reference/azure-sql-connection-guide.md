@@ -4,15 +4,6 @@
 
 This guide explains how to connect and query Azure SQL Database using the provided Python and Bash scripts with support for both **Azure AD authentication** and **SQL authentication**.
 
-## Connection Prerequisites
-
-**Required:**
-- Azure SQL Database (Single DB, Elastic Pool, or Managed Instance)
-- ODBC Driver 18 for SQL Server installed
-- Python 3.8+ with pyodbc module
-- Azure CLI (for Azure AD authentication)
-- Firewall rule configured for your IP
-
 ## Tools Available
 
 ### 1. Python Script: `sql-query.py`
@@ -30,17 +21,17 @@ Full-featured Python script with support for:
 ```bash
 # SQL Authentication
 python3 scripts/utils/sql-query.py \
-  -s server.database.windows.net \
-  -d database_name \
-  -u username \
-  -p password \
+  -s your-server.database.windows.net \
+  -d your-database \
+  -u your-username \
+  -p your-password \
   -q "SELECT @@VERSION" \
   -o table
 
 # Azure AD Authentication
 python3 scripts/utils/sql-query.py \
-  -s server.database.windows.net \
-  -d database_name \
+  -s your-server.database.windows.net \
+  -d your-database \
   --aad \
   -q "SELECT @@VERSION" \
   -o json
@@ -77,37 +68,42 @@ export AZURE_SQL_PASSWORD="your-password"
 
 ```bash
 ./scripts/utils/sql-connect.sh \
-  -s server.database.windows.net \
-  -d database_name \
-  -u username \
-  -p password \
+  -s your-server.database.windows.net \
+  -d your-database \
+  -u your-username \
+  -p your-password \
   -q "SELECT @@VERSION"
 ```
 
 ## Prerequisites
 
 ### Required Software
-1. **Python 3** (already installed)
+1. **Python 3**
 2. **pyodbc** (auto-installed by scripts)
-3. **ODBC Driver 18 for SQL Server** (✅ installed)
+3. **ODBC Driver 18 for SQL Server**
 4. **Azure CLI** (for Azure AD auth only)
 
-### Verify Installation
+### Install ODBC Driver 18
 
 ```bash
-# Check ODBC Driver
-odbcinst -q -d | grep "ODBC Driver 18"
+# Ubuntu/Debian
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
-# Check Azure CLI (for Azure AD auth)
-az --version
+# Verify installation
+odbcinst -q -d | grep "ODBC Driver 18"
 ```
 
 ## Authentication Methods
 
 ### Method 1: SQL Authentication
 **Usage:**
-- Username: SQL login user
-- Password: SQL password
+```bash
+export AZURE_SQL_USERNAME="your-sql-user"
+export AZURE_SQL_PASSWORD="your-password"
+```
 
 **Pros:**
 - ✅ Simple and direct
@@ -121,7 +117,7 @@ az --version
 ### Method 2: Azure AD Authentication
 **Prerequisites:**
 ```bash
-az login --tenant d47ea4c6-fea4-4acb-9353-8680f2f157d6
+az login --tenant your-tenant-id
 ```
 
 **Pros:**
@@ -137,10 +133,10 @@ az login --tenant d47ea4c6-fea4-4acb-9353-8680f2f157d6
 ## Security Best Practices
 
 ### 1. Use Environment Variables
-**Never hardcode credentials in scripts:**
+
+**Create a secure .env file (add to .gitignore!):**
 
 ```bash
-# Create a .env file (add to .gitignore!)
 cat > ~/.azure-sql-env << 'EOF'
 export AZURE_SQL_SERVER="your-server.database.windows.net"
 export AZURE_SQL_DATABASE="your-database"
@@ -148,17 +144,13 @@ export AZURE_SQL_USERNAME="your-username"
 export AZURE_SQL_PASSWORD="your-password"
 EOF
 
+chmod 600 ~/.azure-sql-env
+
 # Source it before use
 source ~/.azure-sql-env
 ```
 
-### 2. File Permissions
-```bash
-chmod 600 ~/.azure-sql-env
-```
-
-### 3. Azure Key Vault (Recommended)
-For production environments, store credentials in Azure Key Vault:
+### 2. Azure Key Vault (Recommended for Production)
 
 ```bash
 # Store password in Key Vault
@@ -243,60 +235,47 @@ ALTER ROLE db_datareader ADD MEMBER [user@domain.com];
 ### Issue: ODBC Driver Not Found
 **Error**: `Data source name not found`
 
-**Solution:**
-```bash
-# Install ODBC Driver 18
-curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
-curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-sudo apt-get update
-sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-```
+**Solution**: Install ODBC Driver 18 (see Prerequisites section)
 
 ## Integration with GitHub Copilot Agents
 
 ### Azure_SQL_DBA Agent
-The `Azure_SQL_DBA.agent.md` can now use these tools for:
+The `Azure_SQL_DBA.agent.md` can use these tools for:
 
 1. **Performance Analysis**
-   ```bash
-   python3 scripts/utils/sql-query.py -s ... -d ... -u ... -p ... \
-     -q "SELECT * FROM sys.dm_exec_query_stats ORDER BY total_elapsed_time DESC"
-   ```
-
 2. **Index Recommendations**
 3. **Blocking Detection**
 4. **Space Management**
 5. **FinOps Analysis**
 
 ### Environment Setup for Agents
-Create a secure environment file that agents can source:
 
 ```bash
-# ~/.azure-sql-dba.env
+# Create secure environment file
+cat > ~/.azure-sql-dba.env << 'EOF'
 export AZURE_SQL_SERVER="your-server.database.windows.net"
 export AZURE_SQL_DATABASE="your-database"
 export AZURE_SQL_USERNAME="your-username"
-export AZURE_SQL_PASSWORD="<from-keyvault>"
+export AZURE_SQL_PASSWORD="your-password"
+EOF
+
+chmod 600 ~/.azure-sql-dba.env
 ```
 
 ## Performance Considerations
 
 ### Connection Pooling
-For multiple queries, consider using a connection pool:
+For multiple queries, consider reusing connections in Python:
 
 ```python
 import pyodbc
 conn = pyodbc.connect(connection_string, autocommit=True)
 # Reuse connection for multiple queries
+cursor = conn.cursor()
 ```
 
 ### Query Timeouts
-Default timeout is 30 seconds. For long-running queries:
-
-```python
-cursor.execute(query)
-cursor.connection.timeout = 300  # 5 minutes
-```
+Default timeout is 30 seconds. For long-running queries, adjust as needed.
 
 ### Output Limits
 For large result sets, use pagination:
@@ -306,16 +285,6 @@ SELECT * FROM large_table
 ORDER BY id
 OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY
 ```
-
-## Next Steps
-
-1. ✅ Connection established and verified
-2. ✅ Firewall rule configured
-3. ✅ Python and Bash scripts ready
-4. ⏭️ Integrate with sql-analyzer.sh for automated diagnostics
-5. ⏭️ Create saved query templates for common DBA tasks
-6. ⏭️ Set up automated monitoring queries
-7. ⏭️ Configure alerts for performance issues
 
 ## Additional Resources
 
