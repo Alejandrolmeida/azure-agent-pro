@@ -1,0 +1,488 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.38.33.27573",
+      "templateHash": "13715376875795268021"
+    }
+  },
+  "parameters": {
+    "sqlServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Nombre del SQL Server (debe ser único globalmente)"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Región de Azure"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "Tags para los recursos"
+      }
+    },
+    "databaseName": {
+      "type": "string",
+      "metadata": {
+        "description": "Nombre de la base de datos"
+      }
+    },
+    "databaseSku": {
+      "type": "string",
+      "defaultValue": "S0",
+      "allowedValues": [
+        "Basic",
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P2",
+        "P4",
+        "GP_Gen5_2",
+        "GP_Gen5_4",
+        "GP_Gen5_8",
+        "BC_Gen5_2",
+        "BC_Gen5_4"
+      ],
+      "metadata": {
+        "description": "SKU de la base de datos"
+      }
+    },
+    "enableAzureADAuth": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Habilitar Azure AD authentication"
+      }
+    },
+    "azureAdAdminObjectId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure AD admin object ID"
+      }
+    },
+    "azureAdAdminUsername": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure AD admin username"
+      }
+    },
+    "sqlAdministratorLogin": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "SQL Server administrator login (solo si enableAzureADAuth es false)"
+      }
+    },
+    "sqlAdministratorPassword": {
+      "type": "securestring",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "SQL Server administrator password (solo si enableAzureADAuth es false)"
+      }
+    },
+    "enableTDE": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Habilitar transparent data encryption"
+      }
+    },
+    "enableThreatProtection": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Habilitar Advanced Threat Protection"
+      }
+    },
+    "enableAuditing": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Habilitar auditoría"
+      }
+    },
+    "logAnalyticsWorkspaceId": {
+      "type": "string",
+      "metadata": {
+        "description": "ID de Log Analytics workspace para auditoría"
+      }
+    },
+    "auditStorageAccountId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "ID de Storage Account para auditoría"
+      }
+    },
+    "enablePrivateEndpoint": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Habilitar private endpoint"
+      }
+    },
+    "privateEndpointSubnetId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "ID de subnet para private endpoint"
+      }
+    },
+    "privateDnsZoneId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "ID de private DNS zone"
+      }
+    },
+    "backupRetentionDays": {
+      "type": "int",
+      "defaultValue": 7,
+      "minValue": 7,
+      "maxValue": 35,
+      "metadata": {
+        "description": "Retention de backups en días"
+      }
+    },
+    "enableGeoRedundantBackup": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Habilitar geo-redundant backup"
+      }
+    },
+    "autoPauseDelay": {
+      "type": "int",
+      "defaultValue": 60,
+      "metadata": {
+        "description": "Configuración de auto-pause para serverless (minutos)"
+      }
+    },
+    "allowedIpAddresses": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Configuración de firewall - IPs permitidas"
+      }
+    }
+  },
+  "variables": {
+    "sqlServerFullName": "[format('{0}.database.windows.net', parameters('sqlServerName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[parameters('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "tags": "[union(parameters('tags'), createObject('resource', 'sql-server', 'deployedBy', 'Bicep'))]",
+      "properties": "[union(createObject('version', '12.0', 'minimalTlsVersion', '1.2', 'publicNetworkAccess', if(parameters('enablePrivateEndpoint'), 'Disabled', 'Enabled'), 'restrictOutboundNetworkAccess', 'Disabled'), if(not(parameters('enableAzureADAuth')), createObject('administratorLogin', if(not(empty(parameters('sqlAdministratorLogin'))), parameters('sqlAdministratorLogin'), 'sqladmin'), 'administratorLoginPassword', parameters('sqlAdministratorPassword')), createObject()))]",
+      "identity": {
+        "type": "SystemAssigned"
+      }
+    },
+    {
+      "condition": "[and(parameters('enableAzureADAuth'), not(empty(parameters('azureAdAdminObjectId'))))]",
+      "type": "Microsoft.Sql/servers/administrators",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), 'ActiveDirectory')]",
+      "properties": {
+        "administratorType": "ActiveDirectory",
+        "login": "[parameters('azureAdAdminUsername')]",
+        "sid": "[parameters('azureAdAdminObjectId')]",
+        "tenantId": "[subscription().tenantId]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    },
+    {
+      "condition": "[not(parameters('enablePrivateEndpoint'))]",
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), 'AllowAllAzureServices')]",
+      "properties": {
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "0.0.0.0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "customFirewallRules",
+        "count": "[length(parameters('allowedIpAddresses'))]"
+      },
+      "condition": "[not(parameters('enablePrivateEndpoint'))]",
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), format('AllowedIP-{0}', copyIndex()))]",
+      "properties": {
+        "startIpAddress": "[parameters('allowedIpAddresses')[copyIndex()]]",
+        "endIpAddress": "[parameters('allowedIpAddresses')[copyIndex()]]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "[parameters('databaseSku')]",
+        "tier": "[if(contains(parameters('databaseSku'), 'GP'), 'GeneralPurpose', if(contains(parameters('databaseSku'), 'BC'), 'BusinessCritical', 'Standard'))]"
+      },
+      "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": 268435456000,
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "zoneRedundant": false,
+        "readScale": "Disabled",
+        "requestedBackupStorageRedundancy": "[if(parameters('enableGeoRedundantBackup'), 'Geo', 'Local')]",
+        "minCapacity": "[if(contains(parameters('databaseSku'), 'GP'), json('0.5'), null())]",
+        "autoPauseDelay": "[if(contains(parameters('databaseSku'), 'GP'), parameters('autoPauseDelay'), null())]",
+        "isLedgerOn": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableTDE')]",
+      "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}/{2}', parameters('sqlServerName'), parameters('databaseName'), 'current')]",
+      "properties": {
+        "state": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}/{2}', parameters('sqlServerName'), parameters('databaseName'), 'default')]",
+      "properties": {
+        "weeklyRetention": "P1W",
+        "monthlyRetention": "P1M",
+        "yearlyRetention": "P1Y",
+        "weekOfYear": 1
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableThreatProtection')]",
+      "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}/{2}', parameters('sqlServerName'), parameters('databaseName'), 'default')]",
+      "properties": {
+        "state": "Enabled",
+        "emailAccountAdmins": true,
+        "emailAddresses": [],
+        "retentionDays": 90
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ]
+    },
+    {
+      "condition": "[and(parameters('enableThreatProtection'), not(empty(parameters('auditStorageAccountId'))))]",
+      "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), 'default')]",
+      "properties": {
+        "storageContainerPath": "[format('{0}/vulnerability-assessment', parameters('auditStorageAccountId'))]",
+        "recurringScans": {
+          "isEnabled": true,
+          "emailSubscriptionAdmins": true,
+          "emails": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableAuditing')]",
+      "type": "Microsoft.Sql/servers/databases/auditingSettings",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[format('{0}/{1}/{2}', parameters('sqlServerName'), parameters('databaseName'), 'default')]",
+      "properties": {
+        "state": "Enabled",
+        "auditActionsAndGroups": [
+          "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+          "FAILED_DATABASE_AUTHENTICATION_GROUP",
+          "BATCH_COMPLETED_GROUP"
+        ],
+        "storageEndpoint": "[if(not(empty(parameters('auditStorageAccountId'))), format('{0}/audit', parameters('auditStorageAccountId')), '')]",
+        "isStorageSecondaryKeyInUse": false,
+        "retentionDays": 90,
+        "isAzureMonitorTargetEnabled": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "apiVersion": "2021-05-01-preview",
+      "scope": "[format('Microsoft.Sql/servers/{0}/databases/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
+      "name": "[format('{0}-diagnostics', parameters('databaseName'))]",
+      "properties": {
+        "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+        "logs": [
+          {
+            "category": "SQLInsights",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "AutomaticTuning",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "QueryStoreRuntimeStatistics",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "QueryStoreWaitStatistics",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "Errors",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "DatabaseWaitStatistics",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "Timeouts",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "Blocks",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "Deadlocks",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "category": "Basic",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "InstanceAndAppAdvanced",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          },
+          {
+            "category": "WorkloadManagement",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": 90
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "sqlServerId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "value": "[parameters('sqlServerName')]"
+    },
+    "sqlServerFQDN": {
+      "type": "string",
+      "value": "[variables('sqlServerFullName')]"
+    },
+    "databaseId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+    },
+    "databaseName": {
+      "type": "string",
+      "value": "[parameters('databaseName')]"
+    },
+    "principalId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Sql/servers', parameters('sqlServerName')), '2023-05-01-preview', 'full').identity.principalId]"
+    },
+    "connectionString": {
+      "type": "string",
+      "value": "[format('Server=tcp:{0},1433;Initial Catalog={1};Authentication=Active Directory Default;Encrypt=True;TrustServerCertificate=False;', variables('sqlServerFullName'), parameters('databaseName'))]"
+    }
+  }
+}

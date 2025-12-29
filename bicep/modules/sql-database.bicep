@@ -42,6 +42,14 @@ param azureAdAdminObjectId string = ''
 @description('Azure AD admin username')
 param azureAdAdminUsername string = ''
 
+@description('SQL Server administrator login (solo si enableAzureADAuth es false)')
+@secure()
+param sqlAdministratorLogin string = ''
+
+@description('SQL Server administrator password (solo si enableAzureADAuth es false)')
+@secure()
+param sqlAdministratorPassword string = newGuid()
+
 @description('Habilitar transparent data encryption')
 param enableTDE bool = true
 
@@ -91,14 +99,19 @@ resource sqlServer 'Microsoft.Sql/servers@2023-05-01-preview' = {
     resource: 'sql-server'
     deployedBy: 'Bicep'
   })
-  properties: {
-    administratorLogin: enableAzureADAuth ? null : 'sqladmin'
-    administratorLoginPassword: enableAzureADAuth ? null : newGuid() // Auto-generate if not using AAD
-    version: '12.0'
-    minimalTlsVersion: '1.2'
-    publicNetworkAccess: enablePrivateEndpoint ? 'Disabled' : 'Enabled'
-    restrictOutboundNetworkAccess: 'Disabled'
-  }
+  properties: union(
+    {
+      version: '12.0'
+      minimalTlsVersion: '1.2'
+      publicNetworkAccess: enablePrivateEndpoint ? 'Disabled' : 'Enabled'
+      restrictOutboundNetworkAccess: 'Disabled'
+    },
+    // Solo incluir administratorLogin/Password si NO usamos Azure AD
+    !enableAzureADAuth ? {
+      administratorLogin: !empty(sqlAdministratorLogin) ? sqlAdministratorLogin : 'sqladmin'
+      administratorLoginPassword: sqlAdministratorPassword
+    } : {}
+  )
   identity: {
     type: 'SystemAssigned'
   }
@@ -333,18 +346,19 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
 }
 
 // Private Endpoint
-module privateEndpoint '../modules/private-endpoint.bicep' = if (enablePrivateEndpoint && !empty(privateEndpointSubnetId)) {
-  name: '${sqlServer.name}-pe-deployment'
-  params: {
-    name: '${sqlServer.name}-pe'
-    location: location
-    tags: tags
-    privateLinkServiceId: sqlServer.id
-    groupId: 'sqlServer'
-    subnetId: privateEndpointSubnetId
-    privateDnsZoneId: privateDnsZoneId
-  }
-}
+// TODO: Create private-endpoint.bicep module
+// module privateEndpoint '../modules/private-endpoint.bicep' = if (enablePrivateEndpoint && !empty(privateEndpointSubnetId)) {
+//   name: '${sqlServer.name}-pe-deployment'
+//   params: {
+//     name: '${sqlServer.name}-pe'
+//     location: location
+//     tags: tags
+//     privateLinkServiceId: sqlServer.id
+//     groupId: 'sqlServer'
+//     subnetId: privateEndpointSubnetId
+//     privateDnsZoneId: privateDnsZoneId
+//   }
+// }
 
 // Outputs
 output sqlServerId string = sqlServer.id
