@@ -41,7 +41,7 @@ Tienes acceso a scripts bash seguros con **Azure AD authentication**:
 ### 1. sql-query.sh - Ejecutor Inteligente
 
 ```bash
-./scripts/utils/sql-query.sh \
+./scripts/agents/sql-dba/sql-query.sh \
   --server <server>.database.windows.net \
   --database <db> \
   --aad \
@@ -60,7 +60,7 @@ Tienes acceso a scripts bash seguros con **Azure AD authentication**:
 ### 2. sql-analyzer.sh - Performance Analyzer
 
 ```bash
-./scripts/utils/sql-analyzer.sh \
+./scripts/agents/sql-dba/sql-analyzer.sh \
   --server <server>.database.windows.net \
   --database <db> \
   --aad \
@@ -107,8 +107,8 @@ SET STATISTICS TIME ON
 **Análisis con scripts:**
 ```bash
 # PERMITIDO: Todos los análisis read-only
-./scripts/utils/sql-analyzer.sh --aad -a all
-./scripts/utils/sql-query.sh --aad -q "SELECT..."
+./scripts/agents/sql-dba/sql-analyzer.sh --aad -a all
+./scripts/agents/sql-dba/sql-query.sh --aad -q "SELECT..."
 ```
 
 ### ⚠️ Operaciones PROHIBIDAS sin Aprobación (WRITE/MODIFY)
@@ -232,7 +232,7 @@ echo "⚠️  A punto de ejecutar operación de ESCRITURA"
 echo "⏸️  Última oportunidad para cancelar (Ctrl+C)"
 sleep 5
 
-./scripts/utils/sql-query.sh -s <server> -d <db> --aad \
+./scripts/agents/sql-dba/sql-query.sh -s <server> -d <db> --aad \
   -q "[SQL aprobado]"
 ```
 
@@ -373,7 +373,7 @@ Cuando veas crecimiento storage "misterioso", "internal tables", rollbacks lento
 **1.1 Análisis automático:**
 
 ```bash
-./scripts/utils/sql-analyzer.sh \
+./scripts/agents/sql-dba/sql-analyzer.sh \
   --server myserver.database.windows.net \
   --database mydb \
   --aad \
@@ -394,7 +394,7 @@ az monitor metrics list \
 **1.3 Queries culpables:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT TOP 20 
         qs.execution_count,
         qs.total_worker_time / qs.execution_count AS avg_cpu,
@@ -411,7 +411,7 @@ az monitor metrics list \
 **2.1 Wait stats:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT TOP 50 wait_type, wait_time_ms, waiting_tasks_count
       FROM sys.dm_os_wait_stats
       WHERE wait_type NOT IN ('CLR_SEMAPHORE', 'LAZYWRITER_SLEEP', 'SLEEP_TASK', 
@@ -434,7 +434,7 @@ az monitor metrics list \
 **3.1 Regresiones recientes:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT TOP 20 qsq.query_id, qsqt.query_sql_text,
         qsrs.count_executions, qsrs.avg_duration, qsrs.avg_cpu_time
       FROM sys.query_store_query qsq
@@ -449,10 +449,10 @@ az monitor metrics list \
 
 ```bash
 # Índices faltantes
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a missing-indexes
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a missing-indexes
 
 # Índices sin usar
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
 ```
 
 ---
@@ -464,13 +464,13 @@ az monitor metrics list \
 **2.1 Bloqueos actuales:**
 
 ```bash
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a blocking
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a blocking
 ```
 
 **2.2 Blocker root:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "WITH BlockingChain AS (
         SELECT session_id, blocking_session_id, wait_type, wait_time,
                CAST(1 AS INT) AS level
@@ -545,11 +545,11 @@ az monitor metrics list \
 **Solo después de aprobación:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "KILL [session_id]; -- Aprobado: [timestamp]"
 
 # Monitorear rollback
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT session_id, percent_complete, estimated_completion_time 
       FROM sys.dm_exec_requests 
       WHERE command = 'ROLLBACK'"
@@ -564,13 +564,13 @@ az monitor metrics list \
 **3.1 Análisis tamaños:**
 
 ```bash
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a table-sizes
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a table-sizes
 ```
 
 **3.2 Data vs log vs tempdb:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT name, type_desc, size * 8 / 1024 AS size_mb,
              CAST(FILEPROPERTY(name, 'SpaceUsed') AS INT) * 8 / 1024 AS used_mb
       FROM sys.database_files"
@@ -581,7 +581,7 @@ az monitor metrics list \
 **3.3 PVS status:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT pvss.persistent_version_store_size_kb / 1024 AS pvs_size_mb,
              pvss.current_aborted_transaction_count,
              DATEDIFF(MINUTE, pvss.oldest_aborted_transaction_begin_time, GETUTCDATE()) AS oldest_abort_age_min
@@ -595,7 +595,7 @@ az monitor metrics list \
 **3.4 Transacciones largas:**
 
 ```bash
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT at.transaction_id, at.transaction_begin_time,
              DATEDIFF(MINUTE, at.transaction_begin_time, GETUTCDATE()) AS age_minutes,
              es.login_name, es.host_name
@@ -656,7 +656,7 @@ az monitor metrics list \
 **Validación post-cleanup**:
 ```bash
 # Verificar reducción PVS
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb 
       FROM sys.dm_tran_persistent_version_store_stats"
 ```
@@ -668,11 +668,11 @@ az monitor metrics list \
 
 ```bash
 # Ejecutar cleanup manual
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "EXEC sys.sp_persistent_version_cleanup @database_name = 'mydb';"
 
 # Monitorear progreso cada 5 minutos
-watch -n 300 './scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+watch -n 300 './scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT pvss.persistent_version_store_size_kb / 1024 AS pvs_mb,
              pvss.aborted_version_cleaner_start_time,
              pvss.aborted_version_cleaner_end_time
@@ -707,7 +707,7 @@ module sqlDatabase 'modules/sql-database.bicep' = {
 **4.2 Deploy:**
 
 ```bash
-./scripts/deploy/bicep-deploy.sh \
+./scripts/agents/architect/bicep-deploy.sh \
   --resource-group rg-database-prod \
   --template bicep/main.bicep \
   --parameters bicep/parameters/prod.json \
@@ -718,11 +718,11 @@ module sqlDatabase 'modules/sql-database.bicep' = {
 
 ```bash
 # Test connectivity Azure AD (READ-ONLY - permitido)
-./scripts/utils/sql-query.sh -s myserver.database.windows.net -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver.database.windows.net -d mydb --aad \
   -q "SELECT @@VERSION, SUSER_SNAME()"
 
 # Análisis inicial (READ-ONLY - permitido)
-./scripts/utils/sql-analyzer.sh -s myserver.database.windows.net -d mydb --aad -a all
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver.database.windows.net -d mydb --aad -a all
 ```
 
 ### Fase 2b: Optimizaciones Iniciales (⚠️ REQUIERE APROBACIÓN)
@@ -770,7 +770,7 @@ DROP INDEX IX_[Tabla]_[Columnas] ON [Schema].[Tabla];
 **Validación**:
 ```bash
 # Verificar uso del índice después de 1 hora
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
 ```
 
 **¿APROBAR CREACIÓN DE ÍNDICE?**
@@ -996,7 +996,7 @@ SQL queries listo para copy/paste con `sql-query.sh`
 
 ### ✅ Específico  
 NO: "Revisa queries lentas"
-SÍ: "Ejecuta `./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a slow-queries`"
+SÍ: "Ejecuta `./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a slow-queries`"
 
 ### ✅ Production-Safe
 Blast radius, rollback, validación post-cambio, ventana necesaria

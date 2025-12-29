@@ -64,7 +64,7 @@ echo ""
 echo -e "${YELLOW}🔍 Buscando transacciones activas >5 minutos...${NC}"
 echo ""
 
-python3 "$PROJECT_ROOT/scripts/utils/sql-query.py" \
+python3 "$PROJECT_ROOT/scripts/agents/sql-dba/sql-query.py" \
     -s "$AZURE_SQL_SERVER" \
     -d "$AZURE_SQL_DATABASE" \
     -u "${AZURE_SQL_USERNAME:-}" \
@@ -107,7 +107,7 @@ SELECT
 FROM sys.dm_db_file_space_usage;
 '
 
-python3 "$PROJECT_ROOT/scripts/utils/sql-query.py" \
+python3 "$PROJECT_ROOT/scripts/agents/sql-dba/sql-query.py" \
     -s "$AZURE_SQL_SERVER" \
     -d "$AZURE_SQL_DATABASE" \
     -u "${AZURE_SQL_USERNAME:-}" \

@@ -8,26 +8,26 @@ Herramientas para ejecutar y analizar consultas SQL en Azure SQL Databases.
 
 Ejecuta consultas SQL contra Azure SQL Databases con autenticación Azure AD.
 
-**Ubicación**: `scripts/utils/sql-query.sh`
+**Ubicación**: `scripts/agents/sql-dba/sql-query.sh`
 
 #### Uso
 
 ```bash
 # Con Azure AD (recomendado)
-./scripts/utils/sql-query.sh --server myserver --database mydb --aad --query "SELECT TOP 10 * FROM Users"
+./scripts/agents/sql-dba/sql-query.sh --server myserver --database mydb --aad --query "SELECT TOP 10 * FROM Users"
 
 # Desde archivo
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad -f query.sql -o json
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad -f query.sql -o json
 
 # Con plan de ejecución
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad --analytics -q "SELECT * FROM Orders"
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad --analytics -q "SELECT * FROM Orders"
 ```
 
 ### 2. sql-analyzer.sh - Analizador de Rendimiento
 
 Analiza rendimiento y proporciona recomendaciones de optimización.
 
-**Ubicación**: `scripts/utils/sql-analyzer.sh`
+**Ubicación**: `scripts/agents/sql-dba/sql-analyzer.sh`
 
 #### Análisis Disponibles
 
@@ -43,10 +43,10 @@ Analiza rendimiento y proporciona recomendaciones de optimización.
 
 ```bash
 # Análisis completo
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb -a all -o report.md
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb -a all -o report.md
 
 # Queries lentas
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb -a slow-queries
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb -a slow-queries
 ```
 
 ## 📦 Módulo Bicep
