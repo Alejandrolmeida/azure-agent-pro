@@ -151,8 +151,12 @@ elif [[ -z "$QUERY_STRING" ]]; then
     exit 1
 fi
 
-# Build connection string
-CONNECTION_STRING="${SERVER}.database.windows.net"
+# Build connection string (add suffix only if not already present)
+if [[ "$SERVER" == *.database.windows.net ]]; then
+    CONNECTION_STRING="$SERVER"
+else
+    CONNECTION_STRING="${SERVER}.database.windows.net"
+fi
 
 # Check if sqlcmd is installed
 if ! command -v sqlcmd &> /dev/null; then
@@ -216,7 +220,7 @@ esac
 
 # Execute query
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}▶ Executing query on ${SERVER}.database.windows.net/${DATABASE}${NC}"
+echo -e "${GREEN}▶ Executing query on ${CONNECTION_STRING}/${DATABASE}${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
