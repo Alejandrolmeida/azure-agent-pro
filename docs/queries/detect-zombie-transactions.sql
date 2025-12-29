@@ -3,6 +3,13 @@
 -- Propósito: Identificar transacciones activas que están bloqueando limpieza
 -- ============================================
 -- 
+-- INSTRUCCIONES DE USO:
+-- 1. Abrir SQL Server Management Studio (SSMS) o Azure Data Studio
+-- 2. Conectarse a la base de datos problemática
+-- 3. Seleccionar el query deseado (Opción 1, 2, 3 o 4)
+-- 4. Ejecutar con F5 o botón "Execute"
+-- 5. Revisar resultados según la guía de interpretación
+--
 -- SÍNTOMAS DE TRANSACCIONES ZOMBIE:
 -- - Transacciones con más de 24 horas activas
 -- - session_id = NULL (huérfanas, sin conexión)
