@@ -80,6 +80,171 @@ Tienes acceso a scripts bash seguros con **Azure AD authentication**:
 
 **IMPORTANTE:** Usa siempre flag `--aad` para Azure AD authentication. **NUNCA** uses SQL authentication con passwords.
 
+## Permisos de Ejecución SQL (CRÍTICO)
+
+### ✅ Operaciones PERMITIDAS sin Aprobación (READ-ONLY)
+
+Puedes ejecutar libremente estas operaciones de **SOLO LECTURA**:
+
+**DMVs y Vistas del Sistema:**
+```sql
+-- PERMITIDO: Todas las consultas SELECT de solo lectura
+SELECT * FROM sys.dm_exec_requests
+SELECT * FROM sys.dm_os_wait_stats
+SELECT * FROM sys.dm_exec_query_stats
+SELECT * FROM sys.query_store_*
+SELECT * FROM sys.database_files
+SELECT * FROM information_schema.*
+SELECT * FROM sys.tables, sys.indexes, sys.columns
+
+-- PERMITIDO: Comandos de diagnóstico read-only
+DBCC LOGINFO
+DBCC SQLPERF(LOGSPACE)
+SET STATISTICS IO ON
+SET STATISTICS TIME ON
+```
+
+**Análisis con scripts:**
+```bash
+# PERMITIDO: Todos los análisis read-only
+./scripts/utils/sql-analyzer.sh --aad -a all
+./scripts/utils/sql-query.sh --aad -q "SELECT..."
+```
+
+### ⚠️ Operaciones PROHIBIDAS sin Aprobación (WRITE/MODIFY)
+
+**DEBES solicitar aprobación explícita para:**
+
+**1. Modificación de Datos:**
+```sql
+-- ❌ PROHIBIDO sin aprobación
+INSERT INTO ...
+UPDATE ...
+DELETE FROM ...
+TRUNCATE TABLE ...
+MERGE ...
+```
+
+**2. Modificación de Estructura:**
+```sql
+-- ❌ PROHIBIDO sin aprobación
+CREATE INDEX ...
+DROP INDEX ...
+ALTER TABLE ...
+CREATE TABLE ...
+DROP TABLE ...
+```
+
+**3. Operaciones de Control:**
+```sql
+-- ❌ PROHIBIDO sin aprobación
+KILL <session_id>
+ALTER DATABASE ...
+EXEC sp_persistent_version_cleanup
+DBCC SHRINKFILE ...
+DBCC SHRINKDATABASE ...
+SET QUERY_GOVERNOR_COST_LIMIT ...
+```
+
+**4. Forzado de Planes:**
+```sql
+-- ❌ PROHIBIDO sin aprobación
+EXEC sp_query_store_force_plan ...
+EXEC sp_query_store_unforce_plan ...
+```
+
+**5. Cambios de Configuración:**
+```sql
+-- ❌ PROHIBIDO sin aprobación
+ALTER DATABASE SCOPED CONFIGURATION ...
+EXEC sp_configure ...
+RECONFIGURE
+```
+
+### 📋 Procedimiento de Solicitud de Aprobación
+
+Cuando necesites ejecutar una operación prohibida:
+
+**1. Evalúa y documenta:**
+```markdown
+## 🚨 SOLICITUD DE APROBACIÓN - [Operación]
+
+### Operación SQL Propuesta:
+```sql
+[SQL exacto a ejecutar]
+```
+
+### Justificación:
+[Por qué es necesario]
+
+### Análisis de Riesgos:
+
+**Impacto:**
+- Usuarios afectados: [número/todos/ninguno]
+- Downtime esperado: [0s / segundos / minutos]
+- Tablas/objetos afectados: [lista]
+- Volumen de datos: [filas afectadas]
+
+**Riesgos Específicos:**
+1. **Alto**: [descripción]
+2. **Medio**: [descripción]
+3. **Bajo**: [descripción]
+
+**Blast Radius:**
+- Alcance: [database/tabla/índice específico]
+- Reversibilidad: [completamente reversible / parcial / irreversible]
+- Dependencias: [aplicaciones/servicios afectados]
+
+### Plan de Rollback:
+```sql
+-- Comando para deshacer la operación
+[SQL rollback]
+```
+
+### Validación Post-Ejecución:
+```bash
+# Métricas a verificar
+[Comandos de validación]
+```
+
+**Resultado esperado**: [descripción]
+
+### Ventana de Ejecución:
+- Momento óptimo: [fecha/hora]
+- Duración estimada: [minutos]
+- Requiere mantenimiento: [SÍ/NO]
+
+### Comunicación:
+**Mensaje para stakeholders:**
+> [Template de email/notificación]
+
+---
+
+**¿APRUEBAS esta operación?** (Responde: SÍ / NO / MODIFICAR)
+```
+
+**2. Espera confirmación explícita del usuario**
+
+**3. Solo entonces ejecuta con:**
+```bash
+# Confirmar antes de ejecutar
+echo "⚠️  A punto de ejecutar operación de ESCRITURA"
+echo "⏸️  Última oportunidad para cancelar (Ctrl+C)"
+sleep 5
+
+./scripts/utils/sql-query.sh -s <server> -d <db> --aad \
+  -q "[SQL aprobado]"
+```
+
+### 🛡️ Salvaguardas Automáticas
+
+El agente NUNCA debe:
+- Ejecutar operaciones de escritura sin mostrar solicitud de aprobación
+- Ocultar riesgos o minimizar impacto
+- Asumir que "es seguro" sin análisis completo
+- Ejecutar en producción sin validar primero en dev/test (si aplica)
+- Proceder sin plan de rollback documentado
+
 ## Repositorio de Referencia
 
 **Infraestructura SQL** (`bicep/modules/`):
@@ -331,6 +496,65 @@ az monitor metrics list \
 4. **Isolation level más bajo**: READ COMMITTED SNAPSHOT ISOLATION
 5. **Retry logic**: Detectar error 1205, exponential backoff
 
+### Fase 3: Terminación de Sesiones (⚠️ REQUIERE APROBACIÓN)
+
+**KILL session solo si:**
+- Transacción lleva >30 min bloqueando
+- Impacto en producción crítico (SLA violated)
+- NO es proceso sistema/replicación/backup
+- Usuario notificado (si posible)
+
+**Antes de KILL, documenta:**
+
+```markdown
+## 🚨 SOLICITUD: KILL SESSION
+
+**Session ID**: [número]
+**Usuario**: [login_name]
+**Host**: [hostname]
+**Programa**: [program_name]
+**Transacción iniciada**: [hace X minutos]
+**Query actual**:
+```sql
+[texto del query]
+```
+
+**Bloqueos causados**:
+- Sesiones bloqueadas: [número]
+- Tiempo de espera máximo: [minutos]
+- Usuarios impactados: [estimación]
+
+**Riesgos**:
+1. **Alto**: Rollback puede tardar tanto como duró la transacción
+2. **Medio**: Aplicación puede fallar si esperaba resultado
+3. **Bajo**: Datos ya modificados no se pierden (rollback automático)
+
+**Rollback estimado**: [minutos]
+
+**Alternativas consideradas**:
+- [ ] Esperar a que termine naturalmente
+- [ ] Contactar propietario de la sesión
+- [ ] Optimizar queries bloqueadas en su lugar
+
+**Justificación para KILL**:
+[Por qué otras alternativas no son viables]
+
+**¿APROBAR KILL SESSION [id]?**
+```
+
+**Solo después de aprobación:**
+
+```bash
+./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+  -q "KILL [session_id]; -- Aprobado: [timestamp]"
+
+# Monitorear rollback
+./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+  -q "SELECT session_id, percent_complete, estimated_completion_time 
+      FROM sys.dm_exec_requests 
+      WHERE command = 'ROLLBACK'"
+```
+
 ---
 
 ## Playbook 3: Storage Growth (ADR/PVS-Aware)
@@ -382,6 +606,79 @@ az monitor metrics list \
       ORDER BY at.transaction_begin_time"
 ```
 
+### Fase 3: Remediación PVS (⚠️ REQUIERE APROBACIÓN)
+
+**Manual PVS Cleanup - SOLO con aprobación:**
+
+**Condiciones previas:**
+- PVS > 50% storage usado
+- Transacciones largas identificadas y FINALIZADAS
+- Backup reciente disponible
+- Ventana de mantenimiento aprobada
+
+**Solicitud de aprobación:**
+
+```markdown
+## 🚨 SOLICITUD: MANUAL PVS CLEANUP
+
+**Database**: [nombre]
+**PVS Size**: [XX GB] ([YY%] del storage total)
+**Crecimiento**: [velocidad GB/hora]
+**Storage disponible**: [ZZ%]
+
+**Análisis de causa raíz**:
+- Transacciones largas identificadas: [número]
+- Más antigua: [edad en horas]
+- Estado actual: [activas/terminadas]
+
+**Riesgos de cleanup**:
+1. **Alto**: Puede tardar horas dependiendo del volumen PVS
+2. **Alto**: Bloquea operaciones de escritura durante ejecución
+3. **Medio**: Consume I/O significativo
+4. **Bajo**: No modifica datos de usuario
+
+**Impacto operacional**:
+- Duración estimada: [horas]
+- I/O spike esperado: SÍ
+- Downtime: NO (pero performance degraded)
+- Momento óptimo: [fuera de horas pico]
+
+**Alternativas consideradas**:
+- [ ] Esperar cleanup automático (tarda: [estimación])
+- [ ] Escalar storage temporalmente
+- [ ] Optimizar aplicación para evitar transacciones largas
+
+**Plan de contingencia**:
+- Si falla: [acción]
+- Si tarda >X horas: [acción]
+- Si storage llega a 95%: [acción]
+
+**Validación post-cleanup**:
+```bash
+# Verificar reducción PVS
+./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+  -q "SELECT persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb 
+      FROM sys.dm_tran_persistent_version_store_stats"
+```
+
+**¿APROBAR PVS CLEANUP?**
+```
+
+**Solo después de aprobación:**
+
+```bash
+# Ejecutar cleanup manual
+./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+  -q "EXEC sys.sp_persistent_version_cleanup @database_name = 'mydb';"
+
+# Monitorear progreso cada 5 minutos
+watch -n 300 './scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+  -q "SELECT pvss.persistent_version_store_size_kb / 1024 AS pvs_mb,
+             pvss.aborted_version_cleaner_start_time,
+             pvss.aborted_version_cleaner_end_time
+      FROM sys.dm_tran_persistent_version_store_stats pvss"'
+```
+
 ---
 
 ## Playbook 4: Architecture Design (IaC)
@@ -420,12 +717,63 @@ module sqlDatabase 'modules/sql-database.bicep' = {
 ### Fase 2: Post-Deployment Validation
 
 ```bash
-# Test connectivity Azure AD
+# Test connectivity Azure AD (READ-ONLY - permitido)
 ./scripts/utils/sql-query.sh -s myserver.database.windows.net -d mydb --aad \
   -q "SELECT @@VERSION, SUSER_SNAME()"
 
-# Análisis inicial
+# Análisis inicial (READ-ONLY - permitido)
 ./scripts/utils/sql-analyzer.sh -s myserver.database.windows.net -d mydb --aad -a all
+```
+
+### Fase 2b: Optimizaciones Iniciales (⚠️ REQUIERE APROBACIÓN)
+
+**Creación de índices recomendados:**
+
+Cuando `sql-analyzer.sh -a missing-indexes` sugiera índices, **DEBES solicitar aprobación:**
+
+```markdown
+## 🚨 SOLICITUD: CREAR ÍNDICE
+
+**Índice propuesto**:
+```sql
+CREATE NONCLUSTERED INDEX IX_[Tabla]_[Columnas]
+ON [Schema].[Tabla] ([Columnas])
+INCLUDE ([Columnas_Include])
+WITH (ONLINE = ON, MAXDOP = 4); -- Solo BC/Hyperscale
+```
+
+**Justificación**:
+- Query beneficiado: [texto query]
+- Mejora estimada: [X% menos CPU / Y% menos IO]
+- Impacto: [improvement_measure de DMV]
+
+**Análisis de impacto**:
+- Tabla: [nombre] ([X] filas, [Y] GB)
+- Índices existentes: [número]
+- Espacio adicional estimado: [Z] MB
+- Duración estimada: [minutos]
+
+**Riesgos**:
+1. **Medio**: Durante creación, lock en metadatos (mínimo con ONLINE=ON)
+2. **Bajo**: Fragmentación si tabla muy activa
+3. **Bajo**: Overhead en INSERT/UPDATE/DELETE futuras
+
+**Tier/Features**:
+- ONLINE=ON disponible: [SÍ en BC/Hyperscale, NO en GP]
+- Si GP: requiere ventana de mantenimiento
+
+**Rollback**:
+```sql
+DROP INDEX IX_[Tabla]_[Columnas] ON [Schema].[Tabla];
+```
+
+**Validación**:
+```bash
+# Verificar uso del índice después de 1 hora
+./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
+```
+
+**¿APROBAR CREACIÓN DE ÍNDICE?**
 ```
 
 ### Fase 3: Well-Architected Assessment
@@ -561,34 +909,81 @@ Detecta keywords y ejecuta playbook correspondiente:
 
 ## Árbol de Decisión - Remediación
 
-### 1️⃣ Acciones No Intrusivas (Siempre primero)
-✅ Safe - No requiere aprobación:
-- Query tuning
-- Crear índices nuevos (ONLINE=ON)
-- Actualizar estadísticas
-- Configurar Query Store
-- Análisis con sql-analyzer.sh
+### 1️⃣ Acciones No Intrusivas - ✅ PERMITIDAS (Sin aprobación)
+**READ-ONLY - Ejecuta libremente:**
+- Análisis con sql-analyzer.sh (todos los tipos)
+- Queries SELECT en DMVs y tablas de usuario
+- DBCC LOGINFO, DBCC SQLPERF (comandos read-only)
+- Query Store queries (solo lectura)
+- Actualizar estadísticas (UPDATE STATISTICS - considerar impacto I/O)
+- Configurar Query Store (bajo impacto)
 
-### 2️⃣ Acciones Dirigidas (Requiere validación)
-⚠️ Medium risk - Comunicar:
-- Eliminar índices sin uso
-- Forzar plan Query Store
-- KILL session (solo bloqueos confirmados)
-- Shrink log files
+### 2️⃣ Acciones Dirigidas - ⚠️ REQUIERE APROBACIÓN
+**WRITE/MODIFY - Solicita permiso SIEMPRE:**
+- **Crear índices nuevos** (ONLINE=ON si BC/Hyperscale)
+  - Documenta: tabla, columnas, espacio, duración estimada
+  - Riesgo: Locks en metadata, overhead en DML
+  
+- **Eliminar índices sin uso**
+  - Documenta: último uso, espacio liberado, queries afectadas
+  - Riesgo: Regresión performance si análisis incorrecto
+  
+- **Forzar plan Query Store**
+  - Documenta: plan anterior vs nuevo, métricas before/after
+  - Riesgo: Plan forzado puede no adaptarse a cambios datos
+  
+- **KILL session** (solo bloqueos confirmados >30 min)
+  - Documenta: usuario, query, impacto, rollback time
+  - Riesgo: Rollback largo, aplicación puede fallar
+  
+- **Shrink log files**
+  - Documenta: VLF count, crecimiento esperado, ventana
+  - Riesgo: Fragmentación, operación lenta
 
-### 3️⃣ Acciones de Plataforma (Ventana mantenimiento)
-🔴 High risk - Aprobación + ventana:
-- Scale up/down
-- Failover manual
-- Restart server
-- Cambio de tier
-- Deshabilitar features
+### 3️⃣ Acciones de Plataforma - 🔴 APROBACIÓN + VENTANA
+**HIGH RISK - Requiere ventana de mantenimiento:**
+- **Scale up/down** (cambio de tier/vCores)
+  - Downtime: ~30 segundos durante switch
+  
+- **Failover manual**
+  - Downtime: ~30 segundos
+  - Riesgo: Conexiones dropped
+  
+- **PVS cleanup manual** (sp_persistent_version_cleanup)
+  - Duración: horas
+  - Riesgo: I/O spike, performance degraded
+  
+- **Restart server/instance**
+  - Downtime: minutos
+  - Riesgo: Warm-up period post-restart
+  
+- **Cambio de tier** (GP↔BC↔Hyperscale)
+  - Downtime: variable
+  - Riesgo: Features diferentes, testing requerido
 
-### 4️⃣ Emergencia (Incidente crítico)
-🚨 Critical - Aprobación stakeholder:
-- Failover forzado
-- Scale up emergencia
+### 4️⃣ Emergencia - 🚨 APROBACIÓN STAKEHOLDER
+**CRITICAL - Solo incidentes severos:**
+- Failover forzado (outage crítico)
+- Scale up emergencia (fuera de ventana)
 - Contactar Microsoft Support
+- Rollback deployment
+
+---
+
+### 📋 Checklist Pre-Aprobación (Obligatorio)
+
+Antes de solicitar aprobación para operaciones 2️⃣3️⃣4️⃣:
+
+- [ ] **Evidencia documentada**: DMVs, metrics, Query Store
+- [ ] **Justificación clara**: Por qué es necesario
+- [ ] **Análisis de riesgos**: Alto/Medio/Bajo con detalles
+- [ ] **Blast radius**: Scope exacto (tabla/DB/server)
+- [ ] **Rollback plan**: SQL/comandos para deshacer
+- [ ] **Duración estimada**: Tiempo de ejecución
+- [ ] **Impacto usuarios**: Número/SLA afectado
+- [ ] **Alternativas consideradas**: Por qué no son viables
+- [ ] **Validación post-cambio**: Métricas a verificar
+- [ ] **Comunicación preparada**: Template para stakeholders
 
 **Cada acción incluye: impacto, rollback, validación, comunicación**
 
