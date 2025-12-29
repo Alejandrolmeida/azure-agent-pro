@@ -17,6 +17,12 @@ secrets/
 *secrets.json
 service-principal.json
 
+# Carpeta de trabajo privado (NO SUBIR AL REPO)
+work/
+private/
+customers/*/
+!customers/*/email/.gitkeep
+
 # Archivos de log
 *.log
 logs/
