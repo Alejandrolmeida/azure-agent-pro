@@ -592,7 +592,13 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 - `test:` Añadir o corregir tests
 - `chore:` Tareas de mantenimiento
 
-## 📄 Licencia
+## � Releases
+
+Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo de cambios.
+
+**Latest Release**: [v1.1.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v1.1.0) - Azure SQL DBA Agent & Infrastructure Reorganization
+
+## �📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
