@@ -321,7 +321,7 @@ cd scripts/deploy
 
 ## 📋 Scripts Disponibles
 
-### `scripts/login/azure-login.sh`
+### `scripts/common/azure-login.sh`
 
 Script principal para autenticación con Azure CLI.
 
@@ -339,7 +339,7 @@ Script principal para autenticación con Azure CLI.
 ./azure-login.sh -i                 # Mostrar información actual
 ```
 
-### `scripts/config/azure-config.sh`
+### `scripts/common/azure-config.sh`
 
 Gestión de configuración y variables de entorno.
 
@@ -357,7 +357,7 @@ Gestión de configuración y variables de entorno.
 ./azure-config.sh --set-location westeurope
 ```
 
-### `scripts/deploy/bicep-deploy.sh`
+### `scripts/agents/architect/bicep-deploy.sh`
 
 Deployment y gestión de plantillas Bicep.
 

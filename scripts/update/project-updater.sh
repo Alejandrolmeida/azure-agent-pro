@@ -211,7 +211,7 @@ update_azure_scripts() {
     log_update "Updating Azure CLI scripts with latest best practices..."
     
     # Update azure-utils.sh with new security functions
-    local azure_utils="$PROJECT_ROOT/scripts/utils/azure-utils.sh"
+    local azure_utils="$PROJECT_ROOT/scripts/common/azure-utils.sh"
     
     if [[ -f "$azure_utils" ]]; then
         # Add new security audit function based on MCP recommendations
@@ -270,7 +270,7 @@ EOF
     fi
     
     # Update bicep-utils.sh with new template generation
-    local bicep_utils="$PROJECT_ROOT/scripts/utils/bicep-utils.sh"
+    local bicep_utils="$PROJECT_ROOT/scripts/agents/architect/bicep-utils.sh"
     
     if [[ -f "$bicep_utils" ]]; then
         if ! grep -q "generate_security_baseline_template" "$bicep_utils"; then
@@ -470,13 +470,13 @@ update_documentation() {
 ### New Azure CLI Patterns
 ```bash
 # Security baseline audit v3
-./scripts/utils/azure-utils.sh audit_security_baseline_v3 "my-resource-group"
+./scripts/common/azure-utils.sh audit_security_baseline_v3 "my-resource-group"
 
 # Policy compliance check v2
-./scripts/utils/azure-utils.sh check_policy_compliance_v2
+./scripts/common/azure-utils.sh check_policy_compliance_v2
 
 # Generate security template
-./scripts/utils/bicep-utils.sh generate_security_baseline_template "webapp" "sensitive"
+./scripts/agents/architect/bicep-utils.sh generate_security_baseline_template "webapp" "sensitive"
 ```
 
 ### Updated GitHub Actions

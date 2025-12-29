@@ -18,13 +18,13 @@ export AZURE_SQL_USERNAME="your-username"
 export AZURE_SQL_PASSWORD="your-password"
 
 # Ejecutar detección
-./scripts/utils/detect-zombie-transactions.sh
+./scripts/agents/sql-dba/detect-zombie-transactions.sh
 ```
 
 ### Opción 2: Python Script Directo
 
 ```bash
-python3 scripts/utils/sql-query.py \
+python3 scripts/agents/sql-dba/sql-query.py \
   -s your-server.database.windows.net \
   -d your-database \
   -u your-username \
@@ -171,8 +171,8 @@ HAVING COUNT(*) > 0;
 ## 📁 Archivos de Referencia
 
 - **Queries completas**: `docs/queries/detect-zombie-transactions.sql`
-- **Script automatizado**: `scripts/utils/detect-zombie-transactions.sh`
-- **Python tool**: `scripts/utils/sql-query.py`
+- **Script automatizado**: `scripts/agents/sql-dba/detect-zombie-transactions.sh`
+- **Python tool**: `scripts/agents/sql-dba/sql-query.py`
 
 ---
 

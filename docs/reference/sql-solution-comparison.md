@@ -386,10 +386,10 @@ Para ejecutar consultas SQL usa los scripts bash con Azure AD:
 
 ```bash
 # Análisis de performance
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb -a all
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb -a all
 
 # Query específica
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad -q "SELECT ..."
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad -q "SELECT ..."
 ```
 
 **Nota de seguridad:** No usamos el MCP server comunitario porque:

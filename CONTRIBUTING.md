@@ -78,7 +78,7 @@ npm install -g markdownlint-cli  # Para validación de markdown
 4. **Verificar setup**
    ```bash
    # Ejecutar validaciones básicas
-   ./scripts/utils/azure-utils.sh --verify
+   ./scripts/common/azure-utils.sh --verify
    az bicep version
    shellcheck --version
    ```

@@ -7,7 +7,7 @@ This guide explains how to connect and query Azure SQL Database using the provid
 ## Tools Available
 
 ### 1. Python Script: `sql-query.py`
-**Location**: `scripts/utils/sql-query.py`
+**Location**: `scripts/agents/sql-dba/sql-query.py`
 
 Full-featured Python script with support for:
 - ✅ Azure AD authentication (via Azure CLI tokens)
@@ -20,7 +20,7 @@ Full-featured Python script with support for:
 
 ```bash
 # SQL Authentication
-python3 scripts/utils/sql-query.py \
+python3 scripts/agents/sql-dba/sql-query.py \
   -s your-server.database.windows.net \
   -d your-database \
   -u your-username \
@@ -29,7 +29,7 @@ python3 scripts/utils/sql-query.py \
   -o table
 
 # Azure AD Authentication
-python3 scripts/utils/sql-query.py \
+python3 scripts/agents/sql-dba/sql-query.py \
   -s your-server.database.windows.net \
   -d your-database \
   --aad \
@@ -47,7 +47,7 @@ python3 scripts/utils/sql-query.py \
 - `-o, --output`: Output format (`table` or `json`)
 
 ### 2. Bash Wrapper: `sql-connect.sh`
-**Location**: `scripts/utils/sql-connect.sh`
+**Location**: `scripts/agents/sql-dba/sql-connect.sh`
 
 Convenient wrapper that supports environment variables.
 
@@ -61,13 +61,13 @@ export AZURE_SQL_USERNAME="your-username"
 export AZURE_SQL_PASSWORD="your-password"
 
 # Execute queries
-./scripts/utils/sql-connect.sh -q "SELECT TOP 10 * FROM sys.tables"
+./scripts/agents/sql-dba/sql-connect.sh -q "SELECT TOP 10 * FROM sys.tables"
 ```
 
 **Usage with Parameters:**
 
 ```bash
-./scripts/utils/sql-connect.sh \
+./scripts/agents/sql-dba/sql-connect.sh \
   -s your-server.database.windows.net \
   -d your-database \
   -u your-username \
@@ -170,7 +170,7 @@ PASSWORD=$(az keyvault secret show \
 
 ### Database Information
 ```bash
-./scripts/utils/sql-connect.sh -q "
+./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT 
     DB_NAME() as DatabaseName,
     CAST(SUM(CAST(FILEPROPERTY(name, 'SpaceUsed') AS bigint) * 8192. / 1024 / 1024 / 1024) AS DECIMAL(10,2)) as UsedSpaceGB,
@@ -181,7 +181,7 @@ FROM sys.database_files WHERE type = 0
 
 ### Top 10 Largest Tables
 ```bash
-./scripts/utils/sql-connect.sh -q "
+./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT TOP 10
     SCHEMA_NAME(t.schema_id) + '.' + t.name as TableName,
     CAST(SUM(p.rows) AS DECIMAL(18,0)) as TotalRows,
@@ -197,7 +197,7 @@ ORDER BY SUM(a.total_pages) DESC
 
 ### Active Connections
 ```bash
-./scripts/utils/sql-connect.sh -q "
+./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT 
     COUNT(*) as TotalConnections,
     COUNT(CASE WHEN status = 'running' THEN 1 END) as ActiveQueries

@@ -67,12 +67,12 @@ Tienes acceso directo a estos MCP servers para potenciar tus capacidades:
 Tu base de conocimiento y patrones reside en `azure-agent-pro`. Usa activamente:
 
 **Scripts de Operación** (`scripts/`):
-- `scripts/login/azure-login.sh`: Autenticación multi-tenant con service principals
-- `scripts/config/azure-config.sh`: Gestión de `azure-config.env` (tenant, subscription, location, tags)
-- `scripts/deploy/bicep-deploy.sh`: Validación, what-if y despliegue de Bicep con rollback automático
+- `scripts/common/azure-login.sh`: Autenticación multi-tenant con service principals
+- `scripts/common/azure-config.sh`: Gestión de `azure-config.env` (tenant, subscription, location, tags)
+- `scripts/agents/architect/bicep-deploy.sh`: Validación, what-if y despliegue de Bicep con rollback automático
 - `scripts/utils/`: Helpers para RBAC, networking, monitoring, cost analysis
-- `scripts/utils/sql-query.sh`: Ejecutar queries SQL con Azure AD authentication
-- `scripts/utils/sql-analyzer.sh`: Análisis de performance (índices, bloqueos, fragmentación)
+- `scripts/agents/sql-dba/sql-query.sh`: Ejecutar queries SQL con Azure AD authentication
+- `scripts/agents/sql-dba/sql-analyzer.sh`: Análisis de performance (índices, bloqueos, fragmentación)
 
 **Infraestructura como Código** (`bicep/`):
 - `bicep/main.bicep`: Orquestador de módulos por entorno
@@ -101,7 +101,7 @@ Tienes scripts bash para operaciones SQL con **Azure AD authentication** (NO usa
 
 **Uso con Azure AD (RECOMENDADO):**
 ```bash
-./scripts/utils/sql-query.sh \
+./scripts/agents/sql-dba/sql-query.sh \
   --server myserver.database.windows.net \
   --database mydb \
   --aad \
@@ -119,19 +119,19 @@ Tienes scripts bash para operaciones SQL con **Azure AD authentication** (NO usa
 
 ```bash
 # Análisis de queries lentas
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   -q "SELECT TOP 10 query_text, execution_count, avg_elapsed_time 
       FROM sys.dm_exec_query_stats 
       ORDER BY avg_elapsed_time DESC"
 
 # Export a CSV
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   --format csv \
   -q "SELECT * FROM information_schema.tables" \
   > tables.csv
 
 # Con timeout custom
-./scripts/utils/sql-query.sh -s myserver -d mydb --aad \
+./scripts/agents/sql-dba/sql-query.sh -s myserver -d mydb --aad \
   --timeout 60 \
   -q "SELECT * FROM LargeTable"
 ```
@@ -140,7 +140,7 @@ Tienes scripts bash para operaciones SQL con **Azure AD authentication** (NO usa
 
 **Análisis completo:**
 ```bash
-./scripts/utils/sql-analyzer.sh \
+./scripts/agents/sql-dba/sql-analyzer.sh \
   --server myserver.database.windows.net \
   --database mydb \
   --aad \
@@ -151,28 +151,28 @@ Tienes scripts bash para operaciones SQL con **Azure AD authentication** (NO usa
 
 ```bash
 # Queries lentas (top 20)
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a slow-queries
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a slow-queries
 
 # Índices faltantes
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a missing-indexes
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a missing-indexes
 
 # Uso de índices
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a index-usage
 
 # Tamaños de tablas
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a table-sizes
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a table-sizes
 
 # Bloqueos activos
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a blocking
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a blocking
 
 # Fragmentación de índices
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a fragmentation
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a fragmentation
 
 # Estadísticas obsoletas
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a statistics
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a statistics
 
 # Recomendaciones Azure Advisor
-./scripts/utils/sql-analyzer.sh -s myserver -d mydb --aad -a recommendations
+./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb --aad -a recommendations
 ```
 
 **Output:**
@@ -207,11 +207,11 @@ Una vez desplegada la base de datos, ejecuta análisis inicial:
 
 \```bash
 # Verificar conectividad
-./scripts/utils/sql-query.sh -s ${SQL_SERVER} -d ${SQL_DATABASE} --aad \
+./scripts/agents/sql-dba/sql-query.sh -s ${SQL_SERVER} -d ${SQL_DATABASE} --aad \
   -q "SELECT @@VERSION"
 
 # Análisis completo de performance
-./scripts/utils/sql-analyzer.sh -s ${SQL_SERVER} -d ${SQL_DATABASE} --aad -a all
+./scripts/agents/sql-dba/sql-analyzer.sh -s ${SQL_SERVER} -d ${SQL_DATABASE} --aad -a all
 \```
 ```
 

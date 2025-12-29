@@ -42,11 +42,11 @@ az bicep build --file bicep/main.bicep
 ## 📁 Archivos Modificados
 
 ### 🔧 Scripts
-- [ ] `scripts/login/azure-login.sh`
-- [ ] `scripts/deploy/bicep-deploy.sh`
-- [ ] `scripts/config/azure-config.sh`
-- [ ] `scripts/utils/azure-utils.sh`
-- [ ] `scripts/utils/bicep-utils.sh`
+- [ ] `scripts/common/azure-login.sh`
+- [ ] `scripts/agents/architect/bicep-deploy.sh`
+- [ ] `scripts/common/azure-config.sh`
+- [ ] `scripts/common/azure-utils.sh`
+- [ ] `scripts/agents/architect/bicep-utils.sh`
 - [ ] Otros: ___________
 
 ### 🏗️ Infraestructura
@@ -82,7 +82,7 @@ az bicep build --file bicep/main.bicep
 <!-- Si este PR requiere pasos especiales de deployment, descríbelos aquí -->
 
 1. [ ] Merge este PR
-2. [ ] Ejecutar `./scripts/deploy/bicep-deploy.sh`
+2. [ ] Ejecutar `./scripts/agents/architect/bicep-deploy.sh`
 3. [ ] Verificar recursos en Azure Portal
 4. [ ] Actualizar documentación si es necesario
 

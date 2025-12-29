@@ -331,7 +331,7 @@ cd azure-agent-pro
 ./scripts/setup/mcp-simple-setup.sh
 
 # 3. Login en Azure
-./scripts/login/azure-login.sh
+./scripts/common/azure-login.sh
 
 # 4. Abrir en VS Code
 code .
