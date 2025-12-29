@@ -1,0 +1,33 @@
+Subject: Root Cause Identified - 8 Orphaned Transactions Blocking Space Reclamation
+
+Hi team,
+
+We have identified the root cause of the storage growth issue:
+
+FINDING:
+8 orphaned transactions (session_id = NULL) active since November 12, 2025 (47 days ago) are blocking 1,240 GB of space reclamation.
+
+DETAILS:
+- Transaction IDs: 1294, 1297, 1299, 1301, 1304, 1306, 9330, 13751
+- All show session_id = NULL (cannot be terminated with KILL)
+- Unallocated space blocked: 1,240 GB
+- Growth impact: ~150 GB/day unable to reclaim
+
+PROPOSED SOLUTION:
+Manual database failover to clear the orphaned transactions.
+
+QUESTION:
+Should we execute the failover ourselves during a maintenance window, or would you prefer to handle it from your side to ensure proper monitoring?
+
+If we proceed:
+- Command: az sql db failover --resource-group <rg> --server <server> --name <db>
+- Expected downtime: 30-60 seconds
+- Proposed window: Saturday, January 4, 2026 at 05:00-06:00 UTC (06:00-07:00 CET)
+  Rationale: Post-ETL window, weekend, minimal user impact for analytics workload
+
+Please advise on the best approach.
+
+Attached: Diagnostic script and results.
+
+Best regards,
+[Your Name]
