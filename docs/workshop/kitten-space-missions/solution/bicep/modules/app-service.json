@@ -1,0 +1,238 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "2180125671988685738"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure region for resources"
+      }
+    },
+    "projectName": {
+      "type": "string",
+      "metadata": {
+        "description": "Project name for naming convention"
+      }
+    },
+    "environment": {
+      "type": "string",
+      "metadata": {
+        "description": "Environment name"
+      }
+    },
+    "appServicePlanSku": {
+      "type": "string",
+      "metadata": {
+        "description": "App Service Plan SKU"
+      }
+    },
+    "subnetId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet ID for VNet integration"
+      }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault name for configuration"
+      }
+    },
+    "applicationInsightsConnectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Application Insights connection string"
+      }
+    },
+    "applicationInsightsInstrumentationKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Application Insights instrumentation key"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "metadata": {
+        "description": "Resource tags"
+      }
+    },
+    "logAnalyticsWorkspaceId": {
+      "type": "string",
+      "metadata": {
+        "description": "Log Analytics Workspace ID for diagnostics"
+      }
+    }
+  },
+  "variables": {
+    "appServicePlanName": "[format('asp-{0}-{1}', parameters('projectName'), parameters('environment'))]",
+    "appServiceName": "[format('app-{0}-{1}', parameters('projectName'), parameters('environment'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "[parameters('appServicePlanSku')]",
+        "tier": "Basic",
+        "capacity": 1
+      },
+      "kind": "linux",
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('appServiceName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "kind": "app,linux",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "clientAffinityEnabled": false,
+        "virtualNetworkSubnetId": "[parameters('subnetId')]",
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0",
+          "minTlsVersion": "1.2",
+          "ftpsState": "Disabled",
+          "http20Enabled": true,
+          "alwaysOn": true,
+          "vnetRouteAllEnabled": true,
+          "appSettings": [
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[parameters('applicationInsightsConnectionString')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[parameters('applicationInsightsInstrumentationKey')]"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "recommended"
+            },
+            {
+              "name": "ASPNETCORE_ENVIRONMENT",
+              "value": "[if(equals(parameters('environment'), 'prod'), 'Production', 'Development')]"
+            },
+            {
+              "name": "KeyVaultName",
+              "value": "[parameters('keyVaultName')]"
+            },
+            {
+              "name": "SqlConnectionString",
+              "value": "[format('@Microsoft.KeyVault(SecretUri=https://{0}{1}/secrets/SqlConnectionString/)', parameters('keyVaultName'), environment().suffixes.keyvaultDns)]"
+            }
+          ],
+          "connectionStrings": [
+            {
+              "name": "DefaultConnection",
+              "connectionString": "[format('@Microsoft.KeyVault(SecretUri=https://{0}{1}/secrets/SqlConnectionString/)', parameters('keyVaultName'), environment().suffixes.keyvaultDns)]",
+              "type": "SQLAzure"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "apiVersion": "2021-05-01-preview",
+      "scope": "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]",
+      "name": "[format('diag-{0}', variables('appServiceName'))]",
+      "properties": {
+        "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+        "logs": [
+          {
+            "category": "AppServiceHTTPLogs",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": "[if(equals(parameters('environment'), 'prod'), 90, 30)]"
+            }
+          },
+          {
+            "category": "AppServiceConsoleLogs",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": "[if(equals(parameters('environment'), 'prod'), 90, 30)]"
+            }
+          },
+          {
+            "category": "AppServiceAppLogs",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": "[if(equals(parameters('environment'), 'prod'), 90, 30)]"
+            }
+          },
+          {
+            "category": "AppServiceAuditLogs",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": "[if(equals(parameters('environment'), 'prod'), 90, 30)]"
+            }
+          }
+        ],
+        "metrics": [
+          {
+            "category": "AllMetrics",
+            "enabled": true,
+            "retentionPolicy": {
+              "enabled": true,
+              "days": "[if(equals(parameters('environment'), 'prod'), 90, 30)]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "appServiceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+    },
+    "appServiceName": {
+      "type": "string",
+      "value": "[variables('appServiceName')]"
+    },
+    "appServicePrincipalId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', variables('appServiceName')), '2023-01-01', 'full').identity.principalId]"
+    },
+    "appServiceDefaultHostName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', variables('appServiceName')), '2023-01-01').defaultHostName]"
+    },
+    "appServicePlanId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+    }
+  }
+}

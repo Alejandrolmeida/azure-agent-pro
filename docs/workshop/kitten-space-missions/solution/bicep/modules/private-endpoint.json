@@ -1,0 +1,124 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "11334551218758834060"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure region for resources"
+      }
+    },
+    "privateEndpointName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the Private Endpoint"
+      }
+    },
+    "privateLinkServiceId": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the service to connect via Private Link"
+      }
+    },
+    "groupId": {
+      "type": "string",
+      "metadata": {
+        "description": "Group ID for the Private Link (e.g., sqlServer, vault)"
+      }
+    },
+    "subnetId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet ID where Private Endpoint will be created"
+      }
+    },
+    "privateDnsZoneName": {
+      "type": "string",
+      "metadata": {
+        "description": "Private DNS Zone name"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "metadata": {
+        "description": "Resource tags"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2023-05-01",
+      "name": "[parameters('privateEndpointName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "subnet": {
+          "id": "[parameters('subnetId')]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "[parameters('privateEndpointName')]",
+            "properties": {
+              "privateLinkServiceId": "[parameters('privateLinkServiceId')]",
+              "groupIds": [
+                "[parameters('groupId')]"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('privateDnsZoneName')]",
+      "location": "global",
+      "tags": "[parameters('tags')]"
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2023-05-01",
+      "name": "[format('{0}/{1}', parameters('privateEndpointName'), 'default')]",
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "config1",
+            "properties": {
+              "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]",
+        "[resourceId('Microsoft.Network/privateEndpoints', parameters('privateEndpointName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "privateEndpointId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/privateEndpoints', parameters('privateEndpointName'))]"
+    },
+    "privateEndpointName": {
+      "type": "string",
+      "value": "[parameters('privateEndpointName')]"
+    },
+    "privateDnsZoneId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
+    },
+    "privateDnsZoneName": {
+      "type": "string",
+      "value": "[parameters('privateDnsZoneName')]"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "dev"
+    },
+    "location": {
+      "value": "westeurope"
+    },
+    "projectName": {
+      "value": "kitten-missions"
+    },
+    "sqlDatabaseSku": {
+      "value": "Basic"
+    },
+    "appServicePlanSku": {
+      "value": "B1"
+    },
+    "enablePrivateEndpoint": {
+      "value": true
+    },
+    "sqlAdminUsername": {
+      "value": "sqladmin"
+    },
+    "sqlAdminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{kv-name}"
+        },
+        "secretName": "SqlAdminPassword"
+      }
+    },
+    "tags": {
+      "value": {
+        "Environment": "Development",
+        "Project": "KittenSpaceMissions",
+        "ManagedBy": "Bicep",
+        "CostCenter": "Engineering",
+        "Owner": "DevOps Team",
+        "Criticality": "Low"
+      }
+    }
+  }
+}

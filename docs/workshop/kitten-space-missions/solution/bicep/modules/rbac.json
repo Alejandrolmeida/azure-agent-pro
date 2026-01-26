@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.40.2.10011",
+      "templateHash": "1777037599957607493"
+    }
+  },
+  "parameters": {
+    "appServicePrincipalId": {
+      "type": "string",
+      "metadata": {
+        "description": "Principal ID of the App Service Managed Identity"
+      }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault name"
+      }
+    },
+    "sqlServerId": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL Server resource ID"
+      }
+    }
+  },
+  "variables": {
+    "keyVaultSecretsUserRoleId": "4633458b-17de-408a-b874-0445c86b69e6",
+    "sqlDbContributorRoleId": "9b7fa17d-e63e-47b0-bb0a-15c516ac86ec"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+      "name": "[guid(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), parameters('appServicePrincipalId'), variables('keyVaultSecretsUserRoleId'))]",
+      "properties": {
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('keyVaultSecretsUserRoleId'))]",
+        "principalId": "[parameters('appServicePrincipalId')]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[resourceId('Microsoft.Sql/servers', split(parameters('sqlServerId'), '/')[8])]",
+      "name": "[guid(parameters('sqlServerId'), parameters('appServicePrincipalId'), variables('sqlDbContributorRoleId'))]",
+      "properties": {
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('sqlDbContributorRoleId'))]",
+        "principalId": "[parameters('appServicePrincipalId')]",
+        "principalType": "ServicePrincipal"
+      }
+    }
+  ],
+  "outputs": {
+    "keyVaultRoleAssignmentId": {
+      "type": "string",
+      "value": "[extensionResourceId(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), 'Microsoft.Authorization/roleAssignments', guid(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), parameters('appServicePrincipalId'), variables('keyVaultSecretsUserRoleId')))]"
+    },
+    "sqlRoleAssignmentId": {
+      "type": "string",
+      "value": "[extensionResourceId(resourceId('Microsoft.Sql/servers', split(parameters('sqlServerId'), '/')[8]), 'Microsoft.Authorization/roleAssignments', guid(parameters('sqlServerId'), parameters('appServicePrincipalId'), variables('sqlDbContributorRoleId')))]"
+    }
+  }
+}
