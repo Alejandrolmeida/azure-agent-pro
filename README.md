@@ -1,8 +1,8 @@
 # Azure Agent Pro
 
-[![Bicep Validation](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Bicep%20Validation%20and%20Linting/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/bicep-validation.yml)
-[![Code Quality](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Code%20Quality%20and%20Security/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/code-quality.yml)
-[![Deploy to Azure](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Deploy%20to%20Azure/badge.svg)](https://github.com/alejandrolmeida/azure-agent-pro/actions/workflows/deploy-azure.yml)
+[![CI](https://img.shields.io/badge/CI-manual%20validation-informational)](#)
+[![Quality](https://img.shields.io/badge/Quality-reviewed-informational)](#)
+[![Deploy](https://img.shields.io/badge/Deploy-manual-green)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Azure CLI](https://img.shields.io/badge/Azure%20CLI-2.55%2B-blue.svg)](https://docs.microsoft.com/en-us/cli/azure/)
 [![Bicep](https://img.shields.io/badge/Bicep-0.23%2B-orange.svg)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
@@ -41,7 +41,7 @@ Los **Model Context Protocol (MCP) Servers** son herramientas especializadas que
 | **Azure_Networking_Pro** | Redes | VNets, Firewall, Private Link, VPN |
 | **Azure_SQL_DBA** | SQL DBA | Performance, blocking, indexing, migration |
 
-> 📖 **Ver todos los agentes**: [docs/reference/agents-overview.md](docs/reference/agents-overview.md)
+> **Ver todos los agentes**: [docs/reference/agents-overview.md](docs/reference/agents-overview.md)
 
 ### ¿Qué aprenderás?
 
@@ -107,89 +107,89 @@ graph TB
 
 ```
 azure-agent-pro/
-├── .github/
-│ ├── chatmodes/ # GitHub Copilot enhanced configurations
-│ │ ├── azure-infrastructure-agent.md
-│ │ ├── azure-devops-pipeline-agent.md
-│ │ └── azure-security-agent.md
-│ ├── workflows/ # CI/CD Automation
-│ │ ├── bicep-validation.yml # Infrastructure validation
-│ │ ├── deploy-azure.yml # Multi-environment deployment
-│ │ └── code-quality.yml # Security & quality checks
-│ ├── ISSUE_TEMPLATE/ # Structured issue templates
-│ └── CODEOWNERS # Automated code review assignments
-├── scripts/
-│ ├── login/
-│ │ └── azure-login.sh # Enhanced authentication with MCP
-│ ├── deploy/
-│ │ └── bicep-deploy.sh # Professional deployment automation
-│ ├── config/
-│ │ └── azure-config.sh # Enterprise configuration management
-│ ├── utils/
-│ │ ├── azure-utils.sh # Advanced Azure CLI utilities
-│ │ └── bicep-utils.sh # Bicep development helpers
-│ ├── setup/
-│ │ └── mcp-setup.sh # Model Context Protocol integration
-│ └── monitoring/
-│ └── azure-monitor.sh # Infrastructure monitoring
-├── bicep/
-│ ├── main.bicep # Main infrastructure template
-│ ├── modules/ # Reusable infrastructure components
-│ │ ├── storage-account.bicep # Secure storage configuration
-│ │ ├── virtual-network.bicep # Network security patterns
-│ │ ├── key-vault.bicep # Secrets management
-│ │ ├── app-service.bicep # Application hosting
-│ │ └── monitoring.bicep # Observability stack
-│ └── parameters/ # Environment-specific configurations
-│ ├── dev.parameters.json # Development environment
-│ ├── test.parameters.json # Testing environment
-│ ├── stage.parameters.json # Staging environment
-│ └── prod.parameters.json # Production environment
-├── docs/ # Documentación completa
-│ ├── README.md # Índice maestro de documentación
-│ ├── getting-started/ # Setup inicial
-│ │ └── mcp-quickstart.md # Configurar MCP Servers (10-15 min)
-│ ├── reference/ # Referencias rápidas
-│ │ ├── azure-cli-cheatsheet.md # Comandos Azure CLI (711 líneas)
-│ │ ├── bicep-cheatsheet.md # Sintaxis Bicep (1,165 líneas)
-│ │ └── mcp-servers-cheatsheet.md # MCP avanzado (1,059 líneas)
-│ └── workshop/ # Workshop principal
-│ ├── kitten-space-missions/ # ⭐ Workshop estrella (3,511 líneas)
-│ │ ├── 8 actividades progresivas
-│ │ └── assets/workshop-hero.png
-│ └── archived/ # Contenido histórico
-├── .vscode/ # VS Code optimizations
-│ ├── settings.json # Optimized settings for Azure development
-│ ├── extensions.json # Recommended extensions
-│ └── bicep.code-snippets # Custom Bicep snippets
-├── scripts/ # Automation scripts
-│ ├── deploy/
-│ │ └── bicep-deploy.sh # Deployment automation
-│ ├── utils/
-│ │ ├── azure-utils.sh # Azure utilities
-│ │ └── bicep-utils.sh # Bicep utilities
-│ ├── setup/
-│ │ └── mcp-setup.sh # MCP servers configuration
-│ └── update/
-│ └── project-updater.sh # Project updater
-├── bicep/ # Infrastructure as Code
-│ ├── main.bicep # Main template
-│ ├── modules/ # Bicep modules
-│ │ ├── storage-account.bicep # Storage Account
-│ │ ├── virtual-network.bicep # Virtual Network
-│ │ └── key-vault.bicep # Key Vault
-│ └── parameters/
-│ ├── dev.parameters.json # Development parameters
-│ └── prod.parameters.json # Production parameters
-├── .github/
-│ ├── workflows/ # CI/CD workflows
-│ ├── chatmodes/ # GitHub Copilot chat modes
-│ │ ├── azure-infrastructure-agent.md
-│ │ └── azure-devops-pipeline-agent.md
-│ └── ISSUE_TEMPLATE/ # Issue templates
-├── PROJECT_CONTEXT.md # Research project context
-├── LEARNING_OBJECTIVES.md # Educational goals and outcomes
-└── README.md # This file
+ .github/
+ chatmodes/ # GitHub Copilot enhanced configurations
+ azure-infrastructure-agent.md
+ azure-devops-pipeline-agent.md
+ azure-security-agent.md
+ workflows/ # CI/CD Automation
+ bicep-validation.yml # Infrastructure validation
+ deploy-azure.yml # Multi-environment deployment
+ code-quality.yml # Security & quality checks
+ ISSUE_TEMPLATE/ # Structured issue templates
+ CODEOWNERS # Automated code review assignments
+ scripts/
+ login/
+ azure-login.sh # Enhanced authentication with MCP
+ deploy/
+ bicep-deploy.sh # Professional deployment automation
+ config/
+ azure-config.sh # Enterprise configuration management
+ utils/
+ azure-utils.sh # Advanced Azure CLI utilities
+ bicep-utils.sh # Bicep development helpers
+ setup/
+ mcp-setup.sh # Model Context Protocol integration
+ monitoring/
+ azure-monitor.sh # Infrastructure monitoring
+ bicep/
+ main.bicep # Main infrastructure template
+ modules/ # Reusable infrastructure components
+ storage-account.bicep # Secure storage configuration
+ virtual-network.bicep # Network security patterns
+ key-vault.bicep # Secrets management
+ app-service.bicep # Application hosting
+ monitoring.bicep # Observability stack
+ parameters/ # Environment-specific configurations
+ dev.parameters.json # Development environment
+ test.parameters.json # Testing environment
+ stage.parameters.json # Staging environment
+ prod.parameters.json # Production environment
+ docs/ # Documentación completa
+ README.md # Índice maestro de documentación
+ getting-started/ # Setup inicial
+ mcp-quickstart.md # Configurar MCP Servers (10-15 min)
+ reference/ # Referencias rápidas
+ azure-cli-cheatsheet.md # Comandos Azure CLI (711 líneas)
+ bicep-cheatsheet.md # Sintaxis Bicep (1,165 líneas)
+ mcp-servers-cheatsheet.md # MCP avanzado (1,059 líneas)
+ workshop/ # Workshop principal
+ kitten-space-missions/ # Workshop estrella (3,511 líneas)
+ 8 actividades progresivas
+ assets/workshop-hero.png
+ archived/ # Contenido histórico
+ .vscode/ # VS Code optimizations
+ settings.json # Optimized settings for Azure development
+ extensions.json # Recommended extensions
+ bicep.code-snippets # Custom Bicep snippets
+ scripts/ # Automation scripts
+ deploy/
+ bicep-deploy.sh # Deployment automation
+ utils/
+ azure-utils.sh # Azure utilities
+ bicep-utils.sh # Bicep utilities
+ setup/
+ mcp-setup.sh # MCP servers configuration
+ update/
+ project-updater.sh # Project updater
+ bicep/ # Infrastructure as Code
+ main.bicep # Main template
+ modules/ # Bicep modules
+ storage-account.bicep # Storage Account
+ virtual-network.bicep # Virtual Network
+ key-vault.bicep # Key Vault
+ parameters/
+ dev.parameters.json # Development parameters
+ prod.parameters.json # Production parameters
+ .github/
+ workflows/ # CI/CD workflows
+ chatmodes/ # GitHub Copilot chat modes
+ azure-infrastructure-agent.md
+ azure-devops-pipeline-agent.md
+ ISSUE_TEMPLATE/ # Issue templates
+ PROJECT_CONTEXT.md # Research project context
+ LEARNING_OBJECTIVES.md # Educational goals and outcomes
+ README.md # This file
 ```
 
 ## Empezar: Workshop Kitten Space Missions
@@ -278,7 +278,7 @@ Una **API REST completa** en Azure con:
 **[ Ver Documentación →](docs/README.md)**
 
 Incluye:
-- ⚙️ [Setup MCP Servers](docs/getting-started/mcp-quickstart.md) - 10-15 minutos
+- [Setup MCP Servers](docs/getting-started/mcp-quickstart.md) - 10-15 minutos
 - 📖 [Azure CLI Cheatsheet](docs/reference/azure-cli-cheatsheet.md) - 711 líneas
 - 📗 [Bicep Cheatsheet](docs/reference/bicep-cheatsheet.md) - 1,165 líneas
 - 📙 [MCP Servers Cheatsheet](docs/reference/mcp-servers-cheatsheet.md) - 1,059 líneas
@@ -513,7 +513,7 @@ Este proyecto está completamente optimizado para GitHub con workflows automatiz
 #### Bicep Validation (`bicep-validation.yml`)
 - **Trigger**: Push/PR a `main` y `develop` con cambios en `bicep/`
 - **Validaciones**: Linting, sintaxis, what-if analysis, security checks
-- � **Testing**: Deploy automático a ambiente de testing en PRs
+- **Testing**: Deploy automático a ambiente de testing en PRs
 - **Artifacts**: Templates compilados disponibles por 30 días
 
 #### Deploy to Azure (`deploy-azure.yml`)
@@ -541,11 +541,11 @@ La rama `main` está protegida con:
 
 - **Security**: Dependency graph, Dependabot, secret scanning
 - **Insights**: Code frequency, contributor stats, traffic analytics
-- 🏷️ **Labels**: Sistema organizado para issues y PRs
+- 🏷 **Labels**: Sistema organizado para issues y PRs
 - **Templates**: Issues específicos (bug, feature, docs, azure)
 - **Project boards**: Para tracking de roadmap y sprints
 
-### �🤝 Contribución con GitHub
+### 🤝 Contribución con GitHub
 
 ¡Las contribuciones son bienvenidas! Por favor lee nuestra [guía de contribución](CONTRIBUTING.md).
 
@@ -611,7 +611,7 @@ TEAMS_WEBHOOK_URL # Para notificaciones de deployment
 6. Push a la rama (`git push origin feature/AmazingFeature`)
 7. Abre un Pull Request usando la plantilla 
 
-### 🏷️ Convenciones de Commits
+### 🏷 Convenciones de Commits
 
 Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 - `feat:` Nueva funcionalidad
@@ -622,13 +622,13 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 - `test:` Añadir o corregir tests
 - `chore:` Tareas de mantenimiento
 
-## � Releases
+## Releases
 
 Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo de cambios.
 
 **Latest Release**: [v2.0.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v2.0.0) - Azure Agent Pro v2: 7 specialized agents + hardened MCP config
 
-## �📄 Licencia
+## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
