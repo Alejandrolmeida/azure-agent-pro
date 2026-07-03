@@ -1,4 +1,4 @@
-# Azure Agent Pro
+# Azure Agent Pro v2
 
 [![CI](https://img.shields.io/badge/CI-manual%20validation-informational)](#)
 [![Quality](https://img.shields.io/badge/Quality-reviewed-informational)](#)
