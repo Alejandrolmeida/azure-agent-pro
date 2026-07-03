@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v2.0.0] - 2026-07-03
+
+### Added
+- 5 nuevos sub-agentes Azure: Admin, Data, App Services, Foundry y Networking
+- `.copilot/copilot-instructions.md` con metodología enterprise para Azure Agent Pro v2
+- `docs/reference/agents-overview.md` como guía completa de los 7 agentes
+- `scripts/setup/setup-wsl.sh` para setup interactivo en WSL/Linux
+- `docs/getting-started/mcp-quickstart.md` reescrito para el flujo WSL-first
+- `docs/releases/v2.0.0.md` como nota oficial de la release
+
+### Changed
+- `mcp.json` corregido para usar `@azure/mcp@latest`
+- `memory-mcp` ahora soporta `MEMORY_FILE_PATH`
+- `azure-architect.agent.md` actualizado con frontmatter moderno y tabla de delegación
+- `.env.example` ampliado con variables para AI Foundry, OpenAI y memoria persistente
+- `README.md` actualizado para reflejar el ecosistema v2
+
+### Security
+- Eliminación de configuración sensible hardcoded en el repo público
+- Enfoque WSL-first con configuración local por entorno
+- Sin secretos, passwords ni datos personales versionados
+
+---
+
 ## [v1.1.0] - 2025-12-29
 
 ### 🎯 Highlights
@@ -82,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Release Links
 
+- **Latest**: [v2.0.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v2.0.0)
 - **Latest**: [v1.1.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v1.1.0)
 - **Previous**: [v1.0.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v1.0.0)
 - **All Releases**: [GitHub Releases](https://github.com/Alejandrolmeida/azure-agent-pro/releases)
@@ -105,5 +130,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[v2.0.0]: https://github.com/Alejandrolmeida/azure-agent-pro/compare/v1.1.0...v2.0.0
 [v1.1.0]: https://github.com/Alejandrolmeida/azure-agent-pro/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v1.0.0

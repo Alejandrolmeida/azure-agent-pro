@@ -637,7 +637,7 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 
 Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo de cambios.
 
-**Latest Release**: [v1.1.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v1.1.0) - Azure SQL DBA Agent & Infrastructure Reorganization
+**Latest Release**: [v2.0.0](https://github.com/Alejandrolmeida/azure-agent-pro/releases/tag/v2.0.0) - Azure Agent Pro v2: 7 specialized agents + hardened MCP config
 
 ## �📄 Licencia
 
