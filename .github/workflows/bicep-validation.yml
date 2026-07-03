@@ -4,14 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - "bicep/**"
-      - ".github/workflows/bicep-validation.yml"
   pull_request:
     branches: [main]
-    paths:
-      - "bicep/**"
-      - ".github/workflows/bicep-validation.yml"
 
 env:
   # Configure these values for your environment
