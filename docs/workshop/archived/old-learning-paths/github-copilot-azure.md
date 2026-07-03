@@ -1,17 +1,17 @@
-# 🤖 GitHub Copilot for Azure - Advanced Configuration Guide
+# GitHub Copilot for Azure - Advanced Configuration Guide
 
-## 🎯 Overview
+## Overview
 
 This guide teaches you how to configure GitHub Copilot for optimal Azure development productivity. You'll learn to create custom chat modes, optimize prompts, and leverage AI assistance for complex Azure tasks.
 
-## 📋 Prerequisites
+## Prerequisites
 
 - GitHub Copilot subscription (Individual or Business)
 - VS Code with GitHub Copilot extension
 - Basic knowledge of Azure services
 - Azure CLI installed and configured
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install Required Extensions
 
@@ -29,28 +29,28 @@ Add these settings to your VS Code configuration:
 
 ```json
 {
-  "github.copilot.enable": {
-    "*": true,
-    "bicep": true,
-    "shellscript": true,
-    "yaml": true,
-    "json": true
-  },
-  "github.copilot.advanced": {
-    "length": 500,
-    "temperature": 0.3,
-    "top_p": 1,
-    "frequency_penalty": 0,
-    "presence_penalty": 0
-  },
-  "github.copilot.editor.enableAutoCompletions": true,
-  "bicep.experimental.deploymentPaneEnabled": true
+ "github.copilot.enable": {
+ "*": true,
+ "bicep": true,
+ "shellscript": true,
+ "yaml": true,
+ "json": true
+ },
+ "github.copilot.advanced": {
+ "length": 500,
+ "temperature": 0.3,
+ "top_p": 1,
+ "frequency_penalty": 0,
+ "presence_penalty": 0
+ },
+ "github.copilot.editor.enableAutoCompletions": true,
+ "bicep.experimental.deploymentPaneEnabled": true
 }
 ```
 
 ## 🎭 Custom Chat Modes for Azure
 
-### 📁 Chat Mode Files Location
+### Chat Mode Files Location
 
 Create these files in `.github/chatmodes/` directory:
 
@@ -157,9 +157,9 @@ You are an expert in Azure DevOps and CI/CD automation specializing in:
 Always include error handling, rollback strategies, and approval processes for production deployments.
 ```
 
-## 🎯 Optimized Prompts for Azure Tasks
+## Optimized Prompts for Azure Tasks
 
-### 📝 Bicep Template Generation
+### Bicep Template Generation
 
 **Prompt Template:**
 ```
@@ -190,7 +190,7 @@ Create a Bicep template for Azure Storage Account with the following requirement
 Include parameter validation, resource naming conventions, output values, security best practices, and comments explaining decisions.
 ```
 
-### 🔒 Security Configuration
+### Security Configuration
 
 **Prompt Template:**
 ```
@@ -229,7 +229,7 @@ Include:
 - Monitoring integration
 ```
 
-## 🛠️ Advanced Copilot Techniques
+## Advanced Copilot Techniques
 
 ### 1. Context-Aware Development
 
@@ -281,7 +281,7 @@ Generate a Bicep module with comprehensive documentation including:
 - Troubleshooting guide
 ```
 
-## 📊 Productivity Metrics
+## Productivity Metrics
 
 Track your Copilot productivity:
 
@@ -297,7 +297,7 @@ Track your Copilot productivity:
 - **Deployment monitoring**: Success/failure rates
 - **Code review feedback**: Quality assessments
 
-## 🎓 Learning Exercises
+## Learning Exercises
 
 ### Exercise 1: Basic Infrastructure
 Create a complete web application infrastructure using only Copilot assistance:
@@ -321,7 +321,7 @@ Build a complete deployment pipeline with:
 - Multi-environment deployment
 - Rollback capabilities
 
-## 🔗 Additional Resources
+## Additional Resources
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
 - [Azure Bicep Documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)

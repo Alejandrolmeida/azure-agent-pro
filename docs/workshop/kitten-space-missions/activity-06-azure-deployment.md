@@ -1,21 +1,21 @@
 # 🌐 Actividad 6: Despliegue en Azure
 
-**⏱️ Duración estimada**: 45 minutos  
-**🎯 Objetivo**: Desplegar la infraestructura completa en Azure y validar que todo funciona correctamente
+**⏱️ Duración estimada**: 45 minutos 
+** Objetivo**: Desplegar la infraestructura completa en Azure y validar que todo funciona correctamente
 
 ---
 
-## 📋 Objetivos de aprendizaje
+## Objetivos de aprendizaje
 
-1. ✅ Ejecutar deployment desde GitHub Actions
-2. ✅ Monitorear el progreso del deployment
-3. ✅ Validar recursos creados en Azure Portal
-4. ✅ Verificar conectividad y configuración
-5. ✅ Resolver problemas comunes de deployment
+1. Ejecutar deployment desde GitHub Actions
+2. Monitorear el progreso del deployment
+3. Validar recursos creados en Azure Portal
+4. Verificar conectividad y configuración
+5. Resolver problemas comunes de deployment
 
 ---
 
-## 🚀 Paso 1: Pre-Deployment Checklist
+## Paso 1: Pre-Deployment Checklist
 
 Antes de desplegar, verifica:
 
@@ -56,8 +56,8 @@ Bicep:
 
 ### 2.2 Monitorear progreso
 
-- ✅ Job "deploy-dev" debe aparecer running
-- 🔍 Click en el job para ver logs en tiempo real
+- Job "deploy-dev" debe aparecer running
+- Click en el job para ver logs en tiempo real
 - ⏱️ Duración esperada: 10-15 minutos
 
 ### 2.3 Logs importantes
@@ -67,19 +67,19 @@ Busca en los logs:
 ```
 ✓ Azure Login (OIDC) - SUCCESS
 ✓ Deploy Bicep Template - IN PROGRESS
-  └─ Creating resource group...
-  └─ Deploying virtual network...
-  └─ Deploying monitoring...
-  └─ Deploying Key Vault...
-  └─ Deploying SQL Database...
-  └─ Deploying App Service...
-  └─ Configuring RBAC...
+ └─ Creating resource group...
+ └─ Deploying virtual network...
+ └─ Deploying monitoring...
+ └─ Deploying Key Vault...
+ └─ Deploying SQL Database...
+ └─ Deploying App Service...
+ └─ Configuring RBAC...
 ✓ Deployment completed successfully
 ```
 
 ---
 
-## 🔍 Paso 3: Validar Recursos en Azure Portal
+## Paso 3: Validar Recursos en Azure Portal
 
 ### 3.1 Verificar Resource Group
 
@@ -101,55 +101,55 @@ Deberías ver ~12-15 recursos:
 
 | Recurso | Nombre esperado | Estado |
 |---------|-----------------|---------|
-| Resource Group | rg-kitten-missions-dev | ✅ |
-| Virtual Network | vnet-kitten-missions-dev | ✅ |
-| Network Security Group | nsg-app-dev | ✅ |
-| App Service Plan | plan-kitten-missions-dev | ✅ |
-| App Service | app-kitten-missions-dev | ✅ |
-| SQL Server | sql-kitten-missions-dev | ✅ |
-| SQL Database | sqldb-kitten-missions-dev | ✅ |
-| Key Vault | kv-kitten-missions-dev-xxx | ✅ |
-| Private Endpoint | pe-sql-dev | ✅ |
-| Log Analytics | log-kitten-missions-dev | ✅ |
-| Application Insights | appi-kitten-missions-dev | ✅ |
+| Resource Group | rg-kitten-missions-dev | |
+| Virtual Network | vnet-kitten-missions-dev | |
+| Network Security Group | nsg-app-dev | |
+| App Service Plan | plan-kitten-missions-dev | |
+| App Service | app-kitten-missions-dev | |
+| SQL Server | sql-kitten-missions-dev | |
+| SQL Database | sqldb-kitten-missions-dev | |
+| Key Vault | kv-kitten-missions-dev-xxx | |
+| Private Endpoint | pe-sql-dev | |
+| Log Analytics | log-kitten-missions-dev | |
+| Application Insights | appi-kitten-missions-dev | |
 
 ### 3.3 Validar cada recurso
 
 **App Service**:
 ```bash
 az webapp show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "{Name:name, State:state, Url:defaultHostName}" -o table
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "{Name:name, State:state, Url:defaultHostName}" -o table
 ```
 
 **SQL Database**:
 ```bash
 az sql db show \
-  --name sqldb-kitten-missions-dev \
-  --server sql-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "{Name:name, Status:status, Size:maxSizeBytes}" -o table
+ --name sqldb-kitten-missions-dev \
+ --server sql-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "{Name:name, Status:status, Size:maxSizeBytes}" -o table
 ```
 
 **Key Vault**:
 ```bash
 az keyvault show \
-  --name [KV-NAME-CON-UNIQUE-STRING] \
-  --query "{Name:name, Location:location, Sku:sku.name}" -o table
+ --name [KV-NAME-CON-UNIQUE-STRING] \
+ --query "{Name:name, Location:location, Sku:sku.name}" -o table
 ```
 
 ---
 
-## 🔗 Paso 4: Verificar Conectividad
+## Paso 4: Verificar Conectividad
 
 ### 4.1 App Service → SQL Database
 
 ```bash
 # Verificar Managed Identity asignado
 az webapp identity show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev
 ```
 
 ### 4.2 App Service → Key Vault
@@ -157,8 +157,8 @@ az webapp identity show \
 ```bash
 # Verificar access policy en Key Vault
 az keyvault show \
-  --name [KV-NAME] \
-  --query "properties.accessPolicies[].objectId" -o table
+ --name [KV-NAME] \
+ --query "properties.accessPolicies[].objectId" -o table
 ```
 
 ### 4.3 Private Endpoint
@@ -166,25 +166,25 @@ az keyvault show \
 ```bash
 # Verificar Private Endpoint connection
 az network private-endpoint show \
-  --name pe-sql-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "privateLinkServiceConnections[0].privateLinkServiceConnectionState.status" -o tsv
+ --name pe-sql-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "privateLinkServiceConnections[0].privateLinkServiceConnectionState.status" -o tsv
 
 # Debe mostrar: Approved
 ```
 
 ---
 
-## 🧪 Paso 5: Smoke Tests
+## Paso 5: Smoke Tests
 
 ### 5.1 Test App Service Health
 
 ```bash
 # Obtener URL del App Service
 APP_URL=$(az webapp show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query defaultHostName -o tsv)
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query defaultHostName -o tsv)
 
 # Test HTTP (aunque no haya app desplegada todavía)
 curl -I https://$APP_URL
@@ -197,23 +197,23 @@ curl -I https://$APP_URL
 ```bash
 # Verificar que está recibiendo telemetría
 az monitor app-insights component show \
-  --app appi-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "instrumentationKey" -o tsv
+ --app appi-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "instrumentationKey" -o tsv
 ```
 
 ---
 
-## 💰 Paso 6: Verificar Costos
+## Paso 6: Verificar Costos
 
 ### 6.1 Azure Cost Management
 
 ```bash
 # Ver costos estimados del resource group
 az consumption usage list \
-  --start-date $(date -d '1 day ago' +%Y-%m-%d) \
-  --end-date $(date +%Y-%m-%d) \
-  | jq '.[] | select(.instanceName | contains("kitten-missions"))'
+ --start-date $(date -d '1 day ago' +%Y-%m-%d) \
+ --end-date $(date +%Y-%m-%d) \
+ | jq '.[] | select(.instanceName | contains("kitten-missions"))'
 ```
 
 **En Portal**:
@@ -238,14 +238,14 @@ az consumption usage list \
 
 ---
 
-## ✅ Entregables
+## Entregables
 
-- ✅ Infraestructura desplegada en Azure
-- ✅ Todos los recursos creados y funcionando
-- ✅ Conectividad verificada (MI, Private Endpoint)
-- ✅ Smoke tests pasados
-- ✅ Costos dentro de budget
-- ✅ Screenshot del Resource Group (opcional)
+- Infraestructura desplegada en Azure
+- Todos los recursos creados y funcionando
+- Conectividad verificada (MI, Private Endpoint)
+- Smoke tests pasados
+- Costos dentro de budget
+- Screenshot del Resource Group (opcional)
 
 ---
 
@@ -269,8 +269,8 @@ az consumption usage list \
 ```bash
 # Verificar OIDC Service Principal tiene rol Contributor
 az role assignment list \
-  --assignee [CLIENT_ID] \
-  --scope /subscriptions/[SUBSCRIPTION_ID]
+ --assignee [CLIENT_ID] \
+ --scope /subscriptions/[SUBSCRIPTION_ID]
 ```
 
 ### Deployment OK pero App Service muestra 502
@@ -280,8 +280,9 @@ En Actividad 8 desplegarás la aplicación.
 
 ---
 
-## 🚀 Siguiente Paso
+## Siguiente Paso
 
 **➡️ [Actividad 7: Monitoreo y Observabilidad](./activity-07-monitoring.md)**
 
 En la siguiente actividad configurarás dashboards, alertas y queries en Application Insights.
+

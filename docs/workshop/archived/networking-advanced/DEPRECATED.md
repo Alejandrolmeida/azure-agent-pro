@@ -1,7 +1,7 @@
 # ⚠️ Workshop Deprecado - Azure Networking con GitHub Copilot
 
-**Estado:** DEPRECATED  
-**Fecha de deprecación:** Diciembre 2025  
+**Estado:** DEPRECATED 
+**Fecha de deprecación:** Diciembre 2025 
 **Razón:** Reemplazado por contenido de mayor calidad y enfoque pedagógico mejorado
 
 ---
@@ -22,7 +22,7 @@ Este workshop ha sido **archivado** y ya no se mantiene activamente.
 
 ---
 
-## 🚀 ¿Qué deberías usar en su lugar?
+## ¿Qué deberías usar en su lugar?
 
 ### Workshop Recomendado: **Kitten Space Missions API**
 
@@ -30,18 +30,18 @@ Este workshop ha sido **archivado** y ya no se mantiene activamente.
 
 **¿Por qué es mejor?**
 
-- ✅ **Nivel básico**: Accesible para principiantes
-- ✅ **Vibe Coding**: Aprende a trabajar con el agente Azure_Architect_Pro
-- ✅ **Progresivo**: 8 actividades que van de simple a complejo
-- ✅ **Completo**: FinOps, Bicep, CI/CD, Security, Monitoring, Testing
-- ✅ **Divertido**: Tema de gatitos astronautas que hace el aprendizaje memorable
-- ✅ **Production-ready**: Código y prácticas listas para usar en proyectos reales
+- **Nivel básico**: Accesible para principiantes
+- **Vibe Coding**: Aprende a trabajar con el agente Azure_Architect_Pro
+- **Progresivo**: 8 actividades que van de simple a complejo
+- **Completo**: FinOps, Bicep, CI/CD, Security, Monitoring, Testing
+- **Divertido**: Tema de gatitos astronautas que hace el aprendizaje memorable
+- **Production-ready**: Código y prácticas listas para usar en proyectos reales
 
 **Cubre los mismos conceptos de networking** (VNets, NSGs, Private Endpoints) pero de forma más didáctica y moderna.
 
 ---
 
-## 📚 Contenido Archivado
+## Contenido Archivado
 
 Si aún necesitas consultar el contenido original de este workshop:
 
@@ -76,5 +76,6 @@ Si tienes dudas sobre esta deprecación o sugerencias para mejorar los workshops
 
 ---
 
-**Última actualización:** Diciembre 2025  
+**Última actualización:** Diciembre 2025 
 **Migración recomendada:** [Kitten Space Missions Workshop](../kitten-space-missions/)
+

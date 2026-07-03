@@ -1,54 +1,54 @@
-# 🏗️ Actividad 4: Generación de Código Bicep
+# Actividad 4: Generación de Código Bicep
 
-**⏱️ Duración estimada**: 45 minutos  
-**🎯 Objetivo**: Generar con el agente todos los módulos Bicep modulares, parametrizados y siguiendo las mejores prácticas del repositorio
+**⏱️ Duración estimada**: 45 minutos 
+** Objetivo**: Generar con el agente todos los módulos Bicep modulares, parametrizados y siguiendo las mejores prácticas del repositorio
 
 ---
 
-## 📋 Objetivos de aprendizaje
+## Objetivos de aprendizaje
 
 Al finalizar esta actividad serás capaz de:
 
-1. ✅ Solicitar al agente generación completa de código Bicep
-2. ✅ Obtener módulos reutilizables y bien estructurados
-3. ✅ Generar parámetros por entorno (dev/prod)
-4. ✅ Validar código Bicep con Azure CLI
-5. ✅ Ejecutar what-if deployments para preview
-6. ✅ Entender la estructura modular de Bicep
+1. Solicitar al agente generación completa de código Bicep
+2. Obtener módulos reutilizables y bien estructurados
+3. Generar parámetros por entorno (dev/prod)
+4. Validar código Bicep con Azure CLI
+5. Ejecutar what-if deployments para preview
+6. Entender la estructura modular de Bicep
 
 ---
 
-## 🎯 Contexto de esta Actividad
+## Contexto de esta Actividad
 
 Tienes de actividades anteriores:
-- ✅ Architecture Design Document (Actividad 2)
-- ✅ Análisis FinOps y decisiones de costos (Actividad 3)
-- ✅ Decisión de SKUs y configuraciones
+- Architecture Design Document (Actividad 2)
+- Análisis FinOps y decisiones de costos (Actividad 3)
+- Decisión de SKUs y configuraciones
 
 Ahora toca **materializar** ese diseño en código Infrastructure as Code (IaC) con Bicep.
 
 ---
 
-## 📁 Paso 1: Estructura de Archivos Bicep
+## Paso 1: Estructura de Archivos Bicep
 
 ### 1.1 Estructura objetivo
 
 ```
 docs/workshop/kitten-space-missions/solution/
 └── bicep/
-    ├── main.bicep                    # Orquestador principal
-    ├── main.parameters.json          # Parámetros base
-    ├── modules/
-    │   ├── app-service.bicep         # Módulo App Service
-    │   ├── sql-database.bicep        # Módulo SQL Database
-    │   ├── key-vault.bicep           # Módulo Key Vault
-    │   ├── networking.bicep          # Módulo VNet + Subnet
-    │   ├── private-endpoint.bicep    # Módulo Private Endpoint
-    │   ├── monitoring.bicep          # Módulo App Insights + Log Analytics
-    │   └── rbac.bicep                # Módulo RBAC assignments
-    └── parameters/
-        ├── dev.parameters.json       # Parámetros dev
-        └── prod.parameters.json      # Parámetros prod (futuro)
+ ├── main.bicep # Orquestador principal
+ ├── main.parameters.json # Parámetros base
+ ├── modules/
+ │ ├── app-service.bicep # Módulo App Service
+ │ ├── sql-database.bicep # Módulo SQL Database
+ │ ├── key-vault.bicep # Módulo Key Vault
+ │ ├── networking.bicep # Módulo VNet + Subnet
+ │ ├── private-endpoint.bicep # Módulo Private Endpoint
+ │ ├── monitoring.bicep # Módulo App Insights + Log Analytics
+ │ └── rbac.bicep # Módulo RBAC assignments
+ └── parameters/
+ ├── dev.parameters.json # Parámetros dev
+ └── prod.parameters.json # Parámetros prod (futuro)
 ```
 
 ### 1.2 Principios de diseño Bicep
@@ -64,7 +64,7 @@ El agente debe seguir estos principios:
 
 ---
 
-## 🤖 Paso 2: Solicitar Generación de Código al Agente
+## Paso 2: Solicitar Generación de Código al Agente
 
 ### 2.1 Prompt completo para generación Bicep
 
@@ -76,11 +76,11 @@ Copia este prompt en Copilot Chat:
 Basándome en el ADD y análisis FinOps previos, necesito que generes 
 AHORA el código Bicep completo para Kitten Space Missions API.
 
-🎯 OBJETIVO:
+ OBJETIVO:
 Generar TODOS los módulos Bicep modulares, parámetros y archivo main 
 siguiendo las convenciones del repositorio azure-agent-pro.
 
-📋 DECISIONES DE DISEÑO CONFIRMADAS:
+ DECISIONES DE DISEÑO CONFIRMADAS:
 Basado en el análisis FinOps, implementar Scenario B (Balanced):
 - App Service Plan: B1 Basic
 - SQL Database: Basic (2GB)
@@ -89,7 +89,7 @@ Basado en el análisis FinOps, implementar Scenario B (Balanced):
 - Application Insights: Pay-as-you-go
 - Log Analytics: Workspace compartido
 
-🏗️ ESTRUCTURA DE ARCHIVOS:
+ ESTRUCTURA DE ARCHIVOS:
 Generar en: docs/workshop/kitten-space-missions/solution/bicep/
 
 Archivos a crear:
@@ -123,31 +123,31 @@ Archivos a crear:
 ### app-service.bicep:
 - App Service Plan B1 (Linux)
 - App Service con:
-  - Managed Identity (SystemAssigned)
-  - HTTPS only, minTlsVersion 1.2
-  - VNet Integration al subnet
-  - App Settings configuradas (con Key Vault refs)
-  - Connection string desde Key Vault
-  - Diagnostic settings a Log Analytics
+ - Managed Identity (SystemAssigned)
+ - HTTPS only, minTlsVersion 1.2
+ - VNet Integration al subnet
+ - App Settings configuradas (con Key Vault refs)
+ - Connection string desde Key Vault
+ - Diagnostic settings a Log Analytics
 
 ### sql-database.bicep:
 - SQL Server con:
-  - AAD Authentication (si es posible)
-  - No SQL auth (solo AAD)
-  - Public network access: Disabled (solo Private Endpoint)
-  - minTlsVersion 1.2
+ - AAD Authentication (si es posible)
+ - No SQL auth (solo AAD)
+ - Public network access: Disabled (solo Private Endpoint)
+ - minTlsVersion 1.2
 - SQL Database Basic (2GB)
 - Transparent Data Encryption habilitado
 - Diagnostic settings
 
 ### key-vault.bicep:
 - Key Vault con:
-  - Soft delete enabled
-  - Purge protection enabled
-  - Access policy para App Service Managed Identity
-  - Secrets: SQL connection string
-  - Private Endpoint (opcional, evalúa costo vs beneficio)
-  - Diagnostic settings
+ - Soft delete enabled
+ - Purge protection enabled
+ - Access policy para App Service Managed Identity
+ - Secrets: SQL connection string
+ - Private Endpoint (opcional, evalúa costo vs beneficio)
+ - Diagnostic settings
 
 ### private-endpoint.bicep:
 - Módulo genérico reutilizable
@@ -159,38 +159,38 @@ Archivos a crear:
 - Application Insights (linked a Log Analytics)
 - Diagnostic settings templates
 - Basic alert rules:
-  - HTTP 5xx > 10 en 5min
-  - Response time p95 > 500ms
-  - Failed requests > 20%
+ - HTTP 5xx > 10 en 5min
+ - Response time p95 > 500ms
+ - Failed requests > 20%
 
 ### rbac.bicep:
 - Role assignments:
-  - App Service → SQL Database (SQL DB Contributor)
-  - App Service → Key Vault (Key Vault Secrets User)
+ - App Service → SQL Database (SQL DB Contributor)
+ - App Service → Key Vault (Key Vault Secrets User)
 
 ### parameters/dev.parameters.json:
 {
-  "$schema": "...",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "environment": {"value": "dev"},
-    "location": {"value": "westeurope"},
-    "projectName": {"value": "kitten-missions"},
-    "sqlDatabaseSku": {"value": "Basic"},
-    "appServicePlanSku": {"value": "B1"},
-    "enablePrivateEndpoint": {"value": true},
-    "tags": {
-      "value": {
-        "Environment": "Development",
-        "Project": "KittenSpaceMissions",
-        "ManagedBy": "Bicep",
-        "CostCenter": "Engineering"
-      }
-    }
-  }
+ "$schema": "...",
+ "contentVersion": "1.0.0.0",
+ "parameters": {
+ "environment": {"value": "dev"},
+ "location": {"value": "westeurope"},
+ "projectName": {"value": "kitten-missions"},
+ "sqlDatabaseSku": {"value": "Basic"},
+ "appServicePlanSku": {"value": "B1"},
+ "enablePrivateEndpoint": {"value": true},
+ "tags": {
+ "value": {
+ "Environment": "Development",
+ "Project": "KittenSpaceMissions",
+ "ManagedBy": "Bicep",
+ "CostCenter": "Engineering"
+ }
+ }
+ }
 }
 
-🔒 SEGURIDAD - CHECKLIST OBLIGATORIO:
+ SEGURIDAD - CHECKLIST OBLIGATORIO:
 Cada módulo DEBE incluir:
 - [ ] Managed Identity donde sea posible
 - [ ] HTTPS/TLS 1.2+ only
@@ -199,13 +199,13 @@ Cada módulo DEBE incluir:
 - [ ] Secrets en Key Vault (NUNCA hardcoded)
 - [ ] Network isolation (VNet, Private Endpoints)
 
-📊 OBSERVABILITY - OBLIGATORIO:
+ OBSERVABILITY - OBLIGATORIO:
 Todos los recursos PaaS deben tener:
 - Diagnostic settings enviando logs a Log Analytics
 - Metrics habilitados
 - Retention configurado (30 días dev, 90 días prod)
 
-🎯 CONVENCIONES DE NAMING:
+ CONVENCIONES DE NAMING:
 Usar formato consistente:
 - Resource Group: rg-{projectName}-{environment}
 - App Service: app-{projectName}-{environment}
@@ -215,14 +215,14 @@ Usar formato consistente:
 - VNet: vnet-{projectName}-{environment}
 - App Insights: appi-{projectName}-{environment}
 
-💡 IMPORTANTE:
+ IMPORTANTE:
 - Todos los módulos deben ser independientes y reutilizables
 - Comentarios inline explicando decisiones clave
 - @description decorators en TODOS los parámetros
 - Usar @secure para passwords/secrets
 - Outputs útiles en cada módulo
 
-🚀 ACCIÓN:
+ ACCIÓN:
 Genera AHORA todos los archivos Bicep listados arriba.
 No necesito aprobación intermedia, confío en que seguirás estas specs.
 
@@ -245,7 +245,7 @@ Luego:
 ```
 Perfecto el main.bicep. Ahora genera los módulos en este orden:
 1. networking.bicep
-2. monitoring.bicep  
+2. monitoring.bicep 
 3. key-vault.bicep
 4. sql-database.bicep
 5. app-service.bicep
@@ -257,7 +257,7 @@ Muéstrame cada uno para revisión.
 
 ---
 
-## ✅ Paso 3: Validar el Código Generado
+## Paso 3: Validar el Código Generado
 
 ### 3.1 Checklist de validación por módulo
 
@@ -338,14 +338,14 @@ code .
 ```
 
 **Verifica visualmente**:
-- ✅ Indentación consistente (2 espacios)
-- ✅ Comentarios útiles
-- ✅ Sin valores hardcoded (IPs, passwords, etc.)
-- ✅ Parámetros con tipos correctos (string, int, bool, object, array)
+- Indentación consistente (2 espacios)
+- Comentarios útiles
+- Sin valores hardcoded (IPs, passwords, etc.)
+- Parámetros con tipos correctos (string, int, bool, object, array)
 
 ---
 
-## 🔍 Paso 4: What-If Deployment (Pre-flight Check)
+## Paso 4: What-If Deployment (Pre-flight Check)
 
 **What-If** te permite ver qué cambios se harían SIN desplegar realmente.
 
@@ -369,10 +369,10 @@ cd docs/workshop/kitten-space-missions/solution/bicep
 
 # What-If deployment (sin desplegar)
 az deployment sub what-if \
-  --location westeurope \
-  --template-file main.bicep \
-  --parameters parameters/dev.parameters.json \
-  --result-format FullResourcePayloads
+ --location westeurope \
+ --template-file main.bicep \
+ --parameters parameters/dev.parameters.json \
+ --result-format FullResourcePayloads
 ```
 
 **Nota**: Ajusta `sub` por `group` si tu main.bicep tiene `targetScope = 'resourceGroup'`
@@ -385,25 +385,25 @@ El output mostrará algo como:
 Resource changes: 15 to create, 0 to modify, 0 to delete.
 
 + Microsoft.Network/virtualNetworks/vnet-kitten-missions-dev
-  name: "vnet-kitten-missions-dev"
-  location: "westeurope"
-  properties.addressSpace.addressPrefixes: ["10.0.0.0/16"]
-  
+ name: "vnet-kitten-missions-dev"
+ location: "westeurope"
+ properties.addressSpace.addressPrefixes: ["10.0.0.0/16"]
+ 
 + Microsoft.Sql/servers/sql-kitten-missions-dev
-  name: "sql-kitten-missions-dev"
-  location: "westeurope"
-  properties.administratorLogin: null
-  properties.azureADAdministrator: {...}
+ name: "sql-kitten-missions-dev"
+ location: "westeurope"
+ properties.administratorLogin: null
+ properties.azureADAdministrator: {...}
 
 ... [más recursos]
 ```
 
 **Validaciones**:
-- ✅ Número de recursos coincide con lo esperado (~12-15)
-- ✅ Naming es correcto (kitten-missions-dev, etc.)
-- ✅ Locations son correctos (westeurope)
-- ✅ SKUs son los correctos (B1, Basic, etc.)
-- ✅ No hay errores de dependencias
+- Número de recursos coincide con lo esperado (~12-15)
+- Naming es correcto (kitten-missions-dev, etc.)
+- Locations son correctos (westeurope)
+- SKUs son los correctos (B1, Basic, etc.)
+- No hay errores de dependencias
 
 ### 4.4 Troubleshooting What-If
 
@@ -412,9 +412,9 @@ Resource changes: 15 to create, 0 to modify, 0 to delete.
 ```bash
 # Validar primero sin what-if
 az deployment sub validate \
-  --location westeurope \
-  --template-file main.bicep \
-  --parameters parameters/dev.parameters.json
+ --location westeurope \
+ --template-file main.bicep \
+ --parameters parameters/dev.parameters.json
 ```
 
 El output mostrará el error específico.
@@ -425,7 +425,7 @@ Necesitas permisos `Contributor` o `Owner` en la subscription. Contacta a tu adm
 
 ---
 
-## 📝 Paso 5: Documentar el Código Bicep
+## Paso 5: Documentar el Código Bicep
 
 ### 5.1 Crear README.md de Bicep
 
@@ -465,23 +465,23 @@ Inclúyelo en el README.md de bicep/
 
 ---
 
-## 🎯 Paso 6: Commit y Push del Código
+## Paso 6: Commit y Push del Código
 
 ### 6.1 Revisar cambios
 
 ```bash
-cd ~/azure-agent-pro  # o tu ruta
+cd ~/azure-agent-pro # o tu ruta
 
 # Ver archivos nuevos
 git status
 
 # Debe mostrar:
 # docs/workshop/kitten-space-missions/solution/bicep/
-#   main.bicep
-#   parameters/dev.parameters.json
-#   parameters/prod.parameters.json
-#   modules/*.bicep
-#   README.md
+# main.bicep
+# parameters/dev.parameters.json
+# parameters/prod.parameters.json
+# modules/*.bicep
+# README.md
 ```
 
 ### 6.2 Commit estructurado
@@ -509,17 +509,17 @@ git push origin main
 
 ---
 
-## ✅ Entregables de esta actividad
+## Entregables de esta actividad
 
 Al finalizar deberías tener:
 
-- ✅ **main.bicep** - Orquestador principal
-- ✅ **8 módulos Bicep** en modules/ (networking, app, sql, kv, monitoring, pe, rbac)
-- ✅ **Parámetros dev/prod** en parameters/
-- ✅ **README.md** documentando la estructura
-- ✅ **Validación syntax** exitosa (az bicep build)
-- ✅ **What-If** ejecutado y revisado
-- ✅ **Código commiteado** a tu fork de GitHub
+- **main.bicep** - Orquestador principal
+- **8 módulos Bicep** en modules/ (networking, app, sql, kv, monitoring, pe, rbac)
+- **Parámetros dev/prod** en parameters/
+- **README.md** documentando la estructura
+- **Validación syntax** exitosa (az bicep build)
+- **What-If** ejecutado y revisado
+- **Código commiteado** a tu fork de GitHub
 
 ### Checklist final
 
@@ -605,7 +605,7 @@ properties.administratorLogin: adminLogin
 Debería ser:
 ```bicep
 properties: {
-  administratorLogin: adminLogin
+ administratorLogin: adminLogin
 }
 ```
 
@@ -614,7 +614,7 @@ Por favor corrige y muéstrame el módulo actualizado.
 
 ---
 
-## 💡 Tips Pro de Bicep
+## Tips Pro de Bicep
 
 ### 1. Uso de @description decorator
 
@@ -646,14 +646,14 @@ output keyVaultUri string = keyVault.properties.vaultUri
 // Usamos Basic SKU para dev (2GB storage, 5 DTU) - suficiente para testing
 // En prod cambiar a Standard S0 (250GB, 10 DTU)
 sku: {
-  name: sqlDatabaseSku
-  tier: 'Basic'
+ name: sqlDatabaseSku
+ tier: 'Basic'
 }
 ```
 
 ---
 
-## 🚀 Siguiente Paso
+## Siguiente Paso
 
 ¡Excelente! Ahora tienes el código Bicep completo y validado. El siguiente paso es configurar los workflows de CI/CD en GitHub Actions para automatizar los despliegues.
 
@@ -663,7 +663,7 @@ En la próxima actividad configurarás pipelines completos de validación, testi
 
 ---
 
-## 📚 Referencias
+## Referencias
 
 - [Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
 - [Bicep Best Practices](https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices)
@@ -672,4 +672,5 @@ En la próxima actividad configurarás pipelines completos de validación, testi
 
 ---
 
-**🏗️ ¡Felicidades! Has generado infraestructura como código profesional. Ahora vamos a automatizar su despliegue.**
+** ¡Felicidades! Has generado infraestructura como código profesional. Ahora vamos a automatizar su despliegue.**
+

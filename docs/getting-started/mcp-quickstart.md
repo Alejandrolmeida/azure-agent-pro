@@ -1,20 +1,20 @@
-# ⚡ Quick Start: Conectar GitHub Copilot con MCP Servers (v2)
+# Quick Start: Conectar GitHub Copilot con MCP Servers (v2)
 
-## 🎯 Qué consigues con los MCP Servers
+## Qué consigues con los MCP Servers
 
 Los **MCP (Model Context Protocol) Servers** permiten a los agentes de Azure Agent Pro acceder a:
 
-- ✅ **azure-mcp**: Tus recursos Azure en **tiempo real** — VMs, VNets, SQL, Storage, RBAC...
-- ✅ **github-mcp**: Repos, Issues, PRs, workflows de GitHub Actions
-- ✅ **filesystem-mcp**: Lectura de todos los Bicep, scripts y configs del workspace
-- ✅ **memory-mcp**: **Contexto persistente** — el agente recuerda tus arquitecturas entre sesiones
-- ✅ **brave-search-mcp**: Documentación oficial Azure, community patterns (opcional)
+- **azure-mcp**: Tus recursos Azure en **tiempo real** — VMs, VNets, SQL, Storage, RBAC...
+- **github-mcp**: Repos, Issues, PRs, workflows de GitHub Actions
+- **filesystem-mcp**: Lectura de todos los Bicep, scripts y configs del workspace
+- **memory-mcp**: **Contexto persistente** — el agente recuerda tus arquitecturas entre sesiones
+- **brave-search-mcp**: Documentación oficial Azure, community patterns (opcional)
 
 **Tiempo estimado de setup:** 5-10 minutos con el script automatizado
 
 ---
 
-## 🚀 Setup Recomendado — Script Interactivo WSL
+## Setup Recomendado — Script Interactivo WSL
 
 ```bash
 # Desde la raíz del proyecto en WSL/Linux
@@ -32,7 +32,7 @@ El script `setup-wsl.sh`:
 
 ---
 
-## 📋 Setup Manual (alternativo)
+## Setup Manual (alternativo)
 
 ### Paso 1: Variables de entorno
 
@@ -46,7 +46,7 @@ Variables mínimas:
 ```bash
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
-GITHUB_TOKEN=$(gh auth token)  # o crear en github.com/settings/tokens
+GITHUB_TOKEN=$(gh auth token) # o crear en github.com/settings/tokens
 MEMORY_FILE_PATH=$HOME/.config/mcp/azure-agent-pro-memory.json
 ```
 
@@ -64,7 +64,7 @@ source .env && az login && code .
 
 ---
 
-## ✅ Tests de Verificación
+## Tests de Verificación
 
 ### Test 1: filesystem-mcp (sin credenciales)
 
@@ -82,7 +82,7 @@ source .env && az login && code .
 ```
 @Azure_Architect_Pro ¿Qué convenciones de naming tenemos?
 ```
-→ Recupera la información ✨
+→ Recupera la información 
 
 ### Test 3: azure-mcp (requiere AZURE_SUBSCRIPTION_ID)
 
@@ -100,7 +100,7 @@ source .env && az login && code .
 
 ---
 
-## 🔧 Troubleshooting WSL
+## Troubleshooting WSL
 
 ### azure-mcp no responde
 
@@ -131,25 +131,26 @@ echo 'set -a; source ~/projects/azure-agent-pro/.env; set +a' >> ~/.bashrc
 ### github-mcp error de autenticación
 
 ```bash
-echo $GITHUB_TOKEN | cut -c1-10   # No debe estar vacío
-gh auth status                     # Verificar gh CLI
+echo $GITHUB_TOKEN | cut -c1-10 # No debe estar vacío
+gh auth status # Verificar gh CLI
 ```
 
 ---
 
-## 🤖 Uso avanzado con los 7 agentes
+## Uso avanzado con los 7 agentes
 
 ```
 # Orquestador principal
 @Azure_Architect_Pro Diseña una arquitectura hub-spoke para prod en West Europe
 
 # Sub-agentes especializados
-@Azure_Admin_Pro     Audita governance y compliance de mi subscription
-@Azure_Data_Pro      Optimiza las queries lentas en mi Azure SQL
+@Azure_Admin_Pro Audita governance y compliance de mi subscription
+@Azure_Data_Pro Optimiza las queries lentas en mi Azure SQL
 @Azure_AppServices_Pro Diagnostica cold starts en mi Function App
-@Azure_Foundry_Pro   Crea un RAG sobre mis documentos PDF internos
+@Azure_Foundry_Pro Crea un RAG sobre mis documentos PDF internos
 @Azure_Networking_Pro Tengo un problema de conectividad en mi hub-spoke
-@Azure_SQL_DBA       Analiza deadlocks en la base de datos de producción
+@Azure_SQL_DBA Analiza deadlocks en la base de datos de producción
 ```
 
 > 📖 **Guía completa**: [../reference/agents-overview.md](../reference/agents-overview.md)
+

@@ -1,10 +1,10 @@
 # Azure Agent Pro - Plantillas Bicep Modernizadas 2025
 
-## 🚀 Características Modernizadas
+## Características Modernizadas
 
 Este proyecto ha sido completamente modernizado para seguir las mejores prácticas de Bicep 2025, utilizando las capacidades más avanzadas de Azure MCP Server para acceso en tiempo real a esquemas de recursos y APIs.
 
-### ✨ Mejoras Implementadas
+### Mejoras Implementadas
 
 #### **User-Defined Types (UDT)**
 - Reemplazo de tipos básicos (`array`, `object`) con tipos definidos por el usuario
@@ -22,21 +22,21 @@ Este proyecto ha sido completamente modernizado para seguir las mejores práctic
 - Cifrado de red virtual disponible
 - NSG con reglas de seguridad optimizadas
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 bicep/
-├── main.bicep                     # Plantilla principal modernizada
+├── main.bicep # Plantilla principal modernizada
 ├── modules/
-│   ├── storage-account.bicep      # API 2025-01-01 + UDT
-│   ├── key-vault.bicep           # API 2024-12-01-preview + RBAC
-│   └── virtual-network.bicep     # API 2024-05-01 + Seguridad
+│ ├── storage-account.bicep # API 2025-01-01 + UDT
+│ ├── key-vault.bicep # API 2024-12-01-preview + RBAC
+│ └── virtual-network.bicep # API 2024-05-01 + Seguridad
 └── parameters/
-    ├── dev.bicepparam            # Parámetros modernos (no JSON)
-    └── prod.bicepparam           # Parámetros modernos (no JSON)
+ ├── dev.bicepparam # Parámetros modernos (no JSON)
+ └── prod.bicepparam # Parámetros modernos (no JSON)
 ```
 
-## 🔧 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### **Azure MCP Server Integration**
 - Acceso en tiempo real a esquemas de recursos de Azure
@@ -49,7 +49,7 @@ bicep/
 - **Safe Dereference Operator** (`.?`): Manejo seguro de nulos
 - **Resource-derived Types**: Tipos automáticos desde recursos
 
-## 🏗️ Recursos Implementados
+## Recursos Implementados
 
 ### **Storage Account**
 ```bicep
@@ -81,25 +81,25 @@ bicep/
 - VM protection disponible
 ```
 
-## 🚀 Despliegue
+## Despliegue
 
 ### **Desarrollo**
 ```bash
 az deployment group create \
-  --resource-group rg-azure-agent-dev \
-  --template-file main.bicep \
-  --parameters dev.bicepparam
+ --resource-group rg-azure-agent-dev \
+ --template-file main.bicep \
+ --parameters dev.bicepparam
 ```
 
 ### **Producción**
 ```bash
 az deployment group create \
-  --resource-group rg-azure-agent-prod \
-  --template-file main.bicep \
-  --parameters prod.bicepparam
+ --resource-group rg-azure-agent-prod \
+ --template-file main.bicep \
+ --parameters prod.bicepparam
 ```
 
-## 📊 Diferencias por Entorno
+## Diferencias por Entorno
 
 | Característica | Desarrollo | Producción |
 |----------------|------------|------------|
@@ -109,39 +109,39 @@ az deployment group create \
 | VM Protection | Deshabilitado | Habilitado |
 | Purge Protection | Deshabilitado | Habilitado |
 
-## 🛡️ Seguridad
+## Seguridad
 
 ### **Configuraciones de Seguridad por Defecto**
-- ✅ TLS 1.2 mínimo en Storage Account
-- ✅ RBAC en Key Vault (no access policies)
-- ✅ Network Security Groups con reglas restrictivas
-- ✅ Private endpoints policies habilitadas
-- ✅ Default outbound access deshabilitado
-- ✅ Shared key access restringido
+- TLS 1.2 mínimo en Storage Account
+- RBAC en Key Vault (no access policies)
+- Network Security Groups con reglas restrictivas
+- Private endpoints policies habilitadas
+- Default outbound access deshabilitado
+- Shared key access restringido
 
 ### **Características Premium**
 - 🔐 Hardware Security Module (HSM) en producción
-- 🛡️ DDoS Protection Standard en producción
+- DDoS Protection Standard en producción
 - 🔄 Geo-redundant storage en producción
-- 📊 Advanced threat protection disponible
+- Advanced threat protection disponible
 
-## 🎯 Outputs Estructurados
+## Outputs Estructurados
 
 Todos los módulos proporcionan outputs estructurados con información completa:
 
 ```bicep
 // Ejemplo de output de Storage Account
 output storageAccountDetails object = {
-  id: string
-  name: string
-  primaryBlobEndpoint: string
-  minimumTlsVersion: string
-  allowBlobPublicAccess: bool
-  // ... más propiedades
+ id: string
+ name: string
+ primaryBlobEndpoint: string
+ minimumTlsVersion: string
+ allowBlobPublicAccess: bool
+ // ... más propiedades
 }
 ```
 
-## 📝 Notas de Desarrollo
+## Notas de Desarrollo
 
 ### **Validaciones Implementadas**
 - Longitud de nombres de recursos
@@ -166,4 +166,4 @@ Gracias a los User-Defined Types, obtienes:
 
 ---
 
-**Desarrollado con Azure MCP Server y mejores prácticas Bicep 2025** 🚀
+**Desarrollado con Azure MCP Server y mejores prácticas Bicep 2025** 

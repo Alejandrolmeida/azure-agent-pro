@@ -1,12 +1,12 @@
-# 📋 Checklist del Workshop - Azure Networking con GitHub Copilot
+# Checklist del Workshop - Azure Networking con GitHub Copilot
 
 Usa este checklist para asegurar que tienes todo listo antes, durante y después del workshop.
 
 ---
 
-## ✅ Pre-Workshop (Completar antes del día del workshop)
+## Pre-Workshop (Completar antes del día del workshop)
 
-### 🔧 Configuración de Entorno
+### Configuración de Entorno
 
 - [ ] Visual Studio Code instalado (versión más reciente)
 - [ ] GitHub Copilot activo (licencia válida)
@@ -15,7 +15,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 - [ ] Node.js 20+ instalado (para MCP servers)
 - [ ] Navegador web moderno (Chrome, Edge, Firefox)
 
-### 🚀 Setup del Proyecto
+### Setup del Proyecto
 
 - [ ] Repositorio clonado: `git clone https://github.com/alejandrolmeida/azure-agent-pro.git`
 - [ ] Script de setup ejecutado: `./scripts/setup/initial-setup.sh`
@@ -25,7 +25,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 - [ ] MCP servers configurados: `./scripts/setup/mcp-setup.sh`
 - [ ] VS Code reiniciado después del setup de MCP
 
-### 🧪 Verificación
+### Verificación
 
 - [ ] Azure CLI funciona: `az --version`
 - [ ] Autenticado en Azure: `az login` y `az account show`
@@ -36,9 +36,9 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-## 📚 Durante el Workshop
+## Durante el Workshop
 
-### 🔧 Módulo 1: Setup y Verificación MCP (30 min)
+### Módulo 1: Setup y Verificación MCP (30 min)
 
 **Ejercicios:**
 
@@ -56,7 +56,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-### 🏗️ Módulo 2: Diseño de Redes Hub-Spoke (60 min)
+### Módulo 2: Diseño de Redes Hub-Spoke (60 min)
 
 **Ejercicios:**
 
@@ -77,7 +77,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-### 🔒 Módulo 3: Seguridad de Red (60 min)
+### Módulo 3: Seguridad de Red (60 min)
 
 **Ejercicios:**
 
@@ -121,7 +121,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-### 📊 Módulo 5: Monitorización y Troubleshooting (30 min)
+### Módulo 5: Monitorización y Troubleshooting (30 min)
 
 **Ejercicios:**
 
@@ -150,9 +150,9 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-## ✅ Post-Workshop (Para reforzar aprendizaje)
+## Post-Workshop (Para reforzar aprendizaje)
 
-### 📝 Revisión
+### Revisión
 
 - [ ] Revisar todas las soluciones en `solutions/SOLUTIONS.md`
 - [ ] Comparar tu código con las soluciones de referencia
@@ -165,15 +165,15 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 - [ ] Añadir recursos adicionales (Azure Bastion, VPN P2S, etc.)
 - [ ] Implementar el workflow de CI/CD
 
-### 📚 Estudio Adicional
+### Estudio Adicional
 
 - [ ] Repasar documentación de Azure Networking
 - [ ] Revisar learning paths:
-  - [ ] [Azure Professional Management](../learning-paths/azure-professional-management.md)
-  - [ ] [GitHub Copilot para Azure](../learning-paths/github-copilot-azure.md)
+ - [ ] [Azure Professional Management](../learning-paths/azure-professional-management.md)
+ - [ ] [GitHub Copilot para Azure](../learning-paths/github-copilot-azure.md)
 - [ ] Estudiar para certificaciones:
-  - [ ] AZ-104: Azure Administrator
-  - [ ] AZ-700: Azure Networking Solutions
+ - [ ] AZ-104: Azure Administrator
+ - [ ] AZ-700: Azure Networking Solutions
 
 ### 💬 Compartir
 
@@ -184,7 +184,7 @@ Usa este checklist para asegurar que tienes todo listo antes, durante y después
 
 ---
 
-## 🎯 Objetivos de Aprendizaje Cumplidos
+## Objetivos de Aprendizaje Cumplidos
 
 Marca los objetivos que hayas logrado:
 
@@ -199,7 +199,7 @@ Marca los objetivos que hayas logrado:
 
 ---
 
-## 📊 Autoevaluación
+## Autoevaluación
 
 Califica tu nivel de confianza (1-5) en cada área:
 
@@ -214,7 +214,7 @@ Califica tu nivel de confianza (1-5) en cada área:
 
 ---
 
-## 💡 Próximos Pasos
+## Próximos Pasos
 
 ### Certificaciones
 
@@ -239,10 +239,11 @@ Califica tu nivel de confianza (1-5) en cada área:
 ## 📞 Recursos de Ayuda
 
 - 📖 [Documentación del Workshop](WORKSHOP_NETWORKING.md)
-- 💡 [Soluciones de Referencia](solutions/SOLUTIONS.md)
-- 🚀 [Quick Start Guide](QUICKSTART.md)
+- [Soluciones de Referencia](solutions/SOLUTIONS.md)
+- [Quick Start Guide](QUICKSTART.md)
 - 🐛 [Issues de GitHub](https://github.com/alejandrolmeida/azure-agent-pro/issues)
 
 ---
 
-**¡Éxito en tu aprendizaje de Azure Networking! 🎉**
+**¡Éxito en tu aprendizaje de Azure Networking! **
+

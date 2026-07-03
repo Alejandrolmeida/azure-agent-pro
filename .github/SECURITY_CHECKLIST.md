@@ -1,10 +1,10 @@
-# 🔒 Security Checklist for Public Repository
+# Security Checklist for Public Repository
 
 Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correctamente configurado para ser público sin exponer información sensible.
 
-## ✅ Pre-Publication Checklist
+## Pre-Publication Checklist
 
-### 🔍 Secrets y Credenciales
+### Secrets y Credenciales
 
 - [ ] **No hay secrets hardcoded** en el código
 - [ ] **No hay API keys** en archivos de configuración
@@ -14,7 +14,7 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Client IDs y Tenant IDs** están en secrets
 - [ ] **Certificates y private keys** están excluidos por .gitignore
 
-### 📁 Archivos de Configuración
+### Archivos de Configuración
 
 - [ ] **`.gitignore`** incluye todos los tipos de archivos sensibles
 - [ ] **No hay archivos `.env`** commitados
@@ -22,7 +22,7 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Parámetros de Bicep** no contienen valores hardcoded
 - [ ] **Scripts** usan variables de entorno, no valores hardcoded
 
-### 👥 Información Personal
+### Información Personal
 
 - [ ] **Emails personales** reemplazados por genéricos
 - [ ] **Nombres de usuario** reemplazados por placeholders
@@ -30,7 +30,7 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Nombres de recursos** usan variables, no nombres específicos
 - [ ] **CODEOWNERS** tiene instrucciones para personalizar
 
-### 🏗️ Azure Resources
+### Azure Resources
 
 - [ ] **Nombres de Resource Groups** son configurables
 - [ ] **Locations de Azure** son variables
@@ -46,9 +46,9 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Secrets requeridos** están listados en documentación
 - [ ] **Permisos** están configurados con least privilege
 
-## 🛡️ Post-Publication Security
+## Post-Publication Security
 
-### 📊 Monitoring
+### Monitoring
 
 - [ ] **Dependabot** habilitado para updates de seguridad
 - [ ] **Code scanning** habilitado
@@ -64,7 +64,7 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Force push** deshabilitado
 - [ ] **Delete protection** habilitado
 
-### 📝 Documentation
+### Documentation
 
 - [ ] **README** actualizado con instrucciones genéricas
 - [ ] **SECURITY.md** incluye proceso de reporte
@@ -72,40 +72,40 @@ Este checklist te ayuda a asegurar que tu repositorio Azure Agent esté correcta
 - [ ] **Issue templates** no contienen datos sensibles
 - [ ] **PR template** incluye security checklist
 
-## 🔧 Configuration Files to Review
+## Configuration Files to Review
 
 ### High Priority
 ```bash
-.gitignore                          # Must exclude all sensitive files
-.github/workflows/*.yml             # Must use secrets, not hardcoded values
-.github/CODEOWNERS                  # Must use placeholders for usernames
-README.md                           # Must use generic URLs and examples
-SECURITY.md                         # Must use generic contact info
+.gitignore # Must exclude all sensitive files
+.github/workflows/*.yml # Must use secrets, not hardcoded values
+.github/CODEOWNERS # Must use placeholders for usernames
+README.md # Must use generic URLs and examples
+SECURITY.md # Must use generic contact info
 ```
 
 ### Medium Priority
 ```bash
-bicep/parameters/*.json             # Should not contain real values
-.github/ISSUE_TEMPLATE/*.md         # Should not reference specific repos
-.github/BRANCH_PROTECTION.md        # Should use examples, not real data
-CONTRIBUTING.md                     # Should be generic for reuse
+bicep/parameters/*.json # Should not contain real values
+.github/ISSUE_TEMPLATE/*.md # Should not reference specific repos
+.github/BRANCH_PROTECTION.md # Should use examples, not real data
+CONTRIBUTING.md # Should be generic for reuse
 ```
 
 ### Low Priority
 ```bash
-docs/**/*.md                        # Review for any specific references
-scripts/**/*.sh                     # Check for hardcoded values
-PROJECT_CONTEXT.md                  # Update dates and references
+docs/**/*.md # Review for any specific references
+scripts/**/*.sh # Check for hardcoded values
+PROJECT_CONTEXT.md # Update dates and references
 ```
 
 ## 🚨 Red Flags to Look For
 
 ### Immediate Action Required
-- ❌ API keys o tokens visibles
-- ❌ Passwords en texto plano
-- ❌ Connection strings completas
-- ❌ Private keys o certificates
-- ❌ Email addresses reales en código
+- API keys o tokens visibles
+- Passwords en texto plano
+- Connection strings completas
+- Private keys o certificates
+- Email addresses reales en código
 
 ### Should Fix Before Publishing
 - ⚠️ Subscription IDs en código
@@ -115,11 +115,11 @@ PROJECT_CONTEXT.md                  # Update dates and references
 - ⚠️ Company-specific información
 
 ### Nice to Have
-- 💡 Generic examples en lugar de datos reales
-- 💡 Placeholders claramente marcados
-- 💡 Documentation para personalización
-- 💡 Template files para configuración
-- 💡 Automated checks para secrets
+- Generic examples en lugar de datos reales
+- Placeholders claramente marcados
+- Documentation para personalización
+- Template files para configuración
+- Automated checks para secrets
 
 ## 🔄 Regular Maintenance
 
@@ -129,7 +129,7 @@ PROJECT_CONTEXT.md                  # Update dates and references
 - [ ] Review access permissions
 - [ ] Check for new secrets accidentally committed
 
-### Quarterly  
+### Quarterly 
 - [ ] Full security audit del código
 - [ ] Review y update de .gitignore
 - [ ] Test security workflows
@@ -141,7 +141,7 @@ PROJECT_CONTEXT.md                  # Update dates and references
 - [ ] Add security tests si aplica
 - [ ] Update documentation de seguridad
 
-## 🛠️ Tools for Verification
+## Tools for Verification
 
 ### Manual Checks
 ```bash
@@ -166,16 +166,16 @@ grep -r -E "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" .
 ### If Secrets Are Accidentally Committed
 
 1. **Immediate Actions**
-   - [ ] Revoke/rotate the compromised credentials
-   - [ ] Remove from Git history (use BFG Repo-Cleaner)
-   - [ ] Force push to update remote
-   - [ ] Notify team members
+ - [ ] Revoke/rotate the compromised credentials
+ - [ ] Remove from Git history (use BFG Repo-Cleaner)
+ - [ ] Force push to update remote
+ - [ ] Notify team members
 
 2. **Follow-up Actions**
-   - [ ] Review logs for unauthorized access
-   - [ ] Update security procedures
-   - [ ] Add prevention measures
-   - [ ] Document incident for learning
+ - [ ] Review logs for unauthorized access
+ - [ ] Update security procedures
+ - [ ] Add prevention measures
+ - [ ] Document incident for learning
 
 ### Contact Information
 - **Security Team**: security@example.com
@@ -184,4 +184,4 @@ grep -r -E "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" .
 
 ---
 
-**Remember**: Es mejor prevenir que remediar. Tómate el tiempo necesario para revisar todo antes de hacer público el repositorio. 🔒✨
+**Remember**: Es mejor prevenir que remediar. Tómate el tiempo necesario para revisar todo antes de hacer público el repositorio. 

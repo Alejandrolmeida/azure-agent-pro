@@ -1,12 +1,12 @@
 ![Azure Agent Pro](./workshop/kitten-space-missions/assets/workshop-hero.png)
 
-# 📚 Documentación - Azure Agent Pro
+# Documentación - Azure Agent Pro
 
 Bienvenido a **Azure Agent Pro**, un proyecto educativo que te enseña a construir infraestructura Azure enterprise usando **Vibe Coding** con el agente personalizado **Azure_Architect_Pro**.
 
 ---
 
-## 🚀 Empezar Aquí
+## Empezar Aquí
 
 ¿Nuevo en el proyecto? Comienza por el workshop hands-on:
 
@@ -15,18 +15,18 @@ Bienvenido a **Azure Agent Pro**, un proyecto educativo que te enseña a constru
 **Construye una API REST completa sin escribir código manualmente**
 
 - ⏱️ **Duración**: 3-4 horas
-- 🎯 **Nivel**: Básico (no necesitas ser experto en Azure)
-- 🎓 **Aprenderás**: Vibe Coding profesional con Azure_Architect_Pro
-- 🔧 **Generarás**: Arquitectura, Bicep, CI/CD, Monitoring, todo automático
+- **Nivel**: Básico (no necesitas ser experto en Azure)
+- **Aprenderás**: Vibe Coding profesional con Azure_Architect_Pro
+- **Generarás**: Arquitectura, Bicep, CI/CD, Monitoring, todo automático
 
 **Lo que cubre:**
-- 🏗️ Architecture Design Documents (Azure Well-Architected)
-- 💰 Análisis FinOps con informes HTML antes de desplegar
-- 🔧 Código Bicep modular generado por IA
-- 🚀 CI/CD con GitHub Actions y OIDC (secretless)
-- 🔒 Security by design (Private Endpoints, Managed Identities)
-- 📊 Observabilidad enterprise (Application Insights, dashboards)
-- ✅ Testing y validación completa
+- Architecture Design Documents (Azure Well-Architected)
+- Análisis FinOps con informes HTML antes de desplegar
+- Código Bicep modular generado por IA
+- CI/CD con GitHub Actions y OIDC (secretless)
+- Security by design (Private Endpoints, Managed Identities)
+- Observabilidad enterprise (Application Insights, dashboards)
+- Testing y validación completa
 
 **[👉 Comenzar Workshop →](./workshop/kitten-space-missions/activity-01-setup.md)**
 
@@ -41,11 +41,11 @@ Si es tu primera vez, necesitas configurar los MCP Servers:
 **Tiempo estimado:** 10-15 minutos
 
 Los MCP (Model Context Protocol) Servers permiten al agente acceder a:
-- ✅ Recursos de Azure en tiempo real
-- ✅ Repositorios de GitHub
-- ✅ Sistema de archivos del proyecto
-- ✅ Documentación web de Azure
-- ✅ Contexto persistente entre sesiones
+- Recursos de Azure en tiempo real
+- Repositorios de GitHub
+- Sistema de archivos del proyecto
+- Documentación web de Azure
+- Contexto persistente entre sesiones
 
 ---
 
@@ -61,7 +61,7 @@ Los MCP (Model Context Protocol) Servers permiten al agente acceder a:
 
 ---
 
-## 🤖 ¿Qué es Azure_Architect_Pro?
+## ¿Qué es Azure_Architect_Pro?
 
 **Azure_Architect_Pro** es un agente de IA personalizado que actúa como tu **Arquitecto Azure Senior personal**.
 
@@ -87,58 +87,58 @@ Los MCP (Model Context Protocol) Servers permiten al agente acceder a:
 
 ---
 
-## 🎯 ¿Para quién es este proyecto?
+## ¿Para quién es este proyecto?
 
 ### Ideal para:
 
-- 👨‍💻 **Desarrolladores** que quieren aprender Azure sin memorizar sintaxis
-- 🏢 **IT Admins** que necesitan automatizar infraestructura
-- 🎓 **Estudiantes** que buscan proyectos prácticos para su portfolio
-- 🚀 **Cloud Architects** que quieren explorar IA en IaC
-- 💼 **Equipos enterprise** buscando adoptar Vibe Coding
+- **Desarrolladores** que quieren aprender Azure sin memorizar sintaxis
+- **IT Admins** que necesitan automatizar infraestructura
+- **Estudiantes** que buscan proyectos prácticos para su portfolio
+- **Cloud Architects** que quieren explorar IA en IaC
+- **Equipos enterprise** buscando adoptar Vibe Coding
 
 ### No necesitas:
 
-- ❌ Ser experto en Azure
-- ❌ Saber Bicep de memoria
-- ❌ Conocer comandos Azure CLI
-- ❌ Experiencia previa con IaC
+- Ser experto en Azure
+- Saber Bicep de memoria
+- Conocer comandos Azure CLI
+- Experiencia previa con IaC
 
 ### Solo necesitas:
 
-- ✅ Curiosidad y ganas de aprender
-- ✅ GitHub Copilot (Individual, Business o Enterprise)
-- ✅ Azure subscription (free trial funciona)
-- ✅ VS Code instalado
+- Curiosidad y ganas de aprender
+- GitHub Copilot (Individual, Business o Enterprise)
+- Azure subscription (free trial funciona)
+- VS Code instalado
 
 ---
 
-## 🛠️ Arquitectura del Proyecto
+## Arquitectura del Proyecto
 
 ```
 azure-agent-pro/
-├── docs/                    # 📚 Documentación (estás aquí)
-│   ├── getting-started/     # ⚙️ Setup inicial
-│   ├── reference/           # 📖 Cheatsheets
-│   └── workshop/            # 🎓 Workshop principal
+├── docs/ # Documentación (estás aquí)
+│ ├── getting-started/ # ⚙️ Setup inicial
+│ ├── reference/ # 📖 Cheatsheets
+│ └── workshop/ # Workshop principal
 │
-├── bicep/                   # 🔧 Módulos Bicep reutilizables
-│   ├── modules/             # Componentes (vnet, nsg, keyvault, etc.)
-│   └── parameters/          # Parámetros por entorno (dev, prod)
+├── bicep/ # Módulos Bicep reutilizables
+│ ├── modules/ # Componentes (vnet, nsg, keyvault, etc.)
+│ └── parameters/ # Parámetros por entorno (dev, prod)
 │
-├── scripts/                 # 🤖 Scripts de automatización
-│   ├── deploy/              # Deployment y validación
-│   ├── config/              # Configuración de Azure
-│   └── utils/               # Utilidades (RBAC, FinOps, etc.)
+├── scripts/ # Scripts de automatización
+│ ├── deploy/ # Deployment y validación
+│ ├── config/ # Configuración de Azure
+│ └── utils/ # Utilidades (RBAC, FinOps, etc.)
 │
-├── .github/workflows/       # 🚀 CI/CD con GitHub Actions
+├── .github/workflows/ # CI/CD con GitHub Actions
 │
-└── mcp.json                 # ⚡ Configuración de MCP Servers
+└── mcp.json # Configuración de MCP Servers
 ```
 
 ---
 
-## 🌟 Características Principales
+## Características Principales
 
 ### 1. Vibe Coding Profesional
 
@@ -163,11 +163,11 @@ El agente genera:
 ### 2. Azure Well-Architected Framework
 
 Todas las arquitecturas siguen los 5 pilares:
-- 🛡️ **Reliability** - Multi-zone, health probes, auto-healing
-- 🔒 **Security** - Zero Trust, Private Endpoints, Managed Identities
-- 💰 **Cost Optimization** - Right-sizing, reservas, auto-scaling
+- **Reliability** - Multi-zone, health probes, auto-healing
+- **Security** - Zero Trust, Private Endpoints, Managed Identities
+- **Cost Optimization** - Right-sizing, reservas, auto-scaling
 - ⚙️ **Operational Excellence** - IaC, GitOps, automated testing
-- ⚡ **Performance Efficiency** - Caching, CDN, async processing
+- **Performance Efficiency** - Caching, CDN, async processing
 
 ### 3. FinOps Desde el Diseño
 
@@ -199,14 +199,14 @@ CI/CD completo con:
 
 ---
 
-## 📊 Métricas del Proyecto
+## Métricas del Proyecto
 
 - 📄 **10,368 líneas** de documentación
-- 🎓 **8 actividades** progresivas en el workshop
-- 🔧 **15+ módulos** Bicep reutilizables
-- 🤖 **6 MCP Servers** especializados
+- **8 actividades** progresivas en el workshop
+- **15+ módulos** Bicep reutilizables
+- **6 MCP Servers** especializados
 - ⏱️ **3-4 horas** para completar el workshop
-- 💰 **~$40-50/mes** costo estimado infra dev
+- **~$40-50/mes** costo estimado infra dev
 - ⭐ **100% gratuito** y open source
 
 ---
@@ -216,7 +216,7 @@ CI/CD completo con:
 ¿Quieres mejorar el proyecto?
 
 1. 🐛 [Reportar un problema](https://github.com/Alejandrolmeida/azure-agent-pro/issues/new?labels=bug)
-2. 💡 [Sugerir mejora](https://github.com/Alejandrolmeida/azure-agent-pro/issues/new?labels=enhancement)
+2. [Sugerir mejora](https://github.com/Alejandrolmeida/azure-agent-pro/issues/new?labels=enhancement)
 3. 🔀 [Abrir Pull Request](https://github.com/Alejandrolmeida/azure-agent-pro/pulls)
 4. ⭐ [Star en GitHub](https://github.com/Alejandrolmeida/azure-agent-pro)
 
@@ -236,18 +236,18 @@ CI/CD completo con:
 ## 📜 Licencia
 
 Este proyecto es **open source** bajo licencia MIT. Puedes:
-- ✅ Usar en proyectos personales y comerciales
-- ✅ Modificar y adaptar el código
-- ✅ Compartir y distribuir
-- ✅ Crear workshops derivados
+- Usar en proyectos personales y comerciales
+- Modificar y adaptar el código
+- Compartir y distribuir
+- Crear workshops derivados
 
 ---
 
-## 🎉 ¡Comienza tu Aventura!
+## ¡Comienza tu Aventura!
 
-**[🚀 Ir al Workshop: Kitten Space Missions →](./workshop/kitten-space-missions/)**
+**[ Ir al Workshop: Kitten Space Missions →](./workshop/kitten-space-missions/)**
 
-*Construye infraestructura Azure enterprise mientras te diviertes con gatitos astronautas. Porque aprender no tiene que ser aburrido.* 🐱✨
+*Construye infraestructura Azure enterprise mientras te diviertes con gatitos astronautas. Porque aprender no tiene que ser aburrido.* 
 
 ---
 
@@ -259,3 +259,4 @@ Si buscas documentación anterior:
 - [Tutoriales antiguos](./workshop/archived/old-tutorials/)
 
 **Nota:** Este contenido se mantiene por referencia histórica pero no recibe actualizaciones. Se recomienda usar el workshop actual.
+

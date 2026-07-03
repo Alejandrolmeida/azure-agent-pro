@@ -1,29 +1,29 @@
 ![Kitten Space Missions - Workshop Header](./assets/workshop-hero.png)
 
-# 🚀🐱 Workshop: Kitten Space Missions API
+# Workshop: Kitten Space Missions API
 
-**Duración total**: 3-4 horas  
-**Nivel**: Básico  
+**Duración total**: 3-4 horas 
+**Nivel**: Básico 
 **Objetivo**: Aprender **Vibe Coding profesional** con Azure Agent Pro desplegando una API divertida de misiones espaciales de gatitos
 
 ---
 
-## 🎯 ¿Qué vas a aprender?
+## ¿Qué vas a aprender?
 
 En este workshop aprenderás a trabajar como un profesional usando **Vibe Coding** con el agente personalizado **Azure_Architect_Pro**. No escribirás infraestructura manualmente: el agente será tu arquitecto de soluciones Azure que te ayudará a:
 
-- 🏗️ Diseñar arquitecturas siguiendo Azure Well-Architected Framework
-- 💰 Realizar análisis FinOps con informes HTML detallados antes de desplegar
-- 🔧 Generar código Bicep modular y reutilizable
-- 🚀 Crear pipelines CI/CD con GitHub Actions
-- 📊 Configurar monitoreo y observabilidad enterprise
-- ✅ Validar todo siguiendo las mejores prácticas de Azure
+- Diseñar arquitecturas siguiendo Azure Well-Architected Framework
+- Realizar análisis FinOps con informes HTML detallados antes de desplegar
+- Generar código Bicep modular y reutilizable
+- Crear pipelines CI/CD con GitHub Actions
+- Configurar monitoreo y observabilidad enterprise
+- Validar todo siguiendo las mejores prácticas de Azure
 
 **Lo más importante**: Aprenderás a comunicarte eficientemente con el agente para que realice sesiones largas de trabajo sin interrupciones constantes.
 
 ---
 
-## 📦 ¿Qué vamos a construir?
+## ¿Qué vamos a construir?
 
 Una **API REST de Misiones Espaciales de Gatitos** (Kitten Space Missions) con:
 
@@ -35,33 +35,33 @@ Una **API REST de Misiones Espaciales de Gatitos** (Kitten Space Missions) con:
 - `GET /api/telemetry` - Consultar telemetría de misiones
 
 ### Arquitectura Azure:
-- ☁️ Azure App Service (API hosting)
+- Azure App Service (API hosting)
 - 🗄️ Azure SQL Database (datos de misiones y astronautas)
 - 🔐 Azure Key Vault (gestión de secretos)
-- 📊 Application Insights (monitoreo)
+- Application Insights (monitoreo)
 - 🌐 Virtual Network con Private Endpoints
-- 🔒 Managed Identities (sin contraseñas)
+- Managed Identities (sin contraseñas)
 
 Todo desplegado con **Bicep** y automatizado con **GitHub Actions**.
 
 ---
 
-## 📋 Requisitos previos
+## Requisitos previos
 
 Antes de empezar necesitas:
 
-- ✅ **GitHub Account** - Para fork del repositorio
-- ✅ **Azure Subscription** - Con permisos Contributor (puedes usar [Azure Free Account](https://azure.microsoft.com/free/))
-- ✅ **VS Code** instalado con extensiones:
-  - GitHub Copilot
-  - Azure Tools
-  - Bicep
-- ✅ **Sistema Linux o WSL2** - Para ejecutar scripts bash
-- ✅ **Azure CLI** instalado y configurado
-- ✅ Conocimientos básicos de:
-  - Git y GitHub
-  - Línea de comandos bash
-  - Conceptos básicos de Azure (resource groups, etc.)
+- **GitHub Account** - Para fork del repositorio
+- **Azure Subscription** - Con permisos Contributor (puedes usar [Azure Free Account](https://azure.microsoft.com/free/))
+- **VS Code** instalado con extensiones:
+ - GitHub Copilot
+ - Azure Tools
+ - Bicep
+- **Sistema Linux o WSL2** - Para ejecutar scripts bash
+- **Azure CLI** instalado y configurado
+- Conocimientos básicos de:
+ - Git y GitHub
+ - Línea de comandos bash
+ - Conceptos básicos de Azure (resource groups, etc.)
 
 ---
 
@@ -84,7 +84,7 @@ Este workshop está dividido en **8 actividades** progresivas. Cada actividad in
 
 ---
 
-## 🎓 Metodología: Vibe Coding Profesional
+## Metodología: Vibe Coding Profesional
 
 ### ¿Qué es Vibe Coding?
 
@@ -92,43 +92,43 @@ Es una forma de trabajar donde **describes tu intención al agente en lenguaje n
 
 ### Principios clave del workshop:
 
-1. **🗣️ Comunicación clara con el agente**
-   - Sé específico pero no microgestiones
-   - Da contexto (cliente, entorno, compliance)
-   - Confía pero verifica
+1. ** Comunicación clara con el agente**
+ - Sé específico pero no microgestiones
+ - Da contexto (cliente, entorno, compliance)
+ - Confía pero verifica
 
 2. **🔄 Iteración rápida**
-   - Valida cada paso
-   - Ajusta según necesites
-   - Aprende de las respuestas del agente
+ - Valida cada paso
+ - Ajusta según necesites
+ - Aprende de las respuestas del agente
 
-3. **🛠️ Automatización total**
-   - Bicep sobre Azure Portal
-   - GitHub Actions sobre comandos manuales
-   - Scripts sobre clicks
+3. ** Automatización total**
+ - Bicep sobre Azure Portal
+ - GitHub Actions sobre comandos manuales
+ - Scripts sobre clicks
 
-4. **✅ Well-Architected desde día 1**
-   - Seguridad por defecto
-   - FinOps desde el diseño
-   - Observabilidad integrada
+4. ** Well-Architected desde día 1**
+ - Seguridad por defecto
+ - FinOps desde el diseño
+ - Observabilidad integrada
 
 ---
 
-## 💡 Tips para sesiones largas con el agente
+## Tips para sesiones largas con el agente
 
 Para que el agente trabaje de forma autónoma sin interrupciones:
 
-### ✅ DO (Hacer):
+### DO (Hacer):
 - "Diseña, genera el código Bicep, crea los workflows de CI/CD y actualiza la documentación para esta API"
 - "Incluye todos los parámetros por entorno (dev/prod) y sigue las convenciones del repo"
 - "Valida todo con what-if y genera el informe de costos antes de desplegar"
 
-### ❌ DON'T (Evitar):
+### DON'T (Evitar):
 - "¿Qué opinas sobre usar App Service?" (decisiones abiertas que requieren tu input)
 - Peticiones ambiguas sin contexto
 - Preguntar paso por paso cuando puedes pedir todo junto
 
-### 🎯 Contexto que debes dar siempre:
+### Contexto que debes dar siempre:
 - **Cliente/Proyecto**: "Kitten Space Missions para cliente Meowtech"
 - **Entorno**: "dev" o "prod"
 - **Compliance**: Si aplica (GDPR, etc.)
@@ -142,37 +142,37 @@ Al finalizar el workshop, tu carpeta `docs/workshop/kitten-space-missions/` tend
 
 ```
 kitten-space-missions/
-├── README.md                      # Este archivo
-├── activity-01-setup.md           # Actividad 1
-├── activity-02-first-conversation.md  # Actividad 2
+├── README.md # Este archivo
+├── activity-01-setup.md # Actividad 1
+├── activity-02-first-conversation.md # Actividad 2
 ├── activity-03-finops-analysis.md # Actividad 3
-├── activity-04-bicep-generation.md  # Actividad 4
-├── activity-05-cicd-setup.md      # Actividad 5
-├── activity-06-azure-deployment.md  # Actividad 6
-├── activity-07-monitoring.md      # Actividad 7
-├── activity-08-testing.md         # Actividad 8
-└── solution/                      # Código generado durante el workshop
-    ├── bicep/
-    │   ├── main.bicep
-    │   ├── modules/
-    │   └── parameters/
-    ├── .github/
-    │   └── workflows/
-    ├── scripts/
-    ├── src/                       # Código API (opcional)
-    └── docs/
-        └── finops-report.html
+├── activity-04-bicep-generation.md # Actividad 4
+├── activity-05-cicd-setup.md # Actividad 5
+├── activity-06-azure-deployment.md # Actividad 6
+├── activity-07-monitoring.md # Actividad 7
+├── activity-08-testing.md # Actividad 8
+└── solution/ # Código generado durante el workshop
+ ├── bicep/
+ │ ├── main.bicep
+ │ ├── modules/
+ │ └── parameters/
+ ├── .github/
+ │ └── workflows/
+ ├── scripts/
+ ├── src/ # Código API (opcional)
+ └── docs/
+ └── finops-report.html
 ```
 
 ---
 
-## 🚀 ¡Comienza ahora!
+## ¡Comienza ahora!
 
 **Paso siguiente**: Ve a la [Actividad 1: Setup Inicial del Entorno](./activity-01-setup.md)
 
 ---
 
-## 📚 Recursos adicionales
+## Recursos adicionales
 
 - [Documentación Azure Agent Pro](../../README.md)
 - [MCP Quickstart](../../MCP_QUICKSTART.md)
@@ -190,4 +190,5 @@ kitten-space-missions/
 
 ---
 
-**¡Que disfrutes construyendo tu API de gatitos astronautas! 🐱🚀✨**
+**¡Que disfrutes construyendo tu API de gatitos astronautas! **
+

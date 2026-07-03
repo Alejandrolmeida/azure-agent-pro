@@ -1,4 +1,4 @@
-# MCP Servers Cheatsheet 🤖
+# MCP Servers Cheatsheet 
 
 Guía completa para trabajar con Model Context Protocol (MCP) Servers de Azure, GitHub y Azure DevOps.
 
@@ -34,11 +34,11 @@ Guía completa para trabajar con Model Context Protocol (MCP) Servers de Azure, 
 ### Prerequisitos
 ```bash
 # Node.js y npm
-node --version  # v18+
+node --version # v18+
 npm --version
 
 # Python (para algunos servidores)
-python --version  # 3.8+
+python --version # 3.8+
 pip --version
 
 # Git
@@ -66,7 +66,7 @@ cd ~/.config/mcp
 
 ---
 
-## ☁️ MCP Server - Azure
+## MCP Server - Azure
 
 ### Instalación y Configuración
 
@@ -86,12 +86,12 @@ npm run build
 ```json
 // ~/.config/mcp/azure-config.json
 {
-  "azure": {
-    "tenantId": "your-tenant-id",
-    "clientId": "your-client-id",
-    "clientSecret": "your-client-secret",
-    "subscriptionId": "your-subscription-id"
-  }
+ "azure": {
+ "tenantId": "your-tenant-id",
+ "clientId": "your-client-id",
+ "clientSecret": "your-client-secret",
+ "subscriptionId": "your-subscription-id"
+ }
 }
 ```
 
@@ -102,9 +102,9 @@ az account set --subscription "your-subscription-id"
 
 # Crear service principal para MCP
 az ad sp create-for-rbac \
-  --name "mcp-azure-server" \
-  --role "Contributor" \
-  --scopes "/subscriptions/your-subscription-id"
+ --name "mcp-azure-server" \
+ --role "Contributor" \
+ --scopes "/subscriptions/your-subscription-id"
 ```
 
 ### Configuración MCP Server Azure
@@ -112,24 +112,24 @@ az ad sp create-for-rbac \
 ```json
 // mcp-server-azure.json
 {
-  "mcpVersion": "2024-11-05",
-  "name": "azure-server",
-  "version": "1.0.0",
-  "server": {
-    "command": "node",
-    "args": ["/path/to/mcp-server-azure/dist/index.js"],
-    "env": {
-      "AZURE_TENANT_ID": "your-tenant-id",
-      "AZURE_CLIENT_ID": "your-client-id",
-      "AZURE_CLIENT_SECRET": "your-client-secret",
-      "AZURE_SUBSCRIPTION_ID": "your-subscription-id"
-    }
-  },
-  "capabilities": {
-    "resources": true,
-    "tools": true,
-    "prompts": true
-  }
+ "mcpVersion": "2024-11-05",
+ "name": "azure-server",
+ "version": "1.0.0",
+ "server": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-azure/dist/index.js"],
+ "env": {
+ "AZURE_TENANT_ID": "your-tenant-id",
+ "AZURE_CLIENT_ID": "your-client-id",
+ "AZURE_CLIENT_SECRET": "your-client-secret",
+ "AZURE_SUBSCRIPTION_ID": "your-subscription-id"
+ }
+ },
+ "capabilities": {
+ "resources": true,
+ "tools": true,
+ "prompts": true
+ }
 }
 ```
 
@@ -139,16 +139,16 @@ az ad sp create-for-rbac \
 ```javascript
 // Listar recursos Azure disponibles
 {
-  "method": "resources/list",
-  "params": {}
+ "method": "resources/list",
+ "params": {}
 }
 
 // Obtener información específica de un recurso
 {
-  "method": "resources/read",
-  "params": {
-    "uri": "azure://subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.Storage/storageAccounts/{name}"
-  }
+ "method": "resources/read",
+ "params": {
+ "uri": "azure://subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.Storage/storageAccounts/{name}"
+ }
 }
 ```
 
@@ -156,44 +156,44 @@ az ad sp create-for-rbac \
 ```javascript
 // Crear recurso
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azure_create_resource",
-    "arguments": {
-      "resourceType": "Microsoft.Storage/storageAccounts",
-      "resourceGroup": "my-rg",
-      "name": "mystorageaccount",
-      "location": "eastus",
-      "properties": {
-        "sku": {"name": "Standard_LRS"},
-        "kind": "StorageV2"
-      }
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azure_create_resource",
+ "arguments": {
+ "resourceType": "Microsoft.Storage/storageAccounts",
+ "resourceGroup": "my-rg",
+ "name": "mystorageaccount",
+ "location": "eastus",
+ "properties": {
+ "sku": {"name": "Standard_LRS"},
+ "kind": "StorageV2"
+ }
+ }
+ }
 }
 
 // Ejecutar comando Azure CLI
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azure_cli_execute",
-    "arguments": {
-      "command": "az vm list --resource-group my-rg --output json"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azure_cli_execute",
+ "arguments": {
+ "command": "az vm list --resource-group my-rg --output json"
+ }
+ }
 }
 
 // Deploy Bicep template
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azure_deploy_bicep",
-    "arguments": {
-      "templateFile": "/path/to/template.bicep",
-      "parametersFile": "/path/to/parameters.json",
-      "resourceGroup": "my-rg"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azure_deploy_bicep",
+ "arguments": {
+ "templateFile": "/path/to/template.bicep",
+ "parametersFile": "/path/to/parameters.json",
+ "resourceGroup": "my-rg"
+ }
+ }
 }
 ```
 
@@ -221,10 +221,10 @@ echo "Tenant ID: $TENANT_ID"
 # Crear service principal
 echo "Creando service principal para MCP..."
 SP_INFO=$(az ad sp create-for-rbac \
-  --name "mcp-azure-server-$(date +%s)" \
-  --role "Contributor" \
-  --scopes "/subscriptions/$SUBSCRIPTION_ID" \
-  --output json)
+ --name "mcp-azure-server-$(date +%s)" \
+ --role "Contributor" \
+ --scopes "/subscriptions/$SUBSCRIPTION_ID" \
+ --output json)
 
 CLIENT_ID=$(echo $SP_INFO | jq -r '.appId')
 CLIENT_SECRET=$(echo $SP_INFO | jq -r '.password')
@@ -232,10 +232,10 @@ CLIENT_SECRET=$(echo $SP_INFO | jq -r '.password')
 # Crear configuración
 cat > "$AZURE_MCP_DIR/config.json" << EOF
 {
-  "tenantId": "$TENANT_ID",
-  "clientId": "$CLIENT_ID",
-  "clientSecret": "$CLIENT_SECRET",
-  "subscriptionId": "$SUBSCRIPTION_ID"
+ "tenantId": "$TENANT_ID",
+ "clientId": "$CLIENT_ID",
+ "clientSecret": "$CLIENT_SECRET",
+ "subscriptionId": "$SUBSCRIPTION_ID"
 }
 EOF
 
@@ -245,7 +245,7 @@ echo "Config guardada en: $AZURE_MCP_DIR/config.json"
 
 ---
 
-## 🐱 MCP Server - GitHub
+## MCP Server - GitHub
 
 ### Instalación y Configuración
 
@@ -276,22 +276,22 @@ gh auth login
 ```json
 // mcp-server-github.json
 {
-  "mcpVersion": "2024-11-05",
-  "name": "github-server",
-  "version": "1.0.0",
-  "server": {
-    "command": "node",
-    "args": ["/path/to/mcp-server-github/dist/index.js"],
-    "env": {
-      "GITHUB_TOKEN": "your-personal-access-token",
-      "GITHUB_API_URL": "https://api.github.com"
-    }
-  },
-  "capabilities": {
-    "resources": true,
-    "tools": true,
-    "prompts": true
-  }
+ "mcpVersion": "2024-11-05",
+ "name": "github-server",
+ "version": "1.0.0",
+ "server": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-github/dist/index.js"],
+ "env": {
+ "GITHUB_TOKEN": "your-personal-access-token",
+ "GITHUB_API_URL": "https://api.github.com"
+ }
+ },
+ "capabilities": {
+ "resources": true,
+ "tools": true,
+ "prompts": true
+ }
 }
 ```
 
@@ -301,26 +301,26 @@ gh auth login
 ```javascript
 // Listar repositorios
 {
-  "method": "resources/list",
-  "params": {
-    "uri": "github://repos"
-  }
+ "method": "resources/list",
+ "params": {
+ "uri": "github://repos"
+ }
 }
 
 // Obtener contenido de archivo
 {
-  "method": "resources/read",
-  "params": {
-    "uri": "github://repos/owner/repo/contents/path/to/file.js"
-  }
+ "method": "resources/read",
+ "params": {
+ "uri": "github://repos/owner/repo/contents/path/to/file.js"
+ }
 }
 
 // Obtener información de issue
 {
-  "method": "resources/read",
-  "params": {
-    "uri": "github://repos/owner/repo/issues/123"
-  }
+ "method": "resources/read",
+ "params": {
+ "uri": "github://repos/owner/repo/issues/123"
+ }
 }
 ```
 
@@ -328,61 +328,61 @@ gh auth login
 ```javascript
 // Crear issue
 {
-  "method": "tools/call",
-  "params": {
-    "name": "github_create_issue",
-    "arguments": {
-      "owner": "myusername",
-      "repo": "myrepo",
-      "title": "Bug report",
-      "body": "Description of the bug...",
-      "labels": ["bug", "high-priority"]
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "github_create_issue",
+ "arguments": {
+ "owner": "myusername",
+ "repo": "myrepo",
+ "title": "Bug report",
+ "body": "Description of the bug...",
+ "labels": ["bug", "high-priority"]
+ }
+ }
 }
 
 // Crear pull request
 {
-  "method": "tools/call",
-  "params": {
-    "name": "github_create_pull_request",
-    "arguments": {
-      "owner": "myusername",
-      "repo": "myrepo",
-      "title": "Feature: Add new functionality",
-      "body": "This PR adds...",
-      "head": "feature-branch",
-      "base": "main"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "github_create_pull_request",
+ "arguments": {
+ "owner": "myusername",
+ "repo": "myrepo",
+ "title": "Feature: Add new functionality",
+ "body": "This PR adds...",
+ "head": "feature-branch",
+ "base": "main"
+ }
+ }
 }
 
 // Buscar en código
 {
-  "method": "tools/call",
-  "params": {
-    "name": "github_search_code",
-    "arguments": {
-      "query": "function authenticate",
-      "repo": "owner/repo"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "github_search_code",
+ "arguments": {
+ "query": "function authenticate",
+ "repo": "owner/repo"
+ }
+ }
 }
 
 // Crear archivo
 {
-  "method": "tools/call",
-  "params": {
-    "name": "github_create_file",
-    "arguments": {
-      "owner": "myusername",
-      "repo": "myrepo",
-      "path": "src/newfile.js",
-      "content": "console.log('Hello World');",
-      "message": "Add new file",
-      "branch": "main"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "github_create_file",
+ "arguments": {
+ "owner": "myusername",
+ "repo": "myrepo",
+ "path": "src/newfile.js",
+ "content": "console.log('Hello World');",
+ "message": "Add new file",
+ "branch": "main"
+ }
+ }
 }
 ```
 
@@ -399,15 +399,15 @@ mkdir -p "$GITHUB_MCP_DIR"
 
 # Verificar GitHub CLI
 if ! command -v gh &> /dev/null; then
-    echo "Error: GitHub CLI no está instalado"
-    echo "Instala con: curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg"
-    exit 1
+ echo "Error: GitHub CLI no está instalado"
+ echo "Instala con: curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg"
+ exit 1
 fi
 
 # Login si es necesario
 if ! gh auth status &> /dev/null; then
-    echo "Realizando login a GitHub..."
-    gh auth login
+ echo "Realizando login a GitHub..."
+ gh auth login
 fi
 
 # Obtener token (para uso en MCP)
@@ -419,8 +419,8 @@ read -p "Ingresa tu Personal Access Token: " GITHUB_TOKEN
 # Crear configuración
 cat > "$GITHUB_MCP_DIR/config.json" << EOF
 {
-  "token": "$GITHUB_TOKEN",
-  "apiUrl": "https://api.github.com"
+ "token": "$GITHUB_TOKEN",
+ "apiUrl": "https://api.github.com"
 }
 EOF
 
@@ -430,7 +430,7 @@ echo "Config guardada en: $GITHUB_MCP_DIR/config.json"
 
 ---
 
-## 🔧 MCP Server - Azure DevOps
+## MCP Server - Azure DevOps
 
 ### Instalación y Configuración
 
@@ -464,22 +464,22 @@ az devops login
 ```json
 // mcp-server-azuredevops.json
 {
-  "mcpVersion": "2024-11-05",
-  "name": "azuredevops-server",
-  "version": "1.0.0",
-  "server": {
-    "command": "node",
-    "args": ["/path/to/mcp-server-azuredevops/dist/index.js"],
-    "env": {
-      "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/your-org",
-      "AZURE_DEVOPS_PAT": "your-personal-access-token"
-    }
-  },
-  "capabilities": {
-    "resources": true,
-    "tools": true,
-    "prompts": true
-  }
+ "mcpVersion": "2024-11-05",
+ "name": "azuredevops-server",
+ "version": "1.0.0",
+ "server": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-azuredevops/dist/index.js"],
+ "env": {
+ "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/your-org",
+ "AZURE_DEVOPS_PAT": "your-personal-access-token"
+ }
+ },
+ "capabilities": {
+ "resources": true,
+ "tools": true,
+ "prompts": true
+ }
 }
 ```
 
@@ -489,26 +489,26 @@ az devops login
 ```javascript
 // Listar proyectos
 {
-  "method": "resources/list",
-  "params": {
-    "uri": "azuredevops://projects"
-  }
+ "method": "resources/list",
+ "params": {
+ "uri": "azuredevops://projects"
+ }
 }
 
 // Obtener work items
 {
-  "method": "resources/read",
-  "params": {
-    "uri": "azuredevops://projects/myproject/workitems/123"
-  }
+ "method": "resources/read",
+ "params": {
+ "uri": "azuredevops://projects/myproject/workitems/123"
+ }
 }
 
 // Listar builds
 {
-  "method": "resources/list",
-  "params": {
-    "uri": "azuredevops://projects/myproject/builds"
-  }
+ "method": "resources/list",
+ "params": {
+ "uri": "azuredevops://projects/myproject/builds"
+ }
 }
 ```
 
@@ -516,60 +516,60 @@ az devops login
 ```javascript
 // Crear work item
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azuredevops_create_workitem",
-    "arguments": {
-      "project": "myproject",
-      "type": "Bug",
-      "title": "Fix authentication issue",
-      "description": "User authentication fails in production",
-      "assignedTo": "user@company.com",
-      "priority": "High"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azuredevops_create_workitem",
+ "arguments": {
+ "project": "myproject",
+ "type": "Bug",
+ "title": "Fix authentication issue",
+ "description": "User authentication fails in production",
+ "assignedTo": "user@company.com",
+ "priority": "High"
+ }
+ }
 }
 
 // Ejecutar build
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azuredevops_queue_build",
-    "arguments": {
-      "project": "myproject",
-      "definitionId": 123,
-      "sourceBranch": "refs/heads/main"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azuredevops_queue_build",
+ "arguments": {
+ "project": "myproject",
+ "definitionId": 123,
+ "sourceBranch": "refs/heads/main"
+ }
+ }
 }
 
 // Crear pull request
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azuredevops_create_pullrequest",
-    "arguments": {
-      "project": "myproject",
-      "repository": "myrepo",
-      "title": "Feature: Add new API endpoint",
-      "description": "This PR adds a new API endpoint for user management",
-      "sourceBranch": "feature/user-api",
-      "targetBranch": "main",
-      "reviewers": ["reviewer1@company.com"]
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azuredevops_create_pullrequest",
+ "arguments": {
+ "project": "myproject",
+ "repository": "myrepo",
+ "title": "Feature: Add new API endpoint",
+ "description": "This PR adds a new API endpoint for user management",
+ "sourceBranch": "feature/user-api",
+ "targetBranch": "main",
+ "reviewers": ["reviewer1@company.com"]
+ }
+ }
 }
 
 // Consultar work items con WIQL
 {
-  "method": "tools/call",
-  "params": {
-    "name": "azuredevops_query_workitems",
-    "arguments": {
-      "project": "myproject",
-      "wiql": "SELECT [System.Id], [System.Title] FROM WorkItems WHERE [System.AssignedTo] = @Me AND [System.State] = 'Active'"
-    }
-  }
+ "method": "tools/call",
+ "params": {
+ "name": "azuredevops_query_workitems",
+ "arguments": {
+ "project": "myproject",
+ "wiql": "SELECT [System.Id], [System.Title] FROM WorkItems WHERE [System.AssignedTo] = @Me AND [System.State] = 'Active'"
+ }
+ }
 }
 ```
 
@@ -586,8 +586,8 @@ mkdir -p "$AZDO_MCP_DIR"
 
 # Verificar Azure DevOps CLI
 if ! az extension list | grep -q azure-devops; then
-    echo "Instalando Azure DevOps CLI extension..."
-    az extension add --name azure-devops
+ echo "Instalando Azure DevOps CLI extension..."
+ az extension add --name azure-devops
 fi
 
 echo "Para configurar Azure DevOps MCP Server necesitas:"
@@ -604,8 +604,8 @@ az devops configure --defaults organization="$ORG_URL"
 # Crear configuración
 cat > "$AZDO_MCP_DIR/config.json" << EOF
 {
-  "organizationUrl": "$ORG_URL",
-  "personalAccessToken": "$PAT"
+ "organizationUrl": "$ORG_URL",
+ "personalAccessToken": "$PAT"
 }
 EOF
 
@@ -615,40 +615,40 @@ echo "Config guardada en: $AZDO_MCP_DIR/config.json"
 
 ---
 
-## 💻 Integración con VS Code
+## Integración con VS Code
 
 ### Configuración de VS Code MCP
 
 ```json
 // settings.json en VS Code
 {
-  "mcp.servers": {
-    "azure": {
-      "command": "node",
-      "args": ["/path/to/mcp-server-azure/dist/index.js"],
-      "env": {
-        "AZURE_TENANT_ID": "your-tenant-id",
-        "AZURE_CLIENT_ID": "your-client-id",
-        "AZURE_CLIENT_SECRET": "your-client-secret",
-        "AZURE_SUBSCRIPTION_ID": "your-subscription-id"
-      }
-    },
-    "github": {
-      "command": "node",
-      "args": ["/path/to/mcp-server-github/dist/index.js"],
-      "env": {
-        "GITHUB_TOKEN": "your-github-token"
-      }
-    },
-    "azuredevops": {
-      "command": "node",
-      "args": ["/path/to/mcp-server-azuredevops/dist/index.js"],
-      "env": {
-        "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/your-org",
-        "AZURE_DEVOPS_PAT": "your-pat"
-      }
-    }
-  }
+ "mcp.servers": {
+ "azure": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-azure/dist/index.js"],
+ "env": {
+ "AZURE_TENANT_ID": "your-tenant-id",
+ "AZURE_CLIENT_ID": "your-client-id",
+ "AZURE_CLIENT_SECRET": "your-client-secret",
+ "AZURE_SUBSCRIPTION_ID": "your-subscription-id"
+ }
+ },
+ "github": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-github/dist/index.js"],
+ "env": {
+ "GITHUB_TOKEN": "your-github-token"
+ }
+ },
+ "azuredevops": {
+ "command": "node",
+ "args": ["/path/to/mcp-server-azuredevops/dist/index.js"],
+ "env": {
+ "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/your-org",
+ "AZURE_DEVOPS_PAT": "your-pat"
+ }
+ }
+ }
 }
 ```
 
@@ -663,37 +663,37 @@ code --install-extension modelcontextprotocol.mcp-vscode
 
 ---
 
-## 🔧 Configuración Avanzada
+## Configuración Avanzada
 
 ### Configuración Centralizada MCP
 
 ```json
 // ~/.config/mcp/servers.json
 {
-  "mcpVersion": "2024-11-05",
-  "servers": {
-    "azure": {
-      "command": "node",
-      "args": ["/usr/local/lib/node_modules/@azure/mcp-server/dist/index.js"],
-      "env": {
-        "AZURE_CONFIG_FILE": "/home/user/.config/mcp/azure/config.json"
-      }
-    },
-    "github": {
-      "command": "node", 
-      "args": ["/usr/local/lib/node_modules/@github/mcp-server/dist/index.js"],
-      "env": {
-        "GITHUB_CONFIG_FILE": "/home/user/.config/mcp/github/config.json"
-      }
-    },
-    "azuredevops": {
-      "command": "node",
-      "args": ["/usr/local/lib/node_modules/@azure/mcp-server-devops/dist/index.js"],
-      "env": {
-        "AZDO_CONFIG_FILE": "/home/user/.config/mcp/azuredevops/config.json"
-      }
-    }
-  }
+ "mcpVersion": "2024-11-05",
+ "servers": {
+ "azure": {
+ "command": "node",
+ "args": ["/usr/local/lib/node_modules/@azure/mcp-server/dist/index.js"],
+ "env": {
+ "AZURE_CONFIG_FILE": "/home/user/.config/mcp/azure/config.json"
+ }
+ },
+ "github": {
+ "command": "node", 
+ "args": ["/usr/local/lib/node_modules/@github/mcp-server/dist/index.js"],
+ "env": {
+ "GITHUB_CONFIG_FILE": "/home/user/.config/mcp/github/config.json"
+ }
+ },
+ "azuredevops": {
+ "command": "node",
+ "args": ["/usr/local/lib/node_modules/@azure/mcp-server-devops/dist/index.js"],
+ "env": {
+ "AZDO_CONFIG_FILE": "/home/user/.config/mcp/azuredevops/config.json"
+ }
+ }
+ }
 }
 ```
 
@@ -715,64 +715,64 @@ export AZURE_KEY_VAULT_URL="https://myvault.vault.azure.net/"
 ```json
 // mcp-logging.json
 {
-  "logging": {
-    "level": "info",
-    "file": "/var/log/mcp/mcp-servers.log",
-    "console": true,
-    "structured": true
-  },
-  "debugging": {
-    "enabled": true,
-    "verboseRequests": false,
-    "traceConnections": true
-  }
+ "logging": {
+ "level": "info",
+ "file": "/var/log/mcp/mcp-servers.log",
+ "console": true,
+ "structured": true
+ },
+ "debugging": {
+ "enabled": true,
+ "verboseRequests": false,
+ "traceConnections": true
+ }
 }
 ```
 
 ---
 
-## 🎯 Casos de Uso Comunes
+## Casos de Uso Comunes
 
 ### Desarrollo Automatizado
 
 ```javascript
 // Workflow completo: GitHub → Azure DevOps → Azure Deploy
 async function automatedDeployment() {
-  // 1. Crear branch en GitHub
-  await mcp.call("github_create_branch", {
-    owner: "myorg",
-    repo: "myapp",
-    branch: "feature/new-api",
-    from: "main"
-  });
-  
-  // 2. Crear work item en Azure DevOps
-  const workItem = await mcp.call("azuredevops_create_workitem", {
-    project: "MyProject",
-    type: "Feature",
-    title: "Implement new API endpoint",
-    description: "Add user management API"
-  });
-  
-  // 3. Deploy infrastructure con Bicep
-  await mcp.call("azure_deploy_bicep", {
-    templateFile: "/templates/api-infrastructure.bicep",
-    resourceGroup: "api-rg",
-    parameters: {
-      environment: "dev",
-      apiName: "user-management"
-    }
-  });
-  
-  // 4. Crear pull request
-  await mcp.call("github_create_pull_request", {
-    owner: "myorg",
-    repo: "myapp",
-    title: "Feature: User Management API",
-    body: `Implements user management API\n\nRelated work item: ${workItem.id}`,
-    head: "feature/new-api",
-    base: "main"
-  });
+ // 1. Crear branch en GitHub
+ await mcp.call("github_create_branch", {
+ owner: "myorg",
+ repo: "myapp",
+ branch: "feature/new-api",
+ from: "main"
+ });
+ 
+ // 2. Crear work item en Azure DevOps
+ const workItem = await mcp.call("azuredevops_create_workitem", {
+ project: "MyProject",
+ type: "Feature",
+ title: "Implement new API endpoint",
+ description: "Add user management API"
+ });
+ 
+ // 3. Deploy infrastructure con Bicep
+ await mcp.call("azure_deploy_bicep", {
+ templateFile: "/templates/api-infrastructure.bicep",
+ resourceGroup: "api-rg",
+ parameters: {
+ environment: "dev",
+ apiName: "user-management"
+ }
+ });
+ 
+ // 4. Crear pull request
+ await mcp.call("github_create_pull_request", {
+ owner: "myorg",
+ repo: "myapp",
+ title: "Feature: User Management API",
+ body: `Implements user management API\n\nRelated work item: ${workItem.id}`,
+ head: "feature/new-api",
+ base: "main"
+ });
 }
 ```
 
@@ -781,38 +781,38 @@ async function automatedDeployment() {
 ```javascript
 // Monitoreo automático de recursos Azure
 async function monitorAzureResources() {
-  // Obtener recursos críticos
-  const resources = await mcp.call("azure_list_resources", {
-    resourceGroup: "production-rg",
-    filter: "critical"
-  });
-  
-  for (const resource of resources) {
-    // Verificar estado de salud
-    const health = await mcp.call("azure_get_resource_health", {
-      resourceId: resource.id
-    });
-    
-    if (health.status !== "Available") {
-      // Crear issue en GitHub
-      await mcp.call("github_create_issue", {
-        owner: "ops-team",
-        repo: "alerts",
-        title: `Azure Resource Health Alert: ${resource.name}`,
-        body: `Resource ${resource.name} is ${health.status}`,
-        labels: ["alert", "azure", "critical"]
-      });
-      
-      // Crear incident en Azure DevOps
-      await mcp.call("azuredevops_create_workitem", {
-        project: "Operations",
-        type: "Bug",
-        title: `Production Issue: ${resource.name}`,
-        priority: "Critical",
-        assignedTo: "ops-team@company.com"
-      });
-    }
-  }
+ // Obtener recursos críticos
+ const resources = await mcp.call("azure_list_resources", {
+ resourceGroup: "production-rg",
+ filter: "critical"
+ });
+ 
+ for (const resource of resources) {
+ // Verificar estado de salud
+ const health = await mcp.call("azure_get_resource_health", {
+ resourceId: resource.id
+ });
+ 
+ if (health.status !== "Available") {
+ // Crear issue en GitHub
+ await mcp.call("github_create_issue", {
+ owner: "ops-team",
+ repo: "alerts",
+ title: `Azure Resource Health Alert: ${resource.name}`,
+ body: `Resource ${resource.name} is ${health.status}`,
+ labels: ["alert", "azure", "critical"]
+ });
+ 
+ // Crear incident en Azure DevOps
+ await mcp.call("azuredevops_create_workitem", {
+ project: "Operations",
+ type: "Bug",
+ title: `Production Issue: ${resource.name}`,
+ priority: "Critical",
+ assignedTo: "ops-team@company.com"
+ });
+ }
+ }
 }
 ```
 
@@ -821,32 +821,32 @@ async function monitorAzureResources() {
 ```javascript
 // Integración completa CI/CD
 async function cicdPipeline(changes) {
-  // 1. Validar cambios en GitHub
-  const validation = await mcp.call("github_validate_changes", {
-    pullRequestId: changes.prId,
-    checks: ["lint", "test", "security"]
-  });
-  
-  if (validation.passed) {
-    // 2. Trigger build en Azure DevOps
-    const build = await mcp.call("azuredevops_queue_build", {
-      project: "MyProject",
-      definitionId: 123,
-      sourceBranch: changes.branch
-    });
-    
-    // 3. Si build exitoso, deploy a staging
-    if (build.result === "succeeded") {
-      await mcp.call("azure_deploy_bicep", {
-        templateFile: "/templates/staging.bicep",
-        resourceGroup: "staging-rg",
-        parameters: {
-          buildNumber: build.buildNumber,
-          environment: "staging"
-        }
-      });
-    }
-  }
+ // 1. Validar cambios en GitHub
+ const validation = await mcp.call("github_validate_changes", {
+ pullRequestId: changes.prId,
+ checks: ["lint", "test", "security"]
+ });
+ 
+ if (validation.passed) {
+ // 2. Trigger build en Azure DevOps
+ const build = await mcp.call("azuredevops_queue_build", {
+ project: "MyProject",
+ definitionId: 123,
+ sourceBranch: changes.branch
+ });
+ 
+ // 3. Si build exitoso, deploy a staging
+ if (build.result === "succeeded") {
+ await mcp.call("azure_deploy_bicep", {
+ templateFile: "/templates/staging.bicep",
+ resourceGroup: "staging-rg",
+ parameters: {
+ buildNumber: build.buildNumber,
+ environment: "staging"
+ }
+ });
+ }
+ }
 }
 ```
 
@@ -913,18 +913,18 @@ echo "Validando configuración MCP..."
 
 # Verificar archivos de configuración
 for server in azure github azuredevops; do
-    config_file="$HOME/.config/mcp/$server/config.json"
-    if [[ -f "$config_file" ]]; then
-        echo "✅ $server: config encontrado"
-        # Validar JSON
-        if jq empty "$config_file" 2>/dev/null; then
-            echo "✅ $server: JSON válido"
-        else
-            echo "❌ $server: JSON inválido"
-        fi
-    else
-        echo "❌ $server: config no encontrado"
-    fi
+ config_file="$HOME/.config/mcp/$server/config.json"
+ if [[ -f "$config_file" ]]; then
+ echo " $server: config encontrado"
+ # Validar JSON
+ if jq empty "$config_file" 2>/dev/null; then
+ echo " $server: JSON válido"
+ else
+ echo " $server: JSON inválido"
+ fi
+ else
+ echo " $server: config no encontrado"
+ fi
 done
 
 # Test de conectividad
@@ -932,29 +932,29 @@ echo "Probando conectividad..."
 
 # Azure
 if az account show &>/dev/null; then
-    echo "✅ Azure: autenticado"
+ echo " Azure: autenticado"
 else
-    echo "❌ Azure: no autenticado"
+ echo " Azure: no autenticado"
 fi
 
 # GitHub
 if gh auth status &>/dev/null; then
-    echo "✅ GitHub: autenticado"
+ echo " GitHub: autenticado"
 else
-    echo "❌ GitHub: no autenticado"
+ echo " GitHub: no autenticado"
 fi
 
 # Azure DevOps
 if az devops project list &>/dev/null; then
-    echo "✅ Azure DevOps: autenticado"
+ echo " Azure DevOps: autenticado"
 else
-    echo "❌ Azure DevOps: no autenticado"
+ echo " Azure DevOps: no autenticado"
 fi
 ```
 
 ---
 
-## ✅ Mejores Prácticas
+## Mejores Prácticas
 
 ### Seguridad
 
@@ -966,14 +966,14 @@ export AZURE_CLIENT_SECRET="$(az keyvault secret show --vault-name myvault --nam
 # Script de rotación automática
 #!/bin/bash
 rotate_credentials() {
-    # Rotar Azure Service Principal
-    az ad sp credential reset --id your-sp-id
-    
-    # Rotar GitHub Token (manual)
-    echo "Recuerda rotar GitHub Personal Access Token"
-    
-    # Rotar Azure DevOps PAT (manual)
-    echo "Recuerda rotar Azure DevOps Personal Access Token"
+ # Rotar Azure Service Principal
+ az ad sp credential reset --id your-sp-id
+ 
+ # Rotar GitHub Token (manual)
+ echo "Recuerda rotar GitHub Personal Access Token"
+ 
+ # Rotar Azure DevOps PAT (manual)
+ echo "Recuerda rotar Azure DevOps Personal Access Token"
 }
 
 # 3. Usar least privilege principle
@@ -985,22 +985,22 @@ rotate_credentials() {
 ```json
 // Configuración optimizada
 {
-  "connection": {
-    "maxRetries": 3,
-    "retryDelay": 1000,
-    "timeout": 30000,
-    "keepAlive": true
-  },
-  "caching": {
-    "enabled": true,
-    "ttl": 300,
-    "maxSize": 100
-  },
-  "rateLimit": {
-    "enabled": true,
-    "maxRequests": 100,
-    "windowMs": 60000
-  }
+ "connection": {
+ "maxRetries": 3,
+ "retryDelay": 1000,
+ "timeout": 30000,
+ "keepAlive": true
+ },
+ "caching": {
+ "enabled": true,
+ "ttl": 300,
+ "maxSize": 100
+ },
+ "rateLimit": {
+ "enabled": true,
+ "maxRequests": 100,
+ "windowMs": 60000
+ }
 }
 ```
 
@@ -1009,26 +1009,26 @@ rotate_credentials() {
 ```javascript
 // Health check automático
 async function healthCheck() {
-  const servers = ['azure', 'github', 'azuredevops'];
-  const results = {};
-  
-  for (const server of servers) {
-    try {
-      const start = Date.now();
-      await mcp.call(`${server}_health_check`);
-      results[server] = {
-        status: 'healthy',
-        responseTime: Date.now() - start
-      };
-    } catch (error) {
-      results[server] = {
-        status: 'unhealthy',
-        error: error.message
-      };
-    }
-  }
-  
-  return results;
+ const servers = ['azure', 'github', 'azuredevops'];
+ const results = {};
+ 
+ for (const server of servers) {
+ try {
+ const start = Date.now();
+ await mcp.call(`${server}_health_check`);
+ results[server] = {
+ status: 'healthy',
+ responseTime: Date.now() - start
+ };
+ } catch (error) {
+ results[server] = {
+ status: 'unhealthy',
+ error: error.message
+ };
+ }
+ }
+ 
+ return results;
 }
 
 // Ejecutar cada 5 minutos
@@ -1037,7 +1037,7 @@ setInterval(healthCheck, 5 * 60 * 1000);
 
 ---
 
-## 📚 Recursos Adicionales
+## Recursos Adicionales
 
 ### Documentación Oficial
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
@@ -1057,4 +1057,4 @@ setInterval(healthCheck, 5 * 60 * 1000);
 
 ---
 
-💡 **Tip**: Utiliza MCP Servers para crear workflows automatizados que conecten Azure, GitHub y Azure DevOps de manera seamless, mejorando la productividad y reduciendo errores manuales.
+ **Tip**: Utiliza MCP Servers para crear workflows automatizados que conecten Azure, GitHub y Azure DevOps de manera seamless, mejorando la productividad y reduciendo errores manuales.

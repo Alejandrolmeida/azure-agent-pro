@@ -2,18 +2,18 @@
 
 ¡Gracias por tu interés en contribuir al proyecto Azure Agent! Esta guía te ayudará a entender cómo puedes contribuir de manera efectiva.
 
-## 📋 Tabla de Contenidos
+## Tabla de Contenidos
 
-- [🎯 Cómo Contribuir](#-cómo-contribuir)
-- [🔧 Configuración del Entorno](#-configuración-del-entorno)
-- [📝 Convenciones de Código](#-convenciones-de-código)
+- [ Cómo Contribuir](#-cómo-contribuir)
+- [ Configuración del Entorno](#-configuración-del-entorno)
+- [ Convenciones de Código](#-convenciones-de-código)
 - [🔄 Proceso de Pull Request](#-proceso-de-pull-request)
 - [🐛 Reportar Bugs](#-reportar-bugs)
-- [✨ Sugerir Funcionalidades](#-sugerir-funcionalidades)
-- [📚 Mejoras de Documentación](#-mejoras-de-documentación)
+- [ Sugerir Funcionalidades](#-sugerir-funcionalidades)
+- [ Mejoras de Documentación](#-mejoras-de-documentación)
 - [🌍 Ambientes y Testing](#-ambientes-y-testing)
 
-## 🎯 Cómo Contribuir
+## Cómo Contribuir
 
 Hay varias formas de contribuir al proyecto:
 
@@ -22,24 +22,24 @@ Hay varias formas de contribuir al proyecto:
 - Incluye toda la información solicitada
 - Busca issues existentes antes de crear uno nuevo
 
-### 💻 Contribuir Código
+### Contribuir Código
 - Fix de bugs
 - Nuevas funcionalidades
 - Mejoras de performance
 - Refactoring de código existente
 
-### 📚 Documentación
+### Documentación
 - Mejorar documentación existente
 - Añadir nuevos ejemplos
 - Corregir errores de documentación
 - Traducir contenido
 
-### 🧪 Testing
+### Testing
 - Añadir nuevos tests
 - Mejorar cobertura de tests
 - Reportar bugs encontrados durante testing
 
-## 🔧 Configuración del Entorno
+## Configuración del Entorno
 
 ### Prerequisitos
 
@@ -51,44 +51,44 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az bicep install
 
 # Herramientas de desarrollo
-sudo apt-get install shellcheck  # Para validación de scripts bash
-npm install -g markdownlint-cli  # Para validación de markdown
+sudo apt-get install shellcheck # Para validación de scripts bash
+npm install -g markdownlint-cli # Para validación de markdown
 ```
 
 ### Setup del Proyecto
 
 1. **Fork del repositorio**
-   ```bash
-   # Haz fork del repositorio en GitHub, luego:
-   git clone https://github.com/tu-usuario/azure-agent.git
-   cd azure-agent
-   ```
+ ```bash
+ # Haz fork del repositorio en GitHub, luego:
+ git clone https://github.com/tu-usuario/azure-agent.git
+ cd azure-agent
+ ```
 
 2. **Configurar upstream**
-   ```bash
-   git remote add upstream https://github.com/alejandrolmeida/azure-agent.git
-   ```
+ ```bash
+ git remote add upstream https://github.com/alejandrolmeida/azure-agent.git
+ ```
 
 3. **Configurar Azure CLI**
-   ```bash
-   az login
-   az account set --subscription "tu-subscription-id"
-   ```
+ ```bash
+ az login
+ az account set --subscription "tu-subscription-id"
+ ```
 
 4. **Verificar setup**
-   ```bash
-   # Ejecutar validaciones básicas
-   ./scripts/common/azure-utils.sh --verify
-   az bicep version
-   shellcheck --version
-   ```
+ ```bash
+ # Ejecutar validaciones básicas
+ ./scripts/common/azure-utils.sh --verify
+ az bicep version
+ shellcheck --version
+ ```
 
-## 📝 Convenciones de Código
+## Convenciones de Código
 
-### 🏗️ Bicep Templates
+### Bicep Templates
 
 ```bicep
-// ✅ Buenas prácticas
+// Buenas prácticas
 @description('Nombre del storage account')
 @minLength(3)
 @maxLength(24)
@@ -96,33 +96,33 @@ param storageAccountName string
 
 @description('Configuración de red para el storage account')
 @allowed([
-  'Allow'
-  'Deny'
+ 'Allow'
+ 'Deny'
 ])
 param publicNetworkAccess string = 'Deny'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccountName
-  location: resourceGroup().location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    publicNetworkAccess: publicNetworkAccess
-    supportsHttpsTrafficOnly: true
-    encryption: {
-      services: {
-        blob: {
-          enabled: true
-        }
-        file: {
-          enabled: true
-        }
-      }
-      keySource: 'Microsoft.Storage'
-    }
-  }
+ name: storageAccountName
+ location: resourceGroup().location
+ kind: 'StorageV2'
+ sku: {
+ name: 'Standard_LRS'
+ }
+ properties: {
+ publicNetworkAccess: publicNetworkAccess
+ supportsHttpsTrafficOnly: true
+ encryption: {
+ services: {
+ blob: {
+ enabled: true
+ }
+ file: {
+ enabled: true
+ }
+ }
+ keySource: 'Microsoft.Storage'
+ }
+ }
 }
 ```
 
@@ -130,7 +130,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 
 ```bash
 #!/bin/bash
-# ✅ Header estándar para todos los scripts
+# Header estándar para todos los scripts
 
 # Configuración estricta de bash
 set -euo pipefail
@@ -142,38 +142,38 @@ readonly PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Funciones con snake_case
 function validate_azure_login() {
-    local current_account
-    
-    if ! current_account=$(az account show --output tsv --query name 2>/dev/null); then
-        echo "❌ Error: No hay sesión activa de Azure CLI"
-        echo "Ejecuta: az login"
-        return 1
-    fi
-    
-    echo "✅ Azure CLI configurado: ${current_account}"
-    return 0
+ local current_account
+ 
+ if ! current_account=$(az account show --output tsv --query name 2>/dev/null); then
+ echo " Error: No hay sesión activa de Azure CLI"
+ echo "Ejecuta: az login"
+ return 1
+ fi
+ 
+ echo " Azure CLI configurado: ${current_account}"
+ return 0
 }
 
 # Main function
 function main() {
-    validate_azure_login
-    # ... resto de la lógica
+ validate_azure_login
+ # ... resto de la lógica
 }
 
 # Ejecutar main si es llamado directamente
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
+ main "$@"
 fi
 ```
 
-### 📁 Estructura de Archivos
+### Estructura de Archivos
 
 ```
 scripts/
 ├── category/
-│   ├── script-name.sh          # Script principal
-│   ├── script-name.config      # Configuración (si aplica)
-│   └── README.md               # Documentación específica
+│ ├── script-name.sh # Script principal
+│ ├── script-name.config # Configuración (si aplica)
+│ └── README.md # Documentación específica
 ```
 
 ### 🏷️ Naming Conventions
@@ -242,13 +242,13 @@ git push origin feature/descripcion-corta
 1. **Verificar** que el bug no ha sido reportado antes
 2. **Usar** la plantilla de bug report
 3. **Incluir**:
-   - Pasos para reproducir
-   - Comportamiento esperado vs actual
-   - Información del entorno
-   - Logs completos
-   - Capturas de pantalla si aplica
+ - Pasos para reproducir
+ - Comportamiento esperado vs actual
+ - Información del entorno
+ - Logs completos
+ - Capturas de pantalla si aplica
 
-## ✨ Sugerir Funcionalidades
+## Sugerir Funcionalidades
 
 1. **Crear** un issue usando la plantilla de feature request
 2. **Describir** el problema que resuelve
@@ -256,7 +256,7 @@ git push origin feature/descripcion-corta
 4. **Considerar** alternativas
 5. **Discutir** en el issue antes de implementar
 
-## 📚 Mejoras de Documentación
+## Mejoras de Documentación
 
 - Usa la plantilla de documentation issue
 - Verifica que la información es precisa
@@ -273,9 +273,9 @@ az group create --name azure-agent-dev-test --location eastus
 
 # Ejecutar deployment de prueba
 az deployment group create \
-  --resource-group azure-agent-dev-test \
-  --template-file bicep/main.bicep \
-  --parameters @bicep/parameters/dev.parameters.json
+ --resource-group azure-agent-dev-test \
+ --template-file bicep/main.bicep \
+ --parameters @bicep/parameters/dev.parameters.json
 ```
 
 ### Testing Local
@@ -333,4 +333,4 @@ Este proyecto sigue el [Contributor Covenant Code of Conduct](https://www.contri
 
 ---
 
-¿Tienes preguntas? ¡Abre un issue o inicia una discusión! 🚀
+¿Tienes preguntas? ¡Abre un issue o inicia una discusión! 

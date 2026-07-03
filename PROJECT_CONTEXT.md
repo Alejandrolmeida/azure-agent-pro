@@ -1,15 +1,15 @@
 # Azure Agent Pro - Research & Educational Project Context
 
-**Last Updated**: 2025-09-22  
-**Version**: 3.0 - Educational Research Project  
-**Project Type**: Open Source Educational Research  
+**Last Updated**: 2025-09-22 
+**Version**: 3.0 - Educational Research Project 
+**Project Type**: Open Source Educational Research 
 **Author**: Project Maintainer (@alejandrolmeida)
 
-## 🎯 Project Vision & Mission
+## Project Vision & Mission
 
 **Azure Agent Pro** es un proyecto de investigación educativo de código abierto diseñado para enseñar a desarrolladores y administradores de IT cómo aprovechar GitHub Copilot con configuraciones avanzadas para gestionar suscripciones de Azure de manera profesional.
 
-### 🎓 Educational Mission
+### Educational Mission
 - **Democratizar** el conocimiento avanzado de Azure
 - **Enseñar** mejores prácticas enterprise a través de ejemplos prácticos
 - **Demostrar** cómo AI (GitHub Copilot) puede acelerar la productividad en Azure
@@ -22,48 +22,48 @@
 - **Evaluar** el impacto de AI-assisted development en productivity y quality
 - **Desarrollar** metodologías de enseñanza para tecnologías cloud modernas
 
-## 🏗️ Project Architecture & Learning Framework
+## Project Architecture & Learning Framework
 
-### 🎯 Core Learning Pillars
+### Core Learning Pillars
 
-1. **🤖 AI-Enhanced Development**
-   - GitHub Copilot optimization for Azure workflows
-   - Custom chat modes for different Azure scenarios
-   - Prompt engineering best practices
-   - AI-assisted troubleshooting and debugging
+1. ** AI-Enhanced Development**
+ - GitHub Copilot optimization for Azure workflows
+ - Custom chat modes for different Azure scenarios
+ - Prompt engineering best practices
+ - AI-assisted troubleshooting and debugging
 
-2. **☁️ Professional Azure Management**
-   - Enterprise-grade governance patterns
-   - Multi-subscription architecture
-   - Security-first approach with automated compliance
-   - Cost optimization and resource management
+2. ** Professional Azure Management**
+ - Enterprise-grade governance patterns
+ - Multi-subscription architecture
+ - Security-first approach with automated compliance
+ - Cost optimization and resource management
 
-3. **🏗️ Infrastructure as Code Excellence**
-   - Advanced Bicep patterns and modules
-   - Automated testing and validation
-   - Multi-environment deployment strategies
-   - Security-by-design principles
+3. ** Infrastructure as Code Excellence**
+ - Advanced Bicep patterns and modules
+ - Automated testing and validation
+ - Multi-environment deployment strategies
+ - Security-by-design principles
 
 4. **🔄 DevOps Automation Mastery**
-   - Comprehensive CI/CD pipelines
-   - GitOps workflows implementation
-   - Monitoring and observability
-   - Incident response automation
+ - Comprehensive CI/CD pipelines
+ - GitOps workflows implementation
+ - Monitoring and observability
+ - Incident response automation
 
-### 📚 Educational Content Structure
+### Educational Content Structure
 
 **Learning Paths:**
-- 🚀 **Beginner Track** (1-2 weeks): Basic setup and first deployments
+- **Beginner Track** (1-2 weeks): Basic setup and first deployments
 - 🏃‍♂️ **Intermediate Track** (2-4 weeks): Advanced patterns and automation
 - 🥇 **Expert Track** (4-8 weeks): Enterprise governance and optimization
 
 **Content Types:**
 - 📖 **Tutorials**: Step-by-step guided learning
-- 🎯 **Hands-on Labs**: Practical exercises with real Azure resources
-- 📝 **Best Practices**: Industry-standard patterns and approaches
-- 🔍 **Case Studies**: Real-world scenarios and solutions
+- **Hands-on Labs**: Practical exercises with real Azure resources
+- **Best Practices**: Industry-standard patterns and approaches
+- **Case Studies**: Real-world scenarios and solutions
 
-## 🛠️ Stack Tecnológico - Actualizado 2025
+## Stack Tecnológico - Actualizado 2025
 - **Azure CLI**: 2.55+ para gestión de recursos (mínimo recomendado)
 - **Bicep**: 0.23+ para Infrastructure as Code con security baselines
 - **Bash**: Scripting para automatización con error handling avanzado
@@ -74,7 +74,7 @@
 - **NUEVO**: Confidential Computing support para workloads clasificados
 - **NUEVO**: Azure Policy automation para governance
 
-## 📋 Convenciones de Naming
+## Convenciones de Naming
 
 ### Recursos Azure
 Patrón: `{prefix}-{environment}-{location}-{resourceType}-{purpose}`
@@ -101,7 +101,7 @@ Ejemplos:
 - **Seguridad**: TLS 1.3, basic monitoring, public access permitido
 - **Clasificación**: General workloads
 
-### Testing (test)  
+### Testing (test) 
 - **Propósito**: Testing de integración y UAT
 - **Recursos**: Medianos, backup habilitado
 - **Costos**: $200-500/mes
@@ -125,7 +125,7 @@ Ejemplos:
 - **Seguridad**: TLS 1.3, confidential computing cuando aplique, full compliance
 - **Clasificación**: Critical/Confidential workloads
 
-## 🏗️ Patrones Arquitectónicos
+## Patrones Arquitectónicos
 
 ### Red (Networking)
 - **Patrón**: Hub-and-spoke topology
@@ -142,7 +142,7 @@ Ejemplos:
 - **Logs**: Log Analytics + Application Insights
 - **Backup**: Azure Backup + cross-region replication
 
-## 🔧 Herramientas de Desarrollo
+## Herramientas de Desarrollo
 
 ### Scripts Principales
 - `azure-login.sh`: Autenticación y configuración de suscripciones
@@ -155,7 +155,7 @@ Ejemplos:
 - **modules/**: Componentes reutilizables (storage, network, compute)
 - **templates/**: Soluciones específicas (webapp, database, monitoring)
 
-## 📊 Métricas y Monitoreo
+## Métricas y Monitoreo
 
 ### KPIs de Infraestructura
 - Availability: >99.9% uptime
@@ -169,7 +169,7 @@ Ejemplos:
 - Security violations
 - Cost threshold exceeded (>110% budget)
 
-## 🔒 Compliance y Seguridad
+## Compliance y Seguridad
 
 ### Frameworks
 - Azure Well-Architected Framework
@@ -182,7 +182,7 @@ Ejemplos:
 - Audit logging habilitado
 - Backup y disaster recovery tested
 
-## 📚 Recursos de Referencia
+## Recursos de Referencia
 
 ### Documentación
 - Azure CLI Reference: https://docs.microsoft.com/cli/azure/

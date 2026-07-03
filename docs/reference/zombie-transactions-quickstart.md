@@ -6,7 +6,7 @@ Transacciones activas que han perdido su conexión (`session_id = NULL`) pero pe
 
 ---
 
-## ⚡ Detección Rápida
+## Detección Rápida
 
 ### Opción 1: Script Bash Automatizado
 
@@ -25,35 +25,35 @@ export AZURE_SQL_PASSWORD="your-password"
 
 ```bash
 python3 scripts/agents/sql-dba/sql-query.py \
-  -s your-server.database.windows.net \
-  -d your-database \
-  -u your-username \
-  -p 'your-password' \
-  -q "SELECT at.transaction_id, at.name, at.transaction_begin_time,
-      DATEDIFF(DAY, at.transaction_begin_time, GETUTCDATE()) AS DurationDays,
-      sess.session_id
-      FROM sys.dm_tran_active_transactions at
-      LEFT JOIN sys.dm_tran_session_transactions st ON at.transaction_id = st.transaction_id
-      LEFT JOIN sys.dm_exec_sessions sess ON st.session_id = sess.session_id
-      WHERE at.transaction_begin_time < DATEADD(HOUR, -1, GETUTCDATE())
-      ORDER BY at.transaction_begin_time" \
-  -o table
+ -s your-server.database.windows.net \
+ -d your-database \
+ -u your-username \
+ -p 'your-password' \
+ -q "SELECT at.transaction_id, at.name, at.transaction_begin_time,
+ DATEDIFF(DAY, at.transaction_begin_time, GETUTCDATE()) AS DurationDays,
+ sess.session_id
+ FROM sys.dm_tran_active_transactions at
+ LEFT JOIN sys.dm_tran_session_transactions st ON at.transaction_id = st.transaction_id
+ LEFT JOIN sys.dm_exec_sessions sess ON st.session_id = sess.session_id
+ WHERE at.transaction_begin_time < DATEADD(HOUR, -1, GETUTCDATE())
+ ORDER BY at.transaction_begin_time" \
+ -o table
 ```
 
 ### Opción 3: SQL Directo (SSMS, Azure Data Studio)
 
 ```sql
 SELECT 
-    at.transaction_id,
-    at.name AS TransactionName,
-    at.transaction_begin_time AS StartTime,
-    DATEDIFF(DAY, at.transaction_begin_time, GETUTCDATE()) AS DurationDays,
-    sess.session_id,
-    sess.login_name,
-    CASE 
-        WHEN sess.session_id IS NULL THEN 'ZOMBIE'
-        ELSE 'ACTIVA'
-    END AS Status
+ at.transaction_id,
+ at.name AS TransactionName,
+ at.transaction_begin_time AS StartTime,
+ DATEDIFF(DAY, at.transaction_begin_time, GETUTCDATE()) AS DurationDays,
+ sess.session_id,
+ sess.login_name,
+ CASE 
+ WHEN sess.session_id IS NULL THEN 'ZOMBIE'
+ ELSE 'ACTIVA'
+ END AS Status
 FROM sys.dm_tran_active_transactions at
 LEFT JOIN sys.dm_tran_session_transactions st ON at.transaction_id = st.transaction_id
 LEFT JOIN sys.dm_exec_sessions sess ON st.session_id = sess.session_id
@@ -63,7 +63,7 @@ ORDER BY at.transaction_begin_time;
 
 ---
 
-## 📋 Interpretación de Resultados
+## Interpretación de Resultados
 
 | Campo | Valor Problemático | Significado |
 |-------|-------------------|-------------|
@@ -77,17 +77,17 @@ ORDER BY at.transaction_begin_time;
 
 ---
 
-## 🔍 Análisis de Impacto
+## Análisis de Impacto
 
 ### Query de Espacio Bloqueado
 
 ```sql
 SELECT 
-    DB_NAME() AS DatabaseName,
-    CAST(SUM(unallocated_extent_page_count) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS UnallocatedSpaceGB,
-    (SELECT COUNT(*) 
-     FROM sys.dm_tran_active_transactions 
-     WHERE transaction_begin_time < DATEADD(HOUR, -1, GETUTCDATE())) AS ZombieCount
+ DB_NAME() AS DatabaseName,
+ CAST(SUM(unallocated_extent_page_count) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS UnallocatedSpaceGB,
+ (SELECT COUNT(*) 
+ FROM sys.dm_tran_active_transactions 
+ WHERE transaction_begin_time < DATEADD(HOUR, -1, GETUTCDATE())) AS ZombieCount
 FROM sys.dm_db_file_space_usage;
 ```
 
@@ -98,31 +98,31 @@ FROM sys.dm_db_file_space_usage;
 
 ---
 
-## 🛠️ Solución
+## Solución
 
 ### ⚠️ NO intentar KILL manual
 
 Las transacciones zombie con `session_id = NULL` **NO** son terminables con `KILL`.
 
-### ✅ Solución: Failover Manual
+### Solución: Failover Manual
 
 ```bash
 # Reemplazar con tus valores
 az sql db failover \
-  --resource-group <your-resource-group> \
-  --server <your-server> \
-  --name <your-database>
+ --resource-group <your-resource-group> \
+ --server <your-server> \
+ --name <your-database>
 ```
 
 **Impacto**:
 - ⏱️ Downtime: 30-60 segundos
 - 🔄 Todas las conexiones se reinician
-- ✅ Transacciones zombie se limpian
-- ✅ Espacio comienza a recuperarse en 24-48h
+- Transacciones zombie se limpian
+- Espacio comienza a recuperarse en 24-48h
 
 ---
 
-## 📊 Monitoreo Post-Solución
+## Monitoreo Post-Solución
 
 ### 1. Verificar que zombies desaparecieron
 
@@ -136,8 +136,8 @@ WHERE transaction_begin_time < DATEADD(HOUR, -1, GETUTCDATE());
 
 ```sql
 SELECT 
-    GETUTCDATE() AS CheckTime,
-    CAST(SUM(unallocated_extent_page_count) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS UnallocatedGB
+ GETUTCDATE() AS CheckTime,
+ CAST(SUM(unallocated_extent_page_count) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS UnallocatedGB
 FROM sys.dm_db_file_space_usage;
 ```
 
@@ -145,8 +145,8 @@ FROM sys.dm_db_file_space_usage;
 
 ```sql
 SELECT 
-    GETUTCDATE() AS CheckTime,
-    CAST(SUM(CAST(size AS BIGINT)) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS TotalGB
+ GETUTCDATE() AS CheckTime,
+ CAST(SUM(CAST(size AS BIGINT)) * 8.0 / 1024 / 1024 AS DECIMAL(10,2)) AS TotalGB
 FROM sys.database_files WHERE type = 0;
 ```
 
@@ -159,8 +159,8 @@ FROM sys.database_files WHERE type = 0;
 ```sql
 -- Ejecutar cada hora, alertar si devuelve filas
 SELECT 
-    COUNT(*) AS ZombieCount,
-    MAX(DATEDIFF(HOUR, transaction_begin_time, GETUTCDATE())) AS OldestHours
+ COUNT(*) AS ZombieCount,
+ MAX(DATEDIFF(HOUR, transaction_begin_time, GETUTCDATE())) AS OldestHours
 FROM sys.dm_tran_active_transactions
 WHERE transaction_begin_time < DATEADD(HOUR, -24, GETUTCDATE())
 HAVING COUNT(*) > 0;
@@ -168,7 +168,7 @@ HAVING COUNT(*) > 0;
 
 ---
 
-## 📁 Archivos de Referencia
+## Archivos de Referencia
 
 - **Queries completas**: `docs/queries/detect-zombie-transactions.sql`
 - **Script automatizado**: `scripts/agents/sql-dba/detect-zombie-transactions.sh`
@@ -192,3 +192,4 @@ HAVING COUNT(*) > 0;
 **Documentación**:
 - [Azure SQL ADR](https://docs.microsoft.com/sql/relational-databases/accelerated-database-recovery-concepts)
 - [DMVs Transacciones](https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/transaction-related-dynamic-management-views-and-functions-transact-sql)
+

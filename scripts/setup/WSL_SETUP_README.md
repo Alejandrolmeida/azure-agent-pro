@@ -2,7 +2,7 @@
 
 Script automatizado para configurar WSL con todas las herramientas necesarias para desarrollo Azure.
 
-## 🚀 Características
+## Características
 
 Este script configura automáticamente:
 
@@ -15,13 +15,13 @@ Este script configura automáticamente:
 - **Oh-my-posh**: Prompt personalizado con tema custom
 - **Aliases útiles**: Atajos para comandos comunes
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 - WSL2 instalado en Windows
 - Distribución Ubuntu/Debian en WSL
 - Conexión a Internet
 
-## 🎯 Instalación
+## Instalación
 
 ### Método 1: Ejecutar directamente
 
@@ -92,7 +92,7 @@ az login
 azlogin
 ```
 
-## 📦 Herramientas Instaladas
+## Herramientas Instaladas
 
 ### Azure CLI y Extensiones
 
@@ -112,32 +112,32 @@ azlogin
 - `azure-keyvault-secrets`: Key Vault
 - `azqr`: Azure Quick Review
 
-## 🔧 Aliases Disponibles
+## Aliases Disponibles
 
 ### Generales
 ```bash
-ll      # ls -alF (lista detallada)
-la      # ls -A (mostrar ocultos)
-cls     # clear (limpiar pantalla)
-..      # cd .. (subir directorio)
-...     # cd ../..
-....    # cd ../../..
+ll # ls -alF (lista detallada)
+la # ls -A (mostrar ocultos)
+cls # clear (limpiar pantalla)
+.. # cd .. (subir directorio)
+... # cd ../..
+.... # cd ../../..
 ```
 
 ### Azure
 ```bash
-azlogin   # az login --use-device-code
+azlogin # az login --use-device-code
 azaccount # az account show
-azlist    # az account list --output table
+azlist # az account list --output table
 ```
 
 ### Git
 ```bash
-gs  # git status
-ga  # git add
-gc  # git commit
-gp  # git push
-gl  # git log --oneline --graph --decorate
+gs # git status
+ga # git add
+gc # git commit
+gp # git push
+gl # git log --oneline --graph --decorate
 ```
 
 ## 🎭 Tema Oh-my-posh
@@ -148,8 +148,8 @@ El script instala un tema personalizado (`almeida.omp.json`) que muestra:
 - 📂 Ruta actual
 - 🌿 Estado de Git (branch, cambios)
 - 🐍 Entorno Python/Conda activo
-- ☁️ Azure subscription activa
-- ⚡ Indicadores de Node, Go, Rust (si están presentes)
+- Azure subscription activa
+- Indicadores de Node, Go, Rust (si están presentes)
 
 ## 🔄 Actualizar Configuración
 
@@ -202,7 +202,7 @@ which oh-my-posh
 curl -s https://ohmyposh.dev/install.sh | bash -s
 ```
 
-## 📝 Archivos Modificados
+## Archivos Modificados
 
 El script modifica/crea:
 
@@ -217,11 +217,11 @@ El script modifica/crea:
 ## 🔐 Seguridad
 
 El script:
-- ✅ Usa fuentes oficiales (GitHub releases, sitios oficiales)
-- ✅ Verifica existencia antes de instalar
-- ✅ No requiere credenciales
-- ✅ Crea backups automáticos
-- ✅ Puede ejecutarse múltiples veces sin problemas
+- Usa fuentes oficiales (GitHub releases, sitios oficiales)
+- Verifica existencia antes de instalar
+- No requiere credenciales
+- Crea backups automáticos
+- Puede ejecutarse múltiples veces sin problemas
 
 ## 🤝 Contribuir
 
@@ -252,3 +252,4 @@ MIT License - Ver [LICENSE](../../LICENSE)
 ---
 
 **¿Preguntas o problemas?** Abre un [issue](https://github.com/alejandrolmeida/azure-agent-pro/issues)
+

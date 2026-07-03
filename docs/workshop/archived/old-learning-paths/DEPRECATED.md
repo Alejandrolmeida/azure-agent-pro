@@ -1,7 +1,7 @@
 # ⚠️ Contenido Deprecado - Learning Paths
 
-**Estado:** DEPRECATED  
-**Fecha de deprecación:** Diciembre 2025  
+**Estado:** DEPRECATED 
+**Fecha de deprecación:** Diciembre 2025 
 **Razón:** Reemplazado por workshop con enfoque Vibe Coding usando Azure_Architect_Pro
 
 ---
@@ -22,7 +22,7 @@ Este contenido ha sido **archivado** y ya no se mantiene activamente.
 
 ---
 
-## 🚀 ¿Qué deberías usar en su lugar?
+## ¿Qué deberías usar en su lugar?
 
 ### Workshop Recomendado: **Kitten Space Missions API**
 
@@ -30,17 +30,17 @@ Este contenido ha sido **archivado** y ya no se mantiene activamente.
 
 **¿Por qué es mejor?**
 
-- ✅ **Vibe Coding**: Aprende a trabajar con el agente Azure_Architect_Pro (miles de líneas de instrucciones especializadas)
-- ✅ **6 MCP Servers**: Acceso a Azure, Bicep, GitHub, filesystem, web search y memoria persistente
-- ✅ **Progresivo**: 8 actividades de simple a complejo
-- ✅ **Hands-on**: Construyes infraestructura real (no solo teoría)
-- ✅ **Completo**: Architecture design, FinOps, Bicep, CI/CD, Security, Monitoring, Testing
-- ✅ **Divertido**: Tema de gatitos astronautas que hace el aprendizaje memorable
-- ✅ **En español**: Coherente con el proyecto
+- **Vibe Coding**: Aprende a trabajar con el agente Azure_Architect_Pro (miles de líneas de instrucciones especializadas)
+- **6 MCP Servers**: Acceso a Azure, Bicep, GitHub, filesystem, web search y memoria persistente
+- **Progresivo**: 8 actividades de simple a complejo
+- **Hands-on**: Construyes infraestructura real (no solo teoría)
+- **Completo**: Architecture design, FinOps, Bicep, CI/CD, Security, Monitoring, Testing
+- **Divertido**: Tema de gatitos astronautas que hace el aprendizaje memorable
+- **En español**: Coherente con el proyecto
 
 ---
 
-## 📚 Contenido Archivado
+## Contenido Archivado
 
 Si aún necesitas consultar el contenido original:
 
@@ -82,5 +82,6 @@ Si tienes dudas sobre esta deprecación:
 
 ---
 
-**Última actualización:** Diciembre 2025  
+**Última actualización:** Diciembre 2025 
 **Migración recomendada:** [Kitten Space Missions Workshop](../../kitten-space-missions/)
+

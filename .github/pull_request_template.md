@@ -1,29 +1,29 @@
-## 📋 Descripción
+## Descripción
 
 <!-- Describe brevemente qué cambios incluye este PR -->
 
-## 🔧 Tipo de Cambio
+## Tipo de Cambio
 
 - [ ] 🐛 Bug fix (cambio que corrige un issue)
-- [ ] ✨ Nueva funcionalidad (cambio que añade funcionalidad)
+- [ ] Nueva funcionalidad (cambio que añade funcionalidad)
 - [ ] 💥 Breaking change (fix o feature que causaría que funcionalidad existente no funcione como se espera)
-- [ ] 📚 Actualización de documentación
-- [ ] 🔧 Refactoring (cambio de código que no corrige bug ni añade funcionalidad)
+- [ ] Actualización de documentación
+- [ ] Refactoring (cambio de código que no corrige bug ni añade funcionalidad)
 - [ ] 🎨 Mejora de estilo/formato
-- [ ] 🚀 Mejora de performance
-- [ ] 🧪 Añadir tests
+- [ ] Mejora de performance
+- [ ] Añadir tests
 - [ ] 🔨 Actualización de scripts de build/deploy
 
-## 🔗 Issue Relacionado
+## Issue Relacionado
 
 <!-- Enlaza al issue que este PR resuelve -->
 Fixes #(número_del_issue)
 Closes #(número_del_issue)
 Related to #(número_del_issue)
 
-## 🧪 Testing
+## Testing
 
-### ✅ Tests Realizados
+### Tests Realizados
 
 - [ ] Tests locales pasados
 - [ ] Validación de Bicep ejecutada
@@ -39,9 +39,9 @@ Related to #(número_del_issue)
 az bicep build --file bicep/main.bicep
 ```
 
-## 📁 Archivos Modificados
+## Archivos Modificados
 
-### 🔧 Scripts
+### Scripts
 - [ ] `scripts/common/azure-login.sh`
 - [ ] `scripts/agents/architect/bicep-deploy.sh`
 - [ ] `scripts/common/azure-config.sh`
@@ -49,7 +49,7 @@ az bicep build --file bicep/main.bicep
 - [ ] `scripts/agents/architect/bicep-utils.sh`
 - [ ] Otros: ___________
 
-### 🏗️ Infraestructura
+### Infraestructura
 - [ ] `bicep/main.bicep`
 - [ ] `bicep/modules/storage-account.bicep`
 - [ ] `bicep/modules/key-vault.bicep`
@@ -57,7 +57,7 @@ az bicep build --file bicep/main.bicep
 - [ ] `bicep/parameters/*.json`
 - [ ] Otros: ___________
 
-### 📚 Documentación
+### Documentación
 - [ ] `README.md`
 - [ ] `PROJECT_CONTEXT.md`
 - [ ] `docs/cheatsheets/`
@@ -90,7 +90,7 @@ az bicep build --file bicep/main.bicep
 
 <!-- Si aplica, añade screenshots que demuestren los cambios -->
 
-## ✅ Checklist del Reviewer
+## Checklist del Reviewer
 
 - [ ] El código sigue las convenciones del proyecto
 - [ ] Los cambios están bien documentados
@@ -100,7 +100,7 @@ az bicep build --file bicep/main.bicep
 - [ ] Los scripts tienen manejo adecuado de errores
 - [ ] La documentación está actualizada
 
-## ✅ Checklist del Autor
+## Checklist del Autor
 
 - [ ] He probado mis cambios localmente
 - [ ] He actualizado la documentación correspondiente
@@ -110,7 +110,7 @@ az bicep build --file bicep/main.bicep
 - [ ] He seguido las convenciones de código del proyecto
 - [ ] He verificado que no hay información sensible en el código
 
-## 📝 Notas Adicionales
+## Notas Adicionales
 
 <!-- Cualquier información adicional que pueda ser útil para los reviewers -->
 

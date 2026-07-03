@@ -1,6 +1,6 @@
-# 📝 Release Notes
+# Release Notes
 
-> **Note**: Este archivo contiene notas históricas de releases específicas.  
+> **Note**: Este archivo contiene notas históricas de releases específicas. 
 > Para el historial completo de cambios, consulta **[CHANGELOG.md](CHANGELOG.md)**.
 
 ---
@@ -13,7 +13,7 @@
 
 ---
 
-## 🎉 Feature: MCP Servers Integration and Azure Networking Workshop
+## Feature: MCP Servers Integration and Azure Networking Workshop
 
 **Release Date:** October 16, 2025
 **Branch:** `feature/mcp-servers-and-networking-workshop` → `main`
@@ -21,37 +21,37 @@
 
 ---
 
-## 🚀 What's New
+## What's New
 
-### 🔌 MCP Servers Integration
+### MCP Servers Integration
 
 Model Context Protocol (MCP) Servers ahora potencian GitHub Copilot con acceso en tiempo real a recursos de Azure y contexto mejorado.
 
 **Archivos añadidos:**
-- ✅ `mcp.json` - Configuración de 6 servidores MCP
-- ✅ `docs/MCP_QUICKSTART.md` - Guía de configuración rápida (10 min)
-- ✅ `.env.example` - Template de variables de entorno
+- `mcp.json` - Configuración de 6 servidores MCP
+- `docs/MCP_QUICKSTART.md` - Guía de configuración rápida (10 min)
+- `.env.example` - Template de variables de entorno
 
 **MCP Servers configurados:**
-1. **azure-mcp** 🔵 - Acceso a recursos de Azure en tiempo real
-2. **bicep-mcp** 📄 - Asistencia con plantillas Bicep
-3. **github-mcp** 🐙 - Búsqueda en repositorios, issues, PRs
-4. **filesystem-mcp** 📁 - Navegación optimizada del proyecto
-5. **brave-search-mcp** 🔍 - Búsqueda web de documentación
-6. **memory-mcp** 🧠 - Contexto persistente entre sesiones
+1. **azure-mcp** - Acceso a recursos de Azure en tiempo real
+2. **bicep-mcp** - Asistencia con plantillas Bicep
+3. **github-mcp** - Búsqueda en repositorios, issues y PRs
+4. **filesystem-mcp** - Navegación optimizada del proyecto
+5. **brave-search-mcp** - Búsqueda web de documentación
+6. **memory-mcp** - Contexto persistente entre sesiones
 
 ---
 
-### 🎓 Azure Networking Workshop (4 horas)
+### Azure Networking Workshop (4 horas)
 
 Workshop completo orientado a certificaciones **AZ-104** y **AZ-700** con ejercicios prácticos y código Bicep de producción.
 
 **Archivos añadidos:**
-- ✅ `docs/workshop/README.md` - Overview del workshop
-- ✅ `docs/workshop/WORKSHOP_NETWORKING.md` - Workshop completo (574 líneas)
-- ✅ `docs/workshop/QUICKSTART.md` - Setup rápido (15 min)
-- ✅ `docs/workshop/CHECKLIST.md` - Checklist de verificación
-- ✅ `docs/workshop/solutions/SOLUTIONS.md` - Soluciones completas (1111 líneas)
+- `docs/workshop/README.md` - Overview del workshop
+- `docs/workshop/WORKSHOP_NETWORKING.md` - Workshop completo (574 líneas)
+- `docs/workshop/QUICKSTART.md` - Setup rápido (15 min)
+- `docs/workshop/CHECKLIST.md` - Checklist de verificación
+- `docs/workshop/solutions/SOLUTIONS.md` - Soluciones completas (1111 líneas)
 
 **Módulos del Workshop:**
 
@@ -67,7 +67,7 @@ Workshop completo orientado a certificaciones **AZ-104** y **AZ-700** con ejerci
 
 ---
 
-## 📊 Estadísticas del Release
+## Estadísticas del Release
 
 ### Archivos Modificados/Creados
 ```
@@ -91,54 +91,54 @@ Workshop completo orientado a certificaciones **AZ-104** y **AZ-700** con ejerci
 
 ---
 
-## 🎯 Características Destacadas
+## Características Destacadas
 
 ### 1. Bicep Modules de Producción
 
 El workshop incluye módulos Bicep completos y funcionales:
 
-- ✅ **vnet-hub.bicep** - VNET Hub con subnets especializadas
-- ✅ **vnet-spoke.bicep** - VNET Spoke con peering automático
-- ✅ **nsg-3tier.bicep** - NSGs para arquitectura de 3 capas
-- ✅ **azure-firewall.bicep** - Azure Firewall con políticas
-- ✅ **vpn-gateway.bicep** - VPN Gateway Active-Active con BGP
-- ✅ **local-network-gateway.bicep** - Gateway para on-premises
-- ✅ **route-table.bicep** - Route Tables para tráfico forzado
+- **vnet-hub.bicep** - VNET Hub con subnets especializadas
+- **vnet-spoke.bicep** - VNET Spoke con peering automático
+- **nsg-3tier.bicep** - NSGs para arquitectura de 3 capas
+- **azure-firewall.bicep** - Azure Firewall con políticas
+- **vpn-gateway.bicep** - VPN Gateway Active-Active con BGP
+- **local-network-gateway.bicep** - Gateway para on-premises
+- **route-table.bicep** - Route Tables para tráfico forzado
 
 ### 2. Queries KQL para Monitorización
 
 Incluye queries listas para usar en Log Analytics:
 
-- ✅ Top 10 IPs por tráfico denegado en NSG
-- ✅ Conexiones VPN activas y uptime
-- ✅ Tráfico bloqueado por Azure Firewall
-- ✅ Failed connection attempts
-- ✅ Latencia entre spokes
+- Top 10 IPs por tráfico denegado en NSG
+- Conexiones VPN activas y uptime
+- Tráfico bloqueado por Azure Firewall
+- Failed connection attempts
+- Latencia entre spokes
 
 ### 3. GitHub Actions Workflow
 
 Workflow completo de CI/CD para infraestructura de red:
 
-- ✅ Validation automática de Bicep
-- ✅ What-if analysis pre-deployment
-- ✅ Deploy a Development (automático)
-- ✅ Manual approval para Production
-- ✅ Post-deployment tests
-- ✅ Rollback automático si falla
+- Validation automática de Bicep
+- What-if analysis pre-deployment
+- Deploy a Development (automático)
+- Manual approval para Production
+- Post-deployment tests
+- Rollback automático si falla
 
 ### 4. Azure Policies
 
 Definiciones de políticas para governance:
 
-- ✅ Requerir NSG en todas las subnets
-- ✅ Denegar Public IPs sin approval
-- ✅ Requerir encryption en tránsito
-- ✅ Tags obligatorios (Environment, CostCenter, Owner)
-- ✅ Audit VNETs sin Network Watcher
+- Requerir NSG en todas las subnets
+- Denegar Public IPs sin approval
+- Requerir encryption en tránsito
+- Tags obligatorios (Environment, CostCenter, Owner)
+- Audit VNETs sin Network Watcher
 
 ---
 
-## 🔧 Cómo Usar
+## Cómo Usar
 
 ### Setup Rápido (15 minutos)
 
@@ -172,33 +172,33 @@ cat docs/workshop/solutions/SOLUTIONS.md
 
 ---
 
-## 📚 Documentación
+## Documentación
 
 ### Guías Principales
 - 📖 [MCP Quick Start](docs/MCP_QUICKSTART.md) - Setup de MCP Servers en 10 min
-- 🎓 [Workshop Overview](docs/workshop/README.md) - Descripción del workshop
-- 🚀 [Quick Start](docs/workshop/QUICKSTART.md) - Setup en 15 min
-- 📋 [Checklist](docs/workshop/CHECKLIST.md) - Verificación completa
-- 🏗️ [Workshop Completo](docs/workshop/WORKSHOP_NETWORKING.md) - 4 horas de contenido
-- 💡 [Soluciones](docs/workshop/solutions/SOLUTIONS.md) - Código de referencia
+- [Workshop Overview](docs/workshop/README.md) - Descripción del workshop
+- [Quick Start](docs/workshop/QUICKSTART.md) - Setup en 15 min
+- [Checklist](docs/workshop/CHECKLIST.md) - Verificación completa
+- [Workshop Completo](docs/workshop/WORKSHOP_NETWORKING.md) - 4 horas de contenido
+- [Soluciones](docs/workshop/solutions/SOLUTIONS.md) - Código de referencia
 
 ### Recursos Adicionales
-- 🔗 [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/)
-- 🔗 [AZ-104 Learning Path](https://learn.microsoft.com/certifications/exams/az-104)
-- 🔗 [AZ-700 Learning Path](https://learn.microsoft.com/certifications/exams/az-700)
-- 🔗 [Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
+- [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/)
+- [AZ-104 Learning Path](https://learn.microsoft.com/certifications/exams/az-104)
+- [AZ-700 Learning Path](https://learn.microsoft.com/certifications/exams/az-700)
+- [Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
 
 ---
 
-## 🎯 Target Audience
+## Target Audience
 
 Este workshop está diseñado para:
 
-- ✅ **Azure Administrators** preparándose para AZ-104
-- ✅ **Network Specialists** preparándose para AZ-700
-- ✅ **DevOps Engineers** trabajando con Azure networking
-- ✅ **Cloud Architects** diseñando redes enterprise
-- ✅ **IT Professionals** que quieren dominar GitHub Copilot con Azure
+- **Azure Administrators** preparándose para AZ-104
+- **Network Specialists** preparándose para AZ-700
+- **DevOps Engineers** trabajando con Azure networking
+- **Cloud Architects** diseñando redes enterprise
+- **IT Professionals** que quieren dominar GitHub Copilot con Azure
 
 ---
 
@@ -211,39 +211,39 @@ Adaptado específicamente para Azure Networking y certificaciones AZ-104/AZ-700.
 
 ---
 
-## 🔗 Links Útiles
+## Links Útiles
 
-- 🌐 **Repository**: https://github.com/Alejandrolmeida/azure-agent-pro
-- 📝 **Feature Branch**: https://github.com/Alejandrolmeida/azure-agent-pro/tree/feature/mcp-servers-and-networking-workshop
-- 🎯 **Issues**: https://github.com/Alejandrolmeida/azure-agent-pro/issues
+- **Repository**: https://github.com/Alejandrolmeida/azure-agent-pro
+- **Feature Branch**: https://github.com/Alejandrolmeida/azure-agent-pro/tree/feature/mcp-servers-and-networking-workshop
+- **Issues**: https://github.com/Alejandrolmeida/azure-agent-pro/issues
 - 💬 **Discussions**: https://github.com/Alejandrolmeida/azure-agent-pro/discussions
 
 ---
 
-## ✅ Next Steps
+## Next Steps
 
 1. **Probar MCP Servers**
-   - Seguir [MCP_QUICKSTART.md](docs/MCP_QUICKSTART.md)
-   - Verificar que los 6 servidores funcionan
+ - Seguir [MCP_QUICKSTART.md](docs/MCP_QUICKSTART.md)
+ - Verificar que los 6 servidores funcionan
 
 2. **Comenzar el Workshop**
-   - Revisar [QUICKSTART.md](docs/workshop/QUICKSTART.md)
-   - Seguir el [CHECKLIST.md](docs/workshop/CHECKLIST.md)
-   - Completar los 5 módulos del workshop
+ - Revisar [QUICKSTART.md](docs/workshop/QUICKSTART.md)
+ - Seguir el [CHECKLIST.md](docs/workshop/CHECKLIST.md)
+ - Completar los 5 módulos del workshop
 
 3. **Practicar**
-   - Desplegar la infraestructura en Azure
-   - Experimentar con variaciones
-   - Contribuir mejoras al proyecto
+ - Desplegar la infraestructura en Azure
+ - Experimentar con variaciones
+ - Contribuir mejoras al proyecto
 
 4. **Certificarse**
-   - Estudiar para AZ-104
-   - Estudiar para AZ-700
-   - Aplicar el conocimiento en proyectos reales
+ - Estudiar para AZ-104
+ - Estudiar para AZ-700
+ - Aplicar el conocimiento en proyectos reales
 
 ---
 
-## 🎉 ¡Gracias!
+## ¡Gracias!
 
 Gracias por usar **Azure Agent Pro**. Si tienes preguntas, sugerencias o encuentras algún problema, por favor:
 
@@ -251,8 +251,9 @@ Gracias por usar **Azure Agent Pro**. Si tienes preguntas, sugerencias o encuent
 - 💬 Inicia una [Discussion](https://github.com/Alejandrolmeida/azure-agent-pro/discussions)
 - ⭐ Dale una estrella al proyecto si te resulta útil
 
-**¡Éxito en tu aprendizaje de Azure Networking! 🚀**
+**¡Éxito en tu aprendizaje de Azure Networking! **
 
 ---
 
 *Última actualización: October 16, 2025*
+

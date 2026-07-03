@@ -1,7 +1,7 @@
 # ⚠️ Contenido Deprecado - Tutorials
 
-**Estado:** DEPRECATED  
-**Fecha de deprecación:** Diciembre 2025  
+**Estado:** DEPRECATED 
+**Fecha de deprecación:** Diciembre 2025 
 **Razón:** Reemplazado completamente por el workshop Kitten Space Missions
 
 ---
@@ -24,7 +24,7 @@ Este contenido ha sido **archivado** y ya no se mantiene activamente.
 
 ---
 
-## 🚀 ¿Qué deberías usar en su lugar?
+## ¿Qué deberías usar en su lugar?
 
 ### Workshop Recomendado: **Kitten Space Missions API**
 
@@ -32,20 +32,20 @@ Este contenido ha sido **archivado** y ya no se mantiene activamente.
 
 Esta actividad cubre TODO lo que el tutorial antiguo enseñaba, pero además:
 
-- ✅ **Setup automatizado** con scripts bash
-- ✅ **Configuración de MCP Servers** (6 servidores especializados)
-- ✅ **Verificación paso a paso** con comandos de validación
-- ✅ **Troubleshooting detallado** para problemas comunes
-- ✅ **Fork y configuración** de GitHub repo
-- ✅ **Azure CLI** configurado correctamente
-- ✅ **VS Code extensions** recomendadas instaladas
-- ✅ **Agente Azure_Architect_Pro** funcionando
+- **Setup automatizado** con scripts bash
+- **Configuración de MCP Servers** (6 servidores especializados)
+- **Verificación paso a paso** con comandos de validación
+- **Troubleshooting detallado** para problemas comunes
+- **Fork y configuración** de GitHub repo
+- **Azure CLI** configurado correctamente
+- **VS Code extensions** recomendadas instaladas
+- **Agente Azure_Architect_Pro** funcionando
 
 **Tiempo:** 30 minutos (vs las 2-3 horas del tutorial antiguo)
 
 ---
 
-## 📚 Contenido Archivado
+## Contenido Archivado
 
 Si aún necesitas consultar el contenido original:
 
@@ -94,10 +94,10 @@ Si hay demanda específica, consideraremos crear tutoriales cortos enfocados en:
 - Integraciones con servicios específicos
 
 Pero el formato será:
-- ✅ En español
-- ✅ Usando Azure_Architect_Pro
-- ✅ Con MCP Servers
-- ✅ Casos prácticos concretos (no genéricos)
+- En español
+- Usando Azure_Architect_Pro
+- Con MCP Servers
+- Casos prácticos concretos (no genéricos)
 
 **¿Te gustaría ver algún tutorial específico?** Abre un issue: [Solicitar Tutorial](https://github.com/Alejandrolmeida/azure-agent-pro/issues/new?title=Request:%20Tutorial&labels=documentation,enhancement)
 
@@ -114,5 +114,6 @@ Si tienes dudas sobre esta deprecación:
 
 ---
 
-**Última actualización:** Diciembre 2025  
+**Última actualización:** Diciembre 2025 
 **Migración recomendada:** [Workshop Kitten Space Missions - Activity 1](../../kitten-space-missions/activity-01-setup.md)
+

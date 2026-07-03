@@ -1,12 +1,12 @@
-# 🎓 Learning Objectives - Azure Agent Pro
+# Learning Objectives - Azure Agent Pro
 
-## 📚 Objetivos Educativos del Proyecto
+## Objetivos Educativos del Proyecto
 
 Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñar a desarrolladores y administradores de IT cómo aprovechar GitHub Copilot con configuraciones avanzadas para gestionar Azure como un profesional.
 
-## 🎯 Objetivos de Aprendizaje Principales
+## Objetivos de Aprendizaje Principales
 
-### 1. 🤖 Dominio de GitHub Copilot para Azure
+### 1. Dominio de GitHub Copilot para Azure
 
 **Objetivos:**
 - Configurar GitHub Copilot con prompts específicos para Azure
@@ -20,7 +20,7 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 - [ ] Automatizar tasks repetitivas con Copilot
 - [ ] Implementar AI-driven troubleshooting
 
-### 2. ☁️ Gestión Profesional de Azure
+### 2. Gestión Profesional de Azure
 
 **Objetivos:**
 - Implementar governance patterns enterprise
@@ -34,7 +34,7 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 - [ ] Configurar cost management y budgets
 - [ ] Establecer monitoring y alerting proactivo
 
-### 3. 🏗️ Infrastructure as Code Avanzado
+### 3. Infrastructure as Code Avanzado
 
 **Objetivos:**
 - Dominar Bicep templates modulares y reutilizables
@@ -62,7 +62,7 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 - [ ] Establecer rollback strategies
 - [ ] Configurar comprehensive monitoring
 
-### 5. 🔒 Security y Compliance
+### 5. Security y Compliance
 
 **Objetivos:**
 - Implementar security-first approach
@@ -76,9 +76,9 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 - [ ] Establecer incident response procedures
 - [ ] Configurar compliance reporting
 
-## 📈 Rutas de Aprendizaje
+## Rutas de Aprendizaje
 
-### 🚀 Ruta Principiante (1-2 semanas)
+### Ruta Principiante (1-2 semanas)
 
 **Prerequisitos:**
 - Conocimientos básicos de Azure Portal
@@ -87,19 +87,19 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 
 **Módulos:**
 1. **Setup del Entorno de Desarrollo**
-   - Configurar Azure CLI y Bicep
-   - Instalar y configurar GitHub Copilot
-   - Setup de VS Code con extensiones
+ - Configurar Azure CLI y Bicep
+ - Instalar y configurar GitHub Copilot
+ - Setup de VS Code con extensiones
 
 2. **Primeros Pasos con GitHub Copilot**
-   - Configurar chat modes básicos
-   - Crear primeros prompts para Azure
-   - Generar templates Bicep simples
+ - Configurar chat modes básicos
+ - Crear primeros prompts para Azure
+ - Generar templates Bicep simples
 
 3. **Deployment Básico**
-   - Crear primera infraestructura con Bicep
-   - Configurar CI/CD básico
-   - Monitoring básico de recursos
+ - Crear primera infraestructura con Bicep
+ - Configurar CI/CD básico
+ - Monitoring básico de recursos
 
 **Entregables:**
 - [ ] Ambiente de desarrollo configurado
@@ -115,19 +115,19 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 
 **Módulos:**
 1. **GitHub Copilot Avanzado**
-   - Chat modes especializados
-   - Prompt engineering avanzado
-   - Automation con Copilot
+ - Chat modes especializados
+ - Prompt engineering avanzado
+ - Automation con Copilot
 
 2. **Bicep Patterns Avanzados**
-   - Módulos reutilizables
-   - Security patterns
-   - Multi-environment deployments
+ - Módulos reutilizables
+ - Security patterns
+ - Multi-environment deployments
 
 3. **DevOps Automation**
-   - Advanced CI/CD pipelines
-   - Automated testing
-   - Deployment strategies
+ - Advanced CI/CD pipelines
+ - Automated testing
+ - Deployment strategies
 
 **Entregables:**
 - [ ] 5+ chat modes personalizados
@@ -143,26 +143,26 @@ Azure Agent Pro es un proyecto de investigación educativo diseñado para enseñ
 
 **Módulos:**
 1. **Enterprise Governance**
-   - Azure Policy automation
-   - Multi-subscription management
-   - Compliance automation
+ - Azure Policy automation
+ - Multi-subscription management
+ - Compliance automation
 
 2. **Advanced Security**
-   - Security-by-design implementation
-   - Threat detection automation
-   - Incident response procedures
+ - Security-by-design implementation
+ - Threat detection automation
+ - Incident response procedures
 
 3. **Performance & Optimization**
-   - Cost optimization strategies
-   - Performance monitoring
-   - Capacity planning
+ - Cost optimization strategies
+ - Performance monitoring
+ - Capacity planning
 
 **Entregables:**
 - [ ] Enterprise governance framework
 - [ ] Comprehensive security implementation
 - [ ] Performance optimization system
 
-## 📊 Evaluación y Certificación
+## Evaluación y Certificación
 
 ### 🏆 Criterios de Evaluación
 
@@ -195,9 +195,9 @@ Al completar exitosamente Azure Agent Pro, los participantes reciben:
 - **Portfolio Project** demostrable
 - **Referencia técnica** para futuras oportunidades
 
-## 🎯 Métricas de Éxito
+## Métricas de Éxito
 
-### 📈 Métricas Cuantitativas
+### Métricas Cuantitativas
 
 - **Tiempo de deployment**: < 5 minutos para infraestructura básica
 - **Test coverage**: > 80% de templates Bicep testeados
@@ -212,7 +212,7 @@ Al completar exitosamente Azure Agent Pro, los participantes reciben:
 - **Collaboration**: Effective use de GitHub features
 - **Learning**: Demostrable skill improvement
 
-## 🚀 Siguientes Pasos
+## Siguientes Pasos
 
 Después de completar Azure Agent Pro:
 
@@ -231,4 +231,4 @@ Después de completar Azure Agent Pro:
 
 ---
 
-**¡Bienvenido a tu journey de convertirte en un Azure professional con GitHub Copilot! 🚀**
+**¡Bienvenido a tu journey de convertirte en un Azure professional con GitHub Copilot! **

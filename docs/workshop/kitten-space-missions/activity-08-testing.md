@@ -1,21 +1,21 @@
-# ✅ Actividad 8: Testing y Validación Final
+# Actividad 8: Testing y Validación Final
 
-**⏱️ Duración estimada**: 20 minutos  
-**🎯 Objetivo**: Validar que toda la infraestructura funciona correctamente mediante smoke tests y health checks
-
----
-
-## 📋 Objetivos de aprendizaje
-
-1. ✅ Ejecutar smoke tests de infraestructura
-2. ✅ Validar conectividad entre componentes
-3. ✅ Verificar security configurations
-4. ✅ Realizar health check completo
-5. ✅ Documentar lecciones aprendidas
+**⏱️ Duración estimada**: 20 minutos 
+** Objetivo**: Validar que toda la infraestructura funciona correctamente mediante smoke tests y health checks
 
 ---
 
-## 🧪 Paso 1: Smoke Tests de Infraestructura
+## Objetivos de aprendizaje
+
+1. Ejecutar smoke tests de infraestructura
+2. Validar conectividad entre componentes
+3. Verificar security configurations
+4. Realizar health check completo
+5. Documentar lecciones aprendidas
+
+---
+
+## Paso 1: Smoke Tests de Infraestructura
 
 ### 1.1 Solicitar script de testing al agente
 
@@ -28,19 +28,19 @@ Kitten Space Missions.
 Ruta: docs/workshop/kitten-space-missions/solution/scripts/smoke-tests.sh
 
 Tests a incluir:
-1. ✅ Resource Group existe
-2. ✅ App Service está running
-3. ✅ SQL Database está online
-4. ✅ Key Vault accesible
-5. ✅ Private Endpoint connected
-6. ✅ Application Insights recibiendo datos
-7. ✅ VNet y subnets creados
-8. ✅ NSG rules configuradas
-9. ✅ Managed Identity asignada
-10. ✅ RBAC permissions correctos
+1. Resource Group existe
+2. App Service está running
+3. SQL Database está online
+4. Key Vault accesible
+5. Private Endpoint connected
+6. Application Insights recibiendo datos
+7. VNet y subnets creados
+8. NSG rules configuradas
+9. Managed Identity asignada
+10. RBAC permissions correctos
 
 Cada test debe:
-- Mostrar ✅ si pasa, ❌ si falla
+- Mostrar si pasa, si falla
 - Exit code 0 si todo OK, 1 si algo falla
 - Output detallado para debugging
 ```
@@ -57,19 +57,19 @@ chmod +x smoke-tests.sh
 ./smoke-tests.sh
 
 # Output esperado:
-# 🧪 Smoke Tests - Kitten Space Missions
+# Smoke Tests - Kitten Space Missions
 # ========================================
-# ✅ Resource Group exists: rg-kitten-missions-dev
-# ✅ App Service running: app-kitten-missions-dev
-# ✅ SQL Database online: sqldb-kitten-missions-dev
-# ✅ Key Vault accessible: kv-kitten-missions-dev-xxx
-# ✅ Private Endpoint connected
-# ✅ Application Insights OK
-# ✅ VNet created: vnet-kitten-missions-dev
-# ✅ Managed Identity assigned
-# ✅ RBAC permissions configured
+# Resource Group exists: rg-kitten-missions-dev
+# App Service running: app-kitten-missions-dev
+# SQL Database online: sqldb-kitten-missions-dev
+# Key Vault accessible: kv-kitten-missions-dev-xxx
+# Private Endpoint connected
+# Application Insights OK
+# VNet created: vnet-kitten-missions-dev
+# Managed Identity assigned
+# RBAC permissions configured
 # 
-# 🎉 All tests passed! (9/9)
+# All tests passed! (9/9)
 ```
 
 ---
@@ -100,33 +100,33 @@ cd docs/workshop/kitten-space-missions/solution/scripts
 # Output esperado:
 # 🔐 Security Validation
 # ======================
-# ✅ App Service: HTTPS only enabled
-# ✅ SQL Server: Public access disabled
-# ✅ App Service: TLS 1.2 minimum
-# ✅ Managed Identity: Configured
-# ✅ Key Vault: Soft delete enabled
-# ✅ NSG: No permissive rules (0.0.0.0/0)
+# App Service: HTTPS only enabled
+# SQL Server: Public access disabled
+# App Service: TLS 1.2 minimum
+# Managed Identity: Configured
+# Key Vault: Soft delete enabled
+# NSG: No permissive rules (0.0.0.0/0)
 # 
-# 🛡️ Security score: 100/100
+# Security score: 100/100
 ```
 
 ---
 
-## 🔗 Paso 3: Connectivity Tests
+## Paso 3: Connectivity Tests
 
 ### 3.1 Test App Service → SQL Database
 
 ```bash
 # Verificar que App Service puede conectarse a SQL via Private Endpoint
 az webapp show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "outboundIpAddresses" -o tsv
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "outboundIpAddresses" -o tsv
 
 # Verificar VNet integration
 az webapp vnet-integration list \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev
 ```
 
 ### 3.2 Test App Service → Key Vault
@@ -134,13 +134,13 @@ az webapp vnet-integration list \
 ```bash
 # Verificar Managed Identity tiene acceso a Key Vault
 APP_IDENTITY=$(az webapp identity show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query principalId -o tsv)
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query principalId -o tsv)
 
 az keyvault show \
-  --name [KV-NAME] \
-  --query "properties.accessPolicies[?objectId=='$APP_IDENTITY'].permissions" -o json
+ --name [KV-NAME] \
+ --query "properties.accessPolicies[?objectId=='$APP_IDENTITY'].permissions" -o json
 ```
 
 ---
@@ -173,27 +173,27 @@ zip -r app.zip .
 
 # Deploy a App Service
 az webapp deployment source config-zip \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --src app.zip
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --src app.zip
 
 # Test health endpoint
 APP_URL=$(az webapp show \
-  --name app-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query defaultHostName -o tsv)
+ --name app-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query defaultHostName -o tsv)
 
 curl https://$APP_URL/health
 ```
 
 ---
 
-## 📊 Paso 5: Validación Final Completa
+## Paso 5: Validación Final Completa
 
 ### 5.1 Checklist exhaustivo
 
 ```markdown
-## 🎯 Workshop Completion Checklist
+## Workshop Completion Checklist
 
 ### Infraestructura (Actividad 4-6)
 - [ ] Resource Group creado
@@ -249,7 +249,7 @@ curl https://$APP_URL/health
 
 ---
 
-## 🎓 Paso 6: Lecciones Aprendidas
+## Paso 6: Lecciones Aprendidas
 
 ### 6.1 Documenta tu experiencia
 
@@ -259,61 +259,61 @@ Pide al agente:
 Genera un documento "Lessons Learned" en Markdown con secciones:
 
 1. **Qué funcionó bien**
-   - Aspectos positivos del proceso
-   - Vibe Coding con el agente
-   - Herramientas útiles
+ - Aspectos positivos del proceso
+ - Vibe Coding con el agente
+ - Herramientas útiles
 
 2. **Qué fue desafiante**
-   - Problemas encontrados
-   - Tiempo real vs estimado
-   - Conceptos difíciles
+ - Problemas encontrados
+ - Tiempo real vs estimado
+ - Conceptos difíciles
 
 3. **Mejoras para próxima vez**
-   - Qué harías diferente
-   - Optimizaciones posibles
-   - Aprendizajes técnicos
+ - Qué harías diferente
+ - Optimizaciones posibles
+ - Aprendizajes técnicos
 
 4. **Recomendaciones para otros**
-   - Tips para quien haga este workshop
-   - Errores comunes a evitar
+ - Tips para quien haga este workshop
+ - Errores comunes a evitar
 
 Guarda en: docs/workshop/kitten-space-missions/solution/docs/lessons-learned.md
 ```
 
 ---
 
-## ✅ Entregables Finales del Workshop
+## Entregables Finales del Workshop
 
 Al completar las 8 actividades tienes:
 
 ### Código
-- ✅ Bicep modules modulares y reutilizables
-- ✅ Parameters por entorno (dev/prod)
-- ✅ GitHub Actions workflows (CI/CD)
-- ✅ Scripts de testing y validación
-- ✅ (Opcional) API Node.js básica
+- Bicep modules modulares y reutilizables
+- Parameters por entorno (dev/prod)
+- GitHub Actions workflows (CI/CD)
+- Scripts de testing y validación
+- (Opcional) API Node.js básica
 
 ### Infraestructura Azure
-- ✅ ~15 recursos desplegados en dev
-- ✅ Networking privado configurado
-- ✅ Security best practices aplicadas
-- ✅ Observability completa
+- ~15 recursos desplegados en dev
+- Networking privado configurado
+- Security best practices aplicadas
+- Observability completa
 
 ### Documentación
-- ✅ Architecture Design Document
-- ✅ FinOps Report HTML
-- ✅ Cost Decision Record
-- ✅ Lessons Learned
-- ✅ README.md de cada carpeta
+- Architecture Design Document
+- FinOps Report HTML
+- Cost Decision Record
+- Lessons Learned
+- README.md de cada carpeta
 
 ### Skills Adquiridas
-- ✅ Vibe Coding profesional con agentes IA
-- ✅ Azure Well-Architected Framework aplicado
-- ✅ Infrastructure as Code con Bicep
-- ✅ GitOps/DevOps con GitHub Actions
-- ✅ FinOps y optimización de costos
-- ✅ Security by design
-- ✅ Observability enterprise
+- Vibe Coding profesional con agentes IA
+- Azure Well-Architected Framework aplicado
+- Infrastructure as Code con Bicep
+- GitOps/DevOps con GitHub Actions
+- FinOps y optimización de costos
+- Security by design
+- Observability enterprise
 
 ---
 
@@ -328,9 +328,9 @@ Si quieres eliminar todo:
 
 # Opción 1: Via Azure CLI
 az group delete \
-  --name rg-kitten-missions-dev \
-  --yes \
-  --no-wait
+ --name rg-kitten-missions-dev \
+ --yes \
+ --no-wait
 
 # Opción 2: Via Portal
 # Resource Groups → rg-kitten-missions-dev → Delete resource group
@@ -343,51 +343,51 @@ az group exists --name rg-kitten-missions-dev
 ### Mantener el código
 
 Aunque elimines los recursos Azure, mantén:
-- ✅ Código en tu GitHub fork
-- ✅ Documentación generada
-- ✅ Aprendizajes y experiencia
+- Código en tu GitHub fork
+- Documentación generada
+- Aprendizajes y experiencia
 
 ---
 
-## 🎉 ¡Felicidades!
+## ¡Felicidades!
 
 Has completado el workshop **Vibe Coding con Azure Agent Pro**.
 
 ### Lo que has logrado:
 
-- 🚀 Desplegaste infraestructura enterprise en Azure
-- 🏗️ Aplicaste Azure Well-Architected Framework
-- 💰 Hiciste análisis FinOps profesional
-- 🤖 Dominaste Vibe Coding con agentes IA
+- Desplegaste infraestructura enterprise en Azure
+- Aplicaste Azure Well-Architected Framework
+- Hiciste análisis FinOps profesional
+- Dominaste Vibe Coding con agentes IA
 - 🔐 Implementaste security by design
-- 📊 Configuraste observabilidad completa
+- Configuraste observabilidad completa
 - 🔄 Automatizaste todo con CI/CD
 
 ### Próximos pasos sugeridos:
 
 1. **Escala a producción**
-   - Crea environment "prod"
-   - Agrega geo-redundancy
-   - Implementa blue-green deployments
+ - Crea environment "prod"
+ - Agrega geo-redundancy
+ - Implementa blue-green deployments
 
 2. **Agrega funcionalidad**
-   - Implementa CRUD completo de la API
-   - Agrega autenticación (Azure AD B2C)
-   - Integra con otros servicios Azure
+ - Implementa CRUD completo de la API
+ - Agrega autenticación (Azure AD B2C)
+ - Integra con otros servicios Azure
 
 3. **Mejora observability**
-   - Distributed tracing
-   - Custom metrics
-   - Advanced dashboards
+ - Distributed tracing
+ - Custom metrics
+ - Advanced dashboards
 
 4. **Contribuye al proyecto**
-   - Comparte mejoras en azure-agent-pro
-   - Documenta tu caso de uso
-   - Ayuda a otros en Issues
+ - Comparte mejoras en azure-agent-pro
+ - Documenta tu caso de uso
+ - Ayuda a otros en Issues
 
 ---
 
-## 📚 Recursos para Continuar Aprendiendo
+## Recursos para Continuar Aprendiendo
 
 - [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/)
 - [Bicep Modules Registry](https://github.com/Azure/bicep-registry-modules)
@@ -402,10 +402,11 @@ Has completado el workshop **Vibe Coding con Azure Agent Pro**.
 Gracias por completar este workshop. Esperamos que hayas disfrutado aprendiendo **Vibe Coding profesional** con **Azure Agent Pro**.
 
 Si tienes feedback, sugerencias o encuentras bugs:
-- 📝 Abre un Issue en el repo
+- Abre un Issue en el repo
 - 💬 Comparte tu experiencia
 - ⭐ Dale star al proyecto si te fue útil
 
 ---
 
-**🐱🚀 ¡Que tus gatitos astronautas tengan misiones exitosas!**
+** ¡Que tus gatitos astronautas tengan misiones exitosas!**
+

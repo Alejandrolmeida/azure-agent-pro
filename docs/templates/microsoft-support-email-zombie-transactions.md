@@ -66,10 +66,10 @@ with the following findings:
 - 1 transaction: SELECT query
 
 **Validation Performed:**
-- ✅ ADR (Accelerated Database Recovery): PVS = 0 KB (not the issue)
-- ✅ User tables: Largest table only 1.15 GB (not the issue)
-- ✅ Log file: 1.1% usage, 36 GB total (healthy)
-- ✅ Confirmed: Issue is orphaned transactions blocking space reclamation
+- ADR (Accelerated Database Recovery): PVS = 0 KB (not the issue)
+- User tables: Largest table only 1.15 GB (not the issue)
+- Log file: 1.1% usage, 36 GB total (healthy)
+- Confirmed: Issue is orphaned transactions blocking space reclamation
 
 ## ATTEMPTED SOLUTIONS
 
@@ -83,23 +83,23 @@ to clear these zombie transactions. However, before proceeding, we would like
 Microsoft's guidance on:
 
 1. **Should we perform the failover ourselves via Azure CLI/Portal?**
-   - Command: `az sql db failover --resource-group <rg> --server <server> --name <db>`
-   - Expected downtime: 30-60 seconds
-   - We have a maintenance window available: [suggest date/time in UTC]
+ - Command: `az sql db failover --resource-group <rg> --server <server> --name <db>`
+ - Expected downtime: 30-60 seconds
+ - We have a maintenance window available: [suggest date/time in UTC]
 
 2. **Or would Microsoft prefer to handle this failover through Support?**
-   - To ensure proper monitoring and validation
-   - To capture any additional diagnostics during the process
+ - To ensure proper monitoring and validation
+ - To capture any additional diagnostics during the process
 
 3. **Post-failover expectations:**
-   - How long should space reclamation take? (we estimate 24-48 hours)
-   - Should we expect any performance impacts during recovery?
-   - Are there any additional DMV queries you recommend for validation?
+ - How long should space reclamation take? (we estimate 24-48 hours)
+ - Should we expect any performance impacts during recovery?
+ - Are there any additional DMV queries you recommend for validation?
 
 4. **Root cause investigation:**
-   - What typically causes orphaned transactions to persist for 47+ days?
-   - Are there preventive measures we should implement?
-   - Should we enable additional monitoring/alerts?
+ - What typically causes orphaned transactions to persist for 47+ days?
+ - Are there preventive measures we should implement?
+ - Should we enable additional monitoring/alerts?
 
 ## BUSINESS IMPACT
 
@@ -155,7 +155,7 @@ Environment:
 
 Diagnostic Summary:
 - 8 zombie transactions since Nov 12, 2025 (transaction IDs: 1294, 1297, 1299, 
-  1301, 1304, 1306, 9330, 13751)
+ 1301, 1304, 1306, 9330, 13751)
 - All show session_id = NULL (cannot use KILL command)
 - 1,240 GB unallocated space blocked
 - ADR PVS = 0 KB (ruled out)
@@ -178,28 +178,29 @@ Thank you,
 ## IMPORTANT NOTES
 
 1. **Replace placeholders** with your actual values:
-   - [your-server] → Your Azure SQL server name
-   - [your-database-name] → Your database name
-   - [your-subscription-id] → Your Azure subscription ID
-   - [your-resource-group] → Your resource group name
-   - [date/time in UTC] → Your preferred maintenance window
-   - [Your Name/Title/Company] → Your contact information
+ - [your-server] → Your Azure SQL server name
+ - [your-database-name] → Your database name
+ - [your-subscription-id] → Your Azure subscription ID
+ - [your-resource-group] → Your resource group name
+ - [date/time in UTC] → Your preferred maintenance window
+ - [Your Name/Title/Company] → Your contact information
 
 2. **Attach the diagnostic script**:
-   - File: `docs/queries/zombie-diagnosis-interactive.sql`
-   - Or export the results as .txt from SSMS
+ - File: `docs/queries/zombie-diagnosis-interactive.sql`
+ - Or export the results as .txt from SSMS
 
 3. **Open a support case**:
-   - Azure Portal → Help + Support → New Support Request
-   - Issue Type: Technical
-   - Service: SQL Database
-   - Problem Type: Connectivity
-   - Problem Subtype: Other connectivity issues
+ - Azure Portal → Help + Support → New Support Request
+ - Issue Type: Technical
+ - Service: SQL Database
+ - Problem Type: Connectivity
+ - Problem Subtype: Other connectivity issues
 
 4. **Severity Level**:
-   - Recommend: **Severity B** (Moderate business impact)
-   - Or **Severity C** if you have a scheduled maintenance window
+ - Recommend: **Severity B** (Moderate business impact)
+ - Or **Severity C** if you have a scheduled maintenance window
 
 5. **Expected Response Time**:
-   - Severity B: < 4 hours (business hours)
-   - Severity C: < 8 hours (business hours)
+ - Severity B: < 4 hours (business hours)
+ - Severity C: < 8 hours (business hours)
+

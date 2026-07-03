@@ -1,50 +1,50 @@
-# 💰 Actividad 3: Análisis FinOps Previo al Despliegue
+# Actividad 3: Análisis FinOps Previo al Despliegue
 
-**⏱️ Duración estimada**: 30 minutos  
-**🎯 Objetivo**: Generar un informe HTML profesional con análisis detallado de costos de la infraestructura antes de desplegar en Azure
+**⏱️ Duración estimada**: 30 minutos 
+** Objetivo**: Generar un informe HTML profesional con análisis detallado de costos de la infraestructura antes de desplegar en Azure
 
 ---
 
-## 📋 Objetivos de aprendizaje
+## Objetivos de aprendizaje
 
 Al finalizar esta actividad serás capaz de:
 
-1. ✅ Solicitar al agente análisis FinOps detallados
-2. ✅ Generar informes HTML interactivos de costos
-3. ✅ Comparar diferentes SKUs y sus trade-offs
-4. ✅ Identificar oportunidades de optimización de costos
-5. ✅ Validar que el diseño cumple con el presupuesto objetivo
-6. ✅ Documentar decisiones de costos para stakeholders
+1. Solicitar al agente análisis FinOps detallados
+2. Generar informes HTML interactivos de costos
+3. Comparar diferentes SKUs y sus trade-offs
+4. Identificar oportunidades de optimización de costos
+5. Validar que el diseño cumple con el presupuesto objetivo
+6. Documentar decisiones de costos para stakeholders
 
 ---
 
-## 💡 ¿Qué es FinOps?
+## ¿Qué es FinOps?
 
 **FinOps** (Financial Operations) es una práctica de gestión financiera en la nube que combina:
 
-- 💰 **Optimización de costos** - Pagar solo por lo que necesitas
-- 📊 **Visibilidad** - Entender dónde se gasta el dinero
-- 🎯 **Accountability** - Asignar costos a equipos/proyectos
+- **Optimización de costos** - Pagar solo por lo que necesitas
+- **Visibilidad** - Entender dónde se gasta el dinero
+- **Accountability** - Asignar costos a equipos/proyectos
 - 🔄 **Mejora continua** - Revisar y optimizar regularmente
 
 ### ¿Por qué hacerlo ANTES de desplegar?
 
-- ✅ Evitar sorpresas en la factura de Azure
-- ✅ Validar que el diseño es sostenible económicamente
-- ✅ Identificar oportunidades de ahorro desde día 1
-- ✅ Justificar decisiones técnicas con datos de costos
-- ✅ Obtener aprobación de stakeholders con información clara
+- Evitar sorpresas en la factura de Azure
+- Validar que el diseño es sostenible económicamente
+- Identificar oportunidades de ahorro desde día 1
+- Justificar decisiones técnicas con datos de costos
+- Obtener aprobación de stakeholders con información clara
 
 ---
 
-## 📊 Paso 1: Solicitar Informe FinOps al Agente
+## Paso 1: Solicitar Informe FinOps al Agente
 
 ### 1.1 Contexto previo
 
 Deberías tener de la Actividad 2:
-- ✅ Architecture Design Document (ADD)
-- ✅ Lista de recursos Azure a desplegar
-- ✅ Estimación de costos preliminar
+- Architecture Design Document (ADD)
+- Lista de recursos Azure a desplegar
+- Estimación de costos preliminar
 
 ### 1.2 Prompt optimizado para FinOps
 
@@ -56,11 +56,11 @@ Abre Copilot Chat y usa este prompt:
 Tenemos el diseño arquitectónico validado para Kitten Space Missions API.
 Ahora necesito un análisis FinOps DETALLADO antes de desplegar.
 
-🎯 OBJETIVO:
+ OBJETIVO:
 Generar un informe HTML profesional e interactivo con análisis completo 
 de costos de la infraestructura propuesta.
 
-📋 CONTEXTO:
+ CONTEXTO:
 - Arquitectura: La diseñada en la actividad anterior (ADD)
 - Entorno: dev (sin producción todavía)
 - Budget objetivo: $70-80/mes máximo
@@ -70,50 +70,50 @@ de costos de la infraestructura propuesta.
 📄 CONTENIDO DEL INFORME HTML:
 
 1. **Executive Summary**
-   - Costo total mensual estimado
-   - Comparativa vs budget objetivo
-   - Top 3 recursos más costosos
-   - Nivel de optimización (score sobre 100)
+ - Costo total mensual estimado
+ - Comparativa vs budget objetivo
+ - Top 3 recursos más costosos
+ - Nivel de optimización (score sobre 100)
 
 2. **Desglose por Recurso**
-   Tabla interactiva con:
-   - Recurso Azure
-   - SKU/Tier seleccionado
-   - Justificación técnica
-   - Costo mensual estimado
-   - % del total
-   - Alternativas más baratas (si existen)
-   - Trade-offs de cada alternativa
+ Tabla interactiva con:
+ - Recurso Azure
+ - SKU/Tier seleccionado
+ - Justificación técnica
+ - Costo mensual estimado
+ - % del total
+ - Alternativas más baratas (si existen)
+ - Trade-offs de cada alternativa
 
 3. **Análisis de SKU Comparativo**
-   Para cada servicio principal:
-   - App Service: F1 vs B1 vs B2
-   - SQL Database: Basic vs Standard S0 vs S1
-   - Mostrar pricing, specs, cuándo conviene cada uno
+ Para cada servicio principal:
+ - App Service: F1 vs B1 vs B2
+ - SQL Database: Basic vs Standard S0 vs S1
+ - Mostrar pricing, specs, cuándo conviene cada uno
 
 4. **Optimizaciones Recomendadas**
-   - Auto-shutdown para dev (si aplica)
-   - Reserved instances (si ROI > 0)
-   - Spot instances (para recursos no críticos)
-   - Tagging strategy para cost allocation
-   - Budget alerts configurados
+ - Auto-shutdown para dev (si aplica)
+ - Reserved instances (si ROI > 0)
+ - Spot instances (para recursos no críticos)
+ - Tagging strategy para cost allocation
+ - Budget alerts configurados
 
 5. **Proyección Anual**
-   - Costo mensual × 12
-   - Ahorro potencial con reservas
-   - Costo si escalamos a prod (estimación)
+ - Costo mensual × 12
+ - Ahorro potencial con reservas
+ - Costo si escalamos a prod (estimación)
 
 6. **Risk Assessment**
-   - ¿Qué pasa si tráfico crece 10x?
-   - ¿Costo de disaster recovery?
-   - ¿Impact de compliance requirements?
+ - ¿Qué pasa si tráfico crece 10x?
+ - ¿Costo de disaster recovery?
+ - ¿Impact de compliance requirements?
 
 7. **Action Items**
-   Checklist pre-deploy:
-   - [ ] Budget alert configurado en Azure
-   - [ ] Tags de cost center aplicados
-   - [ ] Auto-scaling configurado correctamente
-   - [ ] Review mensual de costos programado
+ Checklist pre-deploy:
+ - [ ] Budget alert configurado en Azure
+ - [ ] Tags de cost center aplicados
+ - [ ] Auto-scaling configurado correctamente
+ - [ ] Review mensual de costos programado
 
 🎨 FORMATO DEL INFORME HTML:
 - Diseño profesional con CSS moderno
@@ -125,18 +125,18 @@ de costos de la infraestructura propuesta.
 - Secciones colapsables para detalles
 - Botón de "Export PDF" (funcionalidad básica)
 
-📁 OUTPUT:
+ OUTPUT:
 Genera el archivo en:
 docs/workshop/kitten-space-missions/solution/docs/finops-report.html
 
-🔗 FUENTES DE DATOS:
+ FUENTES DE DATOS:
 Usa Azure Pricing Calculator official data para westeurope region.
 Links de referencia:
 - https://azure.microsoft.com/pricing/calculator/
 - https://azure.microsoft.com/pricing/details/app-service/
 - https://azure.microsoft.com/pricing/details/sql-database/
 
-💡 IMPORTANTE:
+ IMPORTANTE:
 - Sé conservador en estimaciones (mejor sobre-estimar que bajo-estimar)
 - Incluye pequeños costos (egress, storage transactions, etc.)
 - Asume 730 horas/mes (24/7)
@@ -253,7 +253,7 @@ Log Analytics:
 
 ---
 
-## 🔍 Paso 3: Análisis de Optimizaciones
+## Paso 3: Análisis de Optimizaciones
 
 ### 3.1 Optimización #1: Evaluar F1 Free tier
 
@@ -309,7 +309,7 @@ para implementarlo.
 
 ---
 
-## 📝 Paso 4: Documentar Decisiones de Costos
+## Paso 4: Documentar Decisiones de Costos
 
 ### 4.1 Crear Cost Decision Record
 
@@ -341,19 +341,19 @@ Formato:
 ## Optimizaciones Aplicadas
 
 1. **Auto-shutdown**: Sí/No
-   - Ahorro: $XX/mes
-   - Trade-off: ...
+ - Ahorro: $XX/mes
+ - Trade-off: ...
 
 2. **Private Endpoint**: Sí/No
-   - Decisión: ...
-   - Justificación: ...
+ - Decisión: ...
+ - Justificación: ...
 
 ## Total Cost Summary
 
 - Base infrastructure: $XX/mes
 - Optimizations: -$XX/mes
 - **Final estimated**: $XX/mes
-- **vs Budget**: ✅ Under budget / ⚠️ At limit / ❌ Over budget
+- **vs Budget**: Under budget / ⚠️ At limit / Over budget
 
 ## Next Review
 - **When**: [mensual]
@@ -384,20 +384,20 @@ Ejemplo de output esperado:
 ```bash
 # Crear budget
 az consumption budget create \
-  --budget-name "kitten-missions-dev-budget" \
-  --amount 100 \
-  --time-grain Monthly \
-  --start-date "2025-01-01" \
-  --end-date "2026-12-31" \
-  --resource-group "rg-kitten-missions-dev" \
-  --notifications \
-    "actual_80=threshold=80,email=tu-email@example.com" \
-    "actual_100=threshold=100,email=tu-email@example.com"
+ --budget-name "kitten-missions-dev-budget" \
+ --amount 100 \
+ --time-grain Monthly \
+ --start-date "2025-01-01" \
+ --end-date "2026-12-31" \
+ --resource-group "rg-kitten-missions-dev" \
+ --notifications \
+ "actual_80=threshold=80,email=tu-email@example.com" \
+ "actual_100=threshold=100,email=tu-email@example.com"
 ```
 
 ---
 
-## 🎯 Paso 5: Comparativa Final - Escenarios
+## Paso 5: Comparativa Final - Escenarios
 
 ### 5.1 Tabla comparativa de escenarios
 
@@ -406,7 +406,7 @@ Pide al agente que complete esta tabla:
 ```
 Genera una tabla comparativa de 3 escenarios de costos:
 - Scenario A: Máxima economía (F1, sin Private Endpoint, Basic SQL)
-- Scenario B: Balanceado (B1, Private Endpoint, Basic SQL)  
+- Scenario B: Balanceado (B1, Private Endpoint, Basic SQL) 
 - Scenario C: Production-ready (B2, Private Endpoint, Standard S0 SQL)
 
 Incluye:
@@ -422,8 +422,8 @@ Tabla esperada:
 |---------|---------------------|----------------------|------------------------|
 | App Service | F1 Free | B1 Basic | B2 Basic |
 | SQL Database | Basic (2GB) | Basic (2GB) | Standard S0 (250GB) |
-| Private Endpoint | ❌ No | ✅ Yes | ✅ Yes |
-| Auto-scaling | ❌ No | ✅ Yes (1-3) | ✅ Yes (1-5) |
+| Private Endpoint | No | Yes | Yes |
+| Auto-scaling | No | Yes (1-3) | Yes (1-5) |
 | **Costo/mes** | **~$7** | **~$45** | **~$85** |
 | **Costo/año** | **~$84** | **~$540** | **~$1,020** |
 | **Uso recomendado** | PoC rápido | Dev estable | Pre-prod/Prod |
@@ -431,16 +431,16 @@ Tabla esperada:
 
 ---
 
-## ✅ Entregables de esta actividad
+## Entregables de esta actividad
 
 Al finalizar deberías tener:
 
-- ✅ **finops-report.html** - Informe interactivo profesional
-- ✅ **cost-decision-record.md** - Documentación de decisiones
-- ✅ Tabla comparativa de escenarios (puede estar en el report)
-- ✅ Comandos de budget alerts preparados
-- ✅ Decisión clara sobre qué escenario desplegar (A, B o C)
-- ✅ Validación de que costo está dentro de budget
+- **finops-report.html** - Informe interactivo profesional
+- **cost-decision-record.md** - Documentación de decisiones
+- Tabla comparativa de escenarios (puede estar en el report)
+- Comandos de budget alerts preparados
+- Decisión clara sobre qué escenario desplegar (A, B o C)
+- Validación de que costo está dentro de budget
 
 ### Commit de los entregables
 
@@ -458,18 +458,18 @@ git push origin main
 
 ---
 
-## 📊 Ejemplo de Decisión Final
+## Ejemplo de Decisión Final
 
 Basado en el análisis, una decisión típica sería:
 
 ```markdown
-## 🎯 Decisión Final: Scenario B (Balanced)
+## Decisión Final: Scenario B (Balanced)
 
 **Justificación**:
 - App Service B1: Necesario para auto-scaling y cumplir SLA 99%
 - SQL Basic: Suficiente para dev, datos de prueba pequeños
 - Private Endpoint: SÍ - Buena práctica desde dev, facilita migración a prod
-- Cost: $45/mes ✅ Dentro de budget $70-80/mes
+- Cost: $45/mes Dentro de budget $70-80/mes
 
 **Trade-offs aceptados**:
 - SQL Basic limitado a 2GB (OK para dev, monitorear crecimiento)
@@ -522,7 +522,7 @@ xdg-open finops-report.html
 
 ---
 
-## 💡 Tips Pro de FinOps
+## Tips Pro de FinOps
 
 ### Tags para Cost Allocation
 
@@ -551,7 +551,7 @@ Configura reminder para revisar:
 
 ---
 
-## 🚀 Siguiente Paso
+## Siguiente Paso
 
 Con el análisis FinOps completo y decisiones de costos documentadas, estás listo para generar el código Bicep de la infraestructura.
 
@@ -561,7 +561,7 @@ En la siguiente actividad el agente generará todos los módulos Bicep modulares
 
 ---
 
-## 📚 Referencias
+## Referencias
 
 - [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 - [Azure Cost Management](https://learn.microsoft.com/azure/cost-management-billing/)
@@ -570,4 +570,5 @@ En la siguiente actividad el agente generará todos los módulos Bicep modulares
 
 ---
 
-**💰 ¡Excelente! Ahora conoces exactamente cuánto costará tu infraestructura y tienes decisiones justificadas. ¡Vamos a generar el código!**
+** ¡Excelente! Ahora conoces exactamente cuánto costará tu infraestructura y tienes decisiones justificadas. ¡Vamos a generar el código!**
+

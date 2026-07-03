@@ -1,10 +1,10 @@
-# 🚀 Inicio Rápido - Workshop Azure Networking
+# Inicio Rápido - Workshop Azure Networking
 
 **Tiempo estimado:** 15 minutos
 
 ---
 
-## ⚡ Setup Express (15 minutos)
+## Setup Express (15 minutos)
 
 ### 1️⃣ Clonar y Configurar (5 min)
 
@@ -51,23 +51,23 @@ Prueba que todo funciona:
 @workspace Usando Azure MCP, lista las redes virtuales en mi suscripción
 ```
 
-Si ves VNETs listadas (o mensaje de que no hay ninguna): **¡Estás listo! 🎉**
+Si ves VNETs listadas (o mensaje de que no hay ninguna): **¡Estás listo! **
 
 ---
 
-## 📋 Verificación Pre-Workshop
+## Verificación Pre-Workshop
 
 Marca estos items:
 
-- [ ] ✅ Copilot responde con 6 servidores MCP
-- [ ] ✅ Azure CLI autenticado (`az account show`)
-- [ ] ✅ Archivo `.env` existe con credenciales
-- [ ] ✅ Puedes ejecutar comandos de Azure CLI
-- [ ] ✅ Git configurado con tu email/nombre
+- [ ] Copilot responde con 6 servidores MCP
+- [ ] Azure CLI autenticado (`az account show`)
+- [ ] Archivo `.env` existe con credenciales
+- [ ] Puedes ejecutar comandos de Azure CLI
+- [ ] Git configurado con tu email/nombre
 
 ---
 
-## 🛠️ Herramientas Necesarias
+## Herramientas Necesarias
 
 ### Verificar Instalaciones
 
@@ -131,9 +131,9 @@ Necesitas rol **Contributor** o **Network Contributor** mínimo.
 Pide a tu administrador:
 ```bash
 az role assignment create \
-  --assignee <tu-email> \
-  --role Contributor \
-  --scope /subscriptions/<subscription-id>
+ --assignee <tu-email> \
+ --role Contributor \
+ --scope /subscriptions/<subscription-id>
 ```
 
 ### Problema: "GitHub Copilot no responde"
@@ -144,7 +144,7 @@ az role assignment create \
 
 ---
 
-## 📚 Recursos Rápidos
+## Recursos Rápidos
 
 - [Azure CLI Reference](https://learn.microsoft.com/cli/azure/)
 - [Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
@@ -152,7 +152,7 @@ az role assignment create \
 
 ---
 
-## ✅ Checklist Final
+## Checklist Final
 
 Antes de empezar el workshop, confirma:
 
@@ -165,3 +165,4 @@ Antes de empezar el workshop, confirma:
 ---
 
 **¿Todo listo? ➡️ [Comienza el Workshop](WORKSHOP_NETWORKING.md)**
+

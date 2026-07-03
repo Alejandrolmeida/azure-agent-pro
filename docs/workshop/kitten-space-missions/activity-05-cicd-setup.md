@@ -1,17 +1,17 @@
-# 🚀 Actividad 5: Configuración CI/CD con GitHub Actions
+# Actividad 5: Configuración CI/CD con GitHub Actions
 
-**⏱️ Duración estimada**: 30 minutos  
-**🎯 Objetivo**: Configurar pipelines de CI/CD automatizados con GitHub Actions usando OIDC (sin secretos)
+**⏱️ Duración estimada**: 30 minutos 
+** Objetivo**: Configurar pipelines de CI/CD automatizados con GitHub Actions usando OIDC (sin secretos)
 
 ---
 
-## 📋 Objetivos de aprendizaje
+## Objetivos de aprendizaje
 
-1. ✅ Configurar OIDC entre GitHub y Azure (secretless authentication)
-2. ✅ Crear workflows de validación y deployment
-3. ✅ Configurar GitHub Environments con protection rules
-4. ✅ Implementar deployment gates y approvals
-5. ✅ Automatizar validación de Bicep en cada PR
+1. Configurar OIDC entre GitHub y Azure (secretless authentication)
+2. Crear workflows de validación y deployment
+3. Configurar GitHub Environments con protection rules
+4. Implementar deployment gates y approvals
+5. Automatizar validación de Bicep en cada PR
 
 ---
 
@@ -22,9 +22,9 @@
 **OIDC** permite que GitHub Actions se autentique en Azure SIN almacenar secretos/passwords en GitHub.
 
 Beneficios:
-- 🔒 No hay secretos que rotar
+- No hay secretos que rotar
 - 🔐 Autenticación basada en tokens de corta duración
-- ✅ Auditable y seguro
+- Auditable y seguro
 
 ### 1.2 Prompt para configurar OIDC
 
@@ -40,9 +40,9 @@ Detalles:
 - Azure Subscription ID: [ejecuta: az account show --query id -o tsv]
 - Permisos: Contributor en subscription
 - Configurar federated credentials para:
-  - Branch: main
-  - Pull requests
-  - Environment: dev
+ - Branch: main
+ - Pull requests
+ - Environment: dev
 
 Genera los comandos listos para copy-paste.
 ```
@@ -84,7 +84,7 @@ Features:
 
 ---
 
-## 🎯 Paso 3: GitHub Environments
+## Paso 3: GitHub Environments
 
 ### 3.1 Crear environment dev
 
@@ -99,23 +99,24 @@ gh api repos/YOUR-USERNAME/azure-agent-pro/environments/dev --method PUT
 
 ```
 Settings → Environments → dev:
-- ✅ Required reviewers: [tu usuario]
-- ✅ Wait timer: 0 minutos
-- ✅ Deployment branches: main only
+- Required reviewers: [tu usuario]
+- Wait timer: 0 minutos
+- Deployment branches: main only
 ```
 
 ---
 
-## ✅ Entregables
+## Entregables
 
-- ✅ OIDC configurado
-- ✅ Workflow validación (.github/workflows/bicep-validation.yml)
-- ✅ Workflow deployment (.github/workflows/deploy-dev.yml)  
-- ✅ Environment dev configurado
-- ✅ GitHub Secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+- OIDC configurado
+- Workflow validación (.github/workflows/bicep-validation.yml)
+- Workflow deployment (.github/workflows/deploy-dev.yml) 
+- Environment dev configurado
+- GitHub Secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 
 ---
 
-## 🚀 Siguiente Paso
+## Siguiente Paso
 
 **➡️ [Actividad 6: Despliegue en Azure](./activity-06-azure-deployment.md)**
+

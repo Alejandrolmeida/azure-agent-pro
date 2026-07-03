@@ -1,50 +1,50 @@
-# 🎯 GitHub Repository Setup Guide for Azure Agent Pro
+# GitHub Repository Setup Guide for Azure Agent Pro
 
-## 📋 Complete Repository Configuration Checklist
+## Complete Repository Configuration Checklist
 
 This guide provides step-by-step instructions for setting up your Azure Agent Pro repository on GitHub with all necessary configurations for a professional educational project.
 
-## 🚀 Initial Repository Setup
+## Initial Repository Setup
 
 ### 1. Create Repository
 
 1. Go to [GitHub.com](https://github.com) and click "New Repository"
 2. Repository settings:
-   - **Repository name**: `azure-agent-pro`
-   - **Description**: `🤖 Educational research project teaching GitHub Copilot enhanced Azure professional management`
-   - **Visibility**: Public ✅
-   - **Initialize with README**: ✅ (will be replaced)
-   - **Add .gitignore**: None (already included)
-   - **Choose a license**: MIT License
+ - **Repository name**: `azure-agent-pro`
+ - **Description**: ` Educational research project teaching GitHub Copilot enhanced Azure professional management`
+ - **Visibility**: Public 
+ - **Initialize with README**: (will be replaced)
+ - **Add .gitignore**: None (already included)
+ - **Choose a license**: MIT License
 
 ### 2. Repository Settings Configuration
 
 #### General Settings
 - **Features**:
-  - ✅ Wikis
-  - ✅ Issues
-  - ✅ Discussions
-  - ✅ Projects
-  - ✅ Preserve this repository (if available)
+ - Wikis
+ - Issues
+ - Discussions
+ - Projects
+ - Preserve this repository (if available)
 
 - **Pull Requests**:
-  - ✅ Allow merge commits
-  - ✅ Allow squash merging
-  - ✅ Allow rebase merging
-  - ✅ Always suggest updating pull request branches
-  - ✅ Allow auto-merge
+ - Allow merge commits
+ - Allow squash merging
+ - Allow rebase merging
+ - Always suggest updating pull request branches
+ - Allow auto-merge
 
 #### Collaborators and Teams
 - Add relevant team members with appropriate permissions:
-  - **Admin**: Project maintainers
-  - **Write**: Active contributors
-  - **Read**: Community members
+ - **Admin**: Project maintainers
+ - **Write**: Active contributors
+ - **Read**: Community members
 
-## 📝 Repository Description
+## Repository Description
 
 **Short Description (160 characters max):**
 ```
-🚀 Educational research project teaching developers how to use GitHub Copilot professionally for Azure subscription management with advanced automation
+ Educational research project teaching developers how to use GitHub Copilot professionally for Azure subscription management with advanced automation
 ```
 
 **About Section:**
@@ -82,7 +82,7 @@ tutorial
 learning
 ```
 
-## 🔒 Security Configuration
+## Security Configuration
 
 ### 1. Branch Protection Rules
 
@@ -90,30 +90,30 @@ Go to Settings > Branches and create protection rules for `main`:
 
 ```yaml
 Branch Protection Settings:
-- Require pull request reviews before merging: ✅
-  - Required approving reviews: 1
-  - Dismiss stale reviews: ✅
-  - Require review from code owners: ✅
-- Require status checks to pass before merging: ✅
-  - Require branches to be up to date: ✅
-  - Status checks:
-    - Bicep Validation
-    - Code Quality
-    - Security Scan
-- Require conversation resolution before merging: ✅
-- Restrict pushes that create files: ✅
-- Do not allow bypassing the above settings: ✅
+- Require pull request reviews before merging: 
+ - Required approving reviews: 1
+ - Dismiss stale reviews: 
+ - Require review from code owners: 
+- Require status checks to pass before merging: 
+ - Require branches to be up to date: 
+ - Status checks:
+ - Bicep Validation
+ - Code Quality
+ - Security Scan
+- Require conversation resolution before merging: 
+- Restrict pushes that create files: 
+- Do not allow bypassing the above settings: 
 ```
 
 ### 2. Security and Analysis
 
 Enable in Settings > Security & analysis:
-- ✅ Dependency graph
-- ✅ Dependabot alerts
-- ✅ Dependabot security updates
-- ✅ Dependabot version updates
-- ✅ Code scanning alerts
-- ✅ Secret scanning alerts
+- Dependency graph
+- Dependabot alerts
+- Dependabot security updates
+- Dependabot version updates
+- Code scanning alerts
+- Secret scanning alerts
 
 ### 3. Actions Permissions
 
@@ -122,7 +122,7 @@ Settings > Actions > General:
 - **Artifact and log retention**: 90 days
 - **Fork pull request workflows**: Require approval for first-time contributors
 
-## 📊 Project Insights Configuration
+## Project Insights Configuration
 
 ### GitHub Insights to Enable
 - **Pulse**: Weekly activity overview
@@ -182,41 +182,41 @@ Enable and configure GitHub Discussions:
 
 ### Discussion Categories
 
-1. **🎓 Learning & Education**
-   - Purpose: Questions about tutorials and learning paths
-   - Type: Q&A
+1. ** Learning & Education**
+ - Purpose: Questions about tutorials and learning paths
+ - Type: Q&A
 
-2. **💡 Ideas & Suggestions**
-   - Purpose: Propose new features or improvements
-   - Type: Idea
+2. ** Ideas & Suggestions**
+ - Purpose: Propose new features or improvements
+ - Type: Idea
 
-3. **🛠️ Implementation Help**
-   - Purpose: Get help with Azure implementations
-   - Type: Q&A
+3. ** Implementation Help**
+ - Purpose: Get help with Azure implementations
+ - Type: Q&A
 
 4. **📢 Announcements**
-   - Purpose: Project updates and announcements
-   - Type: Announcement
+ - Purpose: Project updates and announcements
+ - Type: Announcement
 
 5. **🤝 General Discussion**
-   - Purpose: General community discussions
-   - Type: Open-ended discussion
+ - Purpose: General community discussions
+ - Type: Open-ended discussion
 
-6. **🔧 Technical Deep Dive**
-   - Purpose: Advanced technical discussions
-   - Type: Open-ended discussion
+6. ** Technical Deep Dive**
+ - Purpose: Advanced technical discussions
+ - Type: Open-ended discussion
 
 ## 📱 Social Media & Marketing
 
 ### LinkedIn Post Template
 ```
-🚀 Excited to share Azure Agent Pro - an open-source educational research project!
+ Excited to share Azure Agent Pro - an open-source educational research project!
 
-🎯 Teaching developers & IT admins how to use GitHub Copilot professionally for Azure management
+ Teaching developers & IT admins how to use GitHub Copilot professionally for Azure management
 
-✨ Features:
+ Features:
 • Advanced GitHub Copilot configurations
-• Enterprise-grade Bicep templates  
+• Enterprise-grade Bicep templates 
 • Comprehensive CI/CD automation
 • Step-by-step learning paths
 • Real-world Azure patterns
@@ -230,15 +230,15 @@ Link: https://github.com/alejandrolmeida/azure-agent-pro
 
 ### Twitter/X Post Template
 ```
-🚀 Just launched Azure Agent Pro! 
+ Just launched Azure Agent Pro! 
 
 An open-source project teaching developers how to use #GitHubCopilot professionally for #Azure management
 
-✨ Features enterprise patterns, automation, & comprehensive learning materials
+ Features enterprise patterns, automation, & comprehensive learning materials
 
 Perfect for leveling up your cloud + AI skills! 
 
-🔗 https://github.com/alejandrolmeida/azure-agent-pro
+ https://github.com/alejandrolmeida/azure-agent-pro
 
 #DevOps #CloudComputing #OpenSource
 ```
@@ -247,13 +247,13 @@ Perfect for leveling up your cloud + AI skills!
 
 ### LinkedIn Post Template
 ```
-🚀 Excited to share Azure Agent Pro - an open-source educational research project!
+ Excited to share Azure Agent Pro - an open-source educational research project!
 
-🎯 Teaching developers & IT admins how to use GitHub Copilot professionally for Azure management
+ Teaching developers & IT admins how to use GitHub Copilot professionally for Azure management
 
-✨ Features:
+ Features:
 • Advanced GitHub Copilot configurations
-• Enterprise-grade Bicep templates  
+• Enterprise-grade Bicep templates 
 • Comprehensive CI/CD automation
 • Step-by-step learning paths
 • Real-world Azure patterns
@@ -273,10 +273,10 @@ Create GitHub Projects for tracking:
 ### Project 1: Content Development
 ```
 Columns:
-- 📝 Backlog
-- 🏗️ In Progress
+- Backlog
+- In Progress
 - 👀 Review
-- ✅ Complete
+- Complete
 
 Cards for:
 - Tutorial creation
@@ -291,7 +291,7 @@ Columns:
 - 📬 New Issues
 - 🔄 Triage
 - 💬 Discussion
-- ✅ Resolved
+- Resolved
 
 Cards for:
 - Community questions
@@ -347,7 +347,7 @@ Add to README.md:
 ![Code Quality](https://github.com/alejandrolmeida/azure-agent-pro/workflows/Code%20Quality/badge.svg)
 ```
 
-## 📈 Analytics and Insights
+## Analytics and Insights
 
 ### Enable Repository Insights
 - Go to Insights tab
@@ -356,16 +356,16 @@ Add to README.md:
 
 ### Community Standards
 Ensure all community standards are met:
-- ✅ Description
-- ✅ README
-- ✅ License
-- ✅ Security policy
-- ✅ Issue templates
-- ✅ Pull request template
-- ✅ Contributing guidelines
-- ✅ Code of conduct
+- Description
+- README
+- License
+- Security policy
+- Issue templates
+- Pull request template
+- Contributing guidelines
+- Code of conduct
 
-## 🌟 Repository Topics
+## Repository Topics
 
 Add relevant topics to improve discoverability:
 
@@ -387,7 +387,7 @@ cloud-architecture
 professional-development
 ```
 
-## 📝 Wiki Setup
+## Wiki Setup
 
 Initialize and configure the repository wiki:
 
@@ -403,7 +403,7 @@ Resources - External links and references
 Glossary - Azure and AI terminology
 ```
 
-## 🎯 Release Management
+## Release Management
 
 ### Release Strategy
 - **Semantic Versioning**: Use MAJOR.MINOR.PATCH
@@ -428,7 +428,7 @@ Version 2.0.0 - Expert Content
 - Advanced AI integration
 ```
 
-## ✅ Final Verification Checklist
+## Final Verification Checklist
 
 Before making repository public, verify:
 
@@ -449,27 +449,27 @@ Before making repository public, verify:
 ## � Go Live Steps
 
 1. **Final Security Scan**:
-   ```bash
-   # Run local security check
-   git secrets --scan-history
-   ```
+ ```bash
+ # Run local security check
+ git secrets --scan-history
+ ```
 
 2. **Test All Workflows**:
-   - Create test PR to verify workflows
-   - Ensure all status checks pass
-   - Verify deployment processes
+ - Create test PR to verify workflows
+ - Ensure all status checks pass
+ - Verify deployment processes
 
 3. **Community Announcement**:
-   - Create initial discussion post
-   - Share on relevant platforms
-   - Engage with Azure and GitHub communities
+ - Create initial discussion post
+ - Share on relevant platforms
+ - Engage with Azure and GitHub communities
 
 4. **Monitoring Setup**:
-   - Watch repository activity
-   - Respond to initial issues quickly
-   - Gather community feedback
+ - Watch repository activity
+ - Respond to initial issues quickly
+ - Gather community feedback
 
-## 🔗 Additional Resources
+## Additional Resources
 
 - [GitHub Repository Best Practices](https://docs.github.com/en/repositories)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)

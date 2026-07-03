@@ -1,4 +1,4 @@
-# 🎓 Workshop: Azure Networking Profesional con GitHub Copilot
+# Workshop: Azure Networking Profesional con GitHub Copilot
 
 **Duración:** 4 horas
 **Nivel:** Intermedio-Avanzado
@@ -6,38 +6,38 @@
 
 ---
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 ### Conocimientos
 
-- ✅ Fundamentos de redes (TCP/IP, DNS, routing)
-- ✅ Experiencia básica con Azure Portal
-- ✅ Conocimientos de Azure CLI o PowerShell
-- ✅ Familiaridad con conceptos de IaC (Infrastructure as Code)
+- Fundamentos de redes (TCP/IP, DNS, routing)
+- Experiencia básica con Azure Portal
+- Conocimientos de Azure CLI o PowerShell
+- Familiaridad con conceptos de IaC (Infrastructure as Code)
 
 ### Software
 
-- ✅ Visual Studio Code
-- ✅ GitHub Copilot (licencia activa)
-- ✅ Azure CLI instalado
-- ✅ Git
-- ✅ Node.js 20+
+- Visual Studio Code
+- GitHub Copilot (licencia activa)
+- Azure CLI instalado
+- Git
+- Node.js 20+
 
 ### Cuenta de Azure
 
-- ✅ Suscripción de Azure activa
-- ✅ Permisos de Contributor o superior
-- ✅ Límites de cuota suficientes para:
-  - VNETs (mínimo 5)
-  - VPN Gateways (mínimo 1)
-  - Public IPs (mínimo 3)
-  - Azure Firewall (opcional)
+- Suscripción de Azure activa
+- Permisos de Contributor o superior
+- Límites de cuota suficientes para:
+ - VNETs (mínimo 5)
+ - VPN Gateways (mínimo 1)
+ - Public IPs (mínimo 3)
+ - Azure Firewall (opcional)
 
 ---
 
 ## 📖 Agenda del Workshop
 
-### 🔧 Módulo 1: Setup y Verificación de MCP Servers (30 min)
+### Módulo 1: Setup y Verificación de MCP Servers (30 min)
 
 **Objetivo**: Configurar GitHub Copilot con MCP servers para acceso a recursos de Azure
 
@@ -98,11 +98,11 @@ arquitecturas hub-spoke en Azure
 y sugiere mejoras según las mejores prácticas de Azure
 ```
 
-**🎯 Checkpoint**: Al finalizar este módulo deberías tener todos los servidores MCP funcionando y comprender qué hace cada uno.
+** Checkpoint**: Al finalizar este módulo deberías tener todos los servidores MCP funcionando y comprender qué hace cada uno.
 
 ---
 
-### 🏗️ Módulo 2: Diseño de Redes y Arquitecturas Hub-Spoke (60 min)
+### Módulo 2: Diseño de Redes y Arquitecturas Hub-Spoke (60 min)
 
 **Objetivo**: Diseñar e implementar una arquitectura de red hub-spoke con Bicep y GitHub Copilot
 
@@ -116,12 +116,12 @@ Usa Copilot para generar un diseño:
 @workspace Genera un diagrama en texto (ASCII art) de una arquitectura
 hub-spoke con:
 - 1 VNET hub (10.0.0.0/16) con subnets para:
-  - AzureFirewallSubnet (10.0.0.0/24)
-  - GatewaySubnet (10.0.1.0/24)
-  - Management (10.0.2.0/24)
+ - AzureFirewallSubnet (10.0.0.0/24)
+ - GatewaySubnet (10.0.1.0/24)
+ - Management (10.0.2.0/24)
 - 2 VNET spokes:
-  - Spoke 1 (10.1.0.0/16) para aplicaciones web
-  - Spoke 2 (10.2.0.0/16) para bases de datos
+ - Spoke 1 (10.1.0.0/16) para aplicaciones web
+ - Spoke 2 (10.2.0.0/16) para bases de datos
 - Peering entre hub y cada spoke
 ```
 
@@ -188,11 +188,11 @@ Bicep con los parámetros de desarrollo
 4. Valide que no hay overlapping de rangos IP
 ```
 
-**🎯 Checkpoint**: Deberías tener una arquitectura hub-spoke funcional desplegada en Azure.
+** Checkpoint**: Deberías tener una arquitectura hub-spoke funcional desplegada en Azure.
 
 ---
 
-### 🔒 Módulo 3: Seguridad de Red (60 min)
+### Módulo 3: Seguridad de Red (60 min)
 
 **Objetivo**: Implementar seguridad de red con NSGs, Azure Firewall y Application Gateway
 
@@ -311,7 +311,7 @@ Asocia las Route Tables a las subnets correspondientes
 6. Configure reglas custom para bloquear IPs específicas
 ```
 
-**🎯 Checkpoint**: Deberías tener una infraestructura de seguridad multinivel implementada.
+** Checkpoint**: Deberías tener una infraestructura de seguridad multinivel implementada.
 
 ---
 
@@ -339,9 +339,9 @@ Asocia las Route Tables a las subnets correspondientes
 - Oficina local con IP pública: 203.0.113.50
 - Rango de red local: 192.168.0.0/16
 - Subredes específicas:
-  - 192.168.10.0/24 (Servidores)
-  - 192.168.20.0/24 (Clientes)
-  - 192.168.30.0/24 (DMZ)
+ - 192.168.10.0/24 (Servidores)
+ - 192.168.20.0/24 (Clientes)
+ - 192.168.30.0/24 (DMZ)
 - BGP: ASN 65001, BGP Peer IP: 192.168.255.254
 ```
 
@@ -352,8 +352,8 @@ Asocia las Route Tables a las subnets correspondientes
 1. Shared key seguro (usa Azure Key Vault)
 2. IKEv2 protocol
 3. IPsec/IKE policy custom:
-   - IKE Phase 1: AES256, SHA256, DHGroup14
-   - IKE Phase 2: GCMAES256, PFS2048
+ - IKE Phase 1: AES256, SHA256, DHGroup14
+ - IKE Phase 2: GCMAES256, PFS2048
 4. Habilita BGP
 5. Configure connection monitoring
 ```
@@ -418,11 +418,11 @@ Asocia las Route Tables a las subnets correspondientes
 8. Connection monitoring y alerting
 ```
 
-**🎯 Checkpoint**: Deberías entender cómo configurar conectividad híbrida completa.
+** Checkpoint**: Deberías entender cómo configurar conectividad híbrida completa.
 
 ---
 
-### 📊 Módulo 5: Monitorización y Troubleshooting (30 min)
+### Módulo 5: Monitorización y Troubleshooting (30 min)
 
 **Objetivo**: Implementar monitorización completa con Network Watcher, Azure Monitor y Log Analytics
 
@@ -469,10 +469,10 @@ Asocia las Route Tables a las subnets correspondientes
 1. Log Analytics Workspace en la misma región que el hub
 2. Retention: 90 días
 3. Data Collection Rules para:
-   - NSG Flow Logs
-   - Azure Firewall Logs
-   - VPN Gateway Diagnostics
-   - Application Gateway Logs
+ - NSG Flow Logs
+ - Azure Firewall Logs
+ - VPN Gateway Diagnostics
+ - Application Gateway Logs
 4. Queries guardadas para análisis común
 ```
 
@@ -498,7 +498,7 @@ Asocia las Route Tables a las subnets correspondientes
 5. ExpressRoute BGP session down (critical)
 ```
 
-**🎯 Checkpoint**: Deberías tener visibilidad completa de tu infraestructura de red.
+** Checkpoint**: Deberías tener visibilidad completa de tu infraestructura de red.
 
 ---
 
@@ -514,9 +514,9 @@ Asocia las Route Tables a las subnets correspondientes
 4. Manual approval para Prod
 5. Deploy a Prod: después de approval
 6. Post-deployment tests:
-   - Verificar peering status
-   - Verificar VPN connectivity
-   - Verificar NSG rules aplicadas
+ - Verificar peering status
+ - Verificar VPN connectivity
+ - Verificar NSG rules aplicadas
 7. Rollback automático si tests fallan
 ```
 
@@ -534,25 +534,25 @@ Asocia las Route Tables a las subnets correspondientes
 
 ---
 
-## 📝 Resumen y Próximos Pasos
+## Resumen y Próximos Pasos
 
 ### ¿Qué has aprendido?
 
-✅ Configurar GitHub Copilot con MCP servers para Azure
-✅ Diseñar arquitecturas hub-spoke con Bicep
-✅ Implementar seguridad de red multinivel
-✅ Configurar conectividad híbrida (VPN/ExpressRoute)
-✅ Monitorizar y troubleshoot redes en Azure
-✅ Automatizar despliegues con GitHub Actions
+ Configurar GitHub Copilot con MCP servers para Azure
+ Diseñar arquitecturas hub-spoke con Bicep
+ Implementar seguridad de red multinivel
+ Configurar conectividad híbrida (VPN/ExpressRoute)
+ Monitorizar y troubleshoot redes en Azure
+ Automatizar despliegues con GitHub Actions
 
 ### Certificaciones
 
 Este workshop te prepara para:
 
 - **AZ-104**: Microsoft Azure Administrator
-  - Módulo: Implement and manage virtual networking
+ - Módulo: Implement and manage virtual networking
 - **AZ-700**: Designing and Implementing Microsoft Azure Networking Solutions
-  - Todos los objetivos del examen
+ - Todos los objetivos del examen
 
 ### Recursos para Continuar
 
@@ -567,8 +567,9 @@ Este workshop te prepara para:
 
 Por favor comparte tu feedback del workshop:
 
-- 🌟 ¿Qué te gustó más?
-- 🔧 ¿Qué mejorarías?
-- 💡 ¿Qué temas adicionales te gustaría cubrir?
+- ¿Qué te gustó más?
+- ¿Qué mejorarías?
+- ¿Qué temas adicionales te gustaría cubrir?
 
-**¡Gracias por participar! 🎉**
+**¡Gracias por participar! **
+

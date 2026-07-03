@@ -2,7 +2,7 @@
 
 Herramientas para ejecutar y analizar consultas SQL en Azure SQL Databases.
 
-## 🛠️ Herramientas Disponibles
+## Herramientas Disponibles
 
 ### 1. sql-query.sh - Ejecutor de Consultas SQL
 
@@ -49,7 +49,7 @@ Analiza rendimiento y proporciona recomendaciones de optimización.
 ./scripts/agents/sql-dba/sql-analyzer.sh -s myserver -d mydb -a slow-queries
 ```
 
-## 📦 Módulo Bicep
+## Módulo Bicep
 
 **Ubicación**: `bicep/modules/sql-database.bicep`
 
@@ -57,15 +57,15 @@ Despliega Azure SQL con seguridad y monitoreo avanzado.
 
 ```bicep
 module sqlDb './modules/sql-database.bicep' = {
-  name: 'sql-deployment'
-  params: {
-    sqlServerName: 'sql-prod'
-    databaseName: 'orders'
-    databaseSku: 'GP_Gen5_2'
-    enableAzureADAuth: true
-    enablePrivateEndpoint: true
-    logAnalyticsWorkspaceId: logAnalytics.id
-  }
+ name: 'sql-deployment'
+ params: {
+ sqlServerName: 'sql-prod'
+ databaseName: 'orders'
+ databaseSku: 'GP_Gen5_2'
+ enableAzureADAuth: true
+ enablePrivateEndpoint: true
+ logAnalyticsWorkspaceId: logAnalytics.id
+ }
 }
 ```
 
@@ -76,7 +76,7 @@ module sqlDb './modules/sql-database.bicep' = {
 - No passwords en plaintext
 - Variables de entorno para credenciales
 
-## 📊 Casos de Uso con Copilot
+## Casos de Uso con Copilot
 
 El agente puede:
 1. Analizar performance automáticamente
@@ -86,3 +86,4 @@ El agente puede:
 5. Generar reportes de rendimiento
 
 Ver guía completa en: [sql-tools-guide.md](./sql-tools-guide.md)
+

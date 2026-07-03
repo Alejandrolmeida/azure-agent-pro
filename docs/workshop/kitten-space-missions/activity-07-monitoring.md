@@ -1,30 +1,30 @@
-# 📊 Actividad 7: Monitoreo y Observabilidad
+# Actividad 7: Monitoreo y Observabilidad
 
-**⏱️ Duración estimada**: 20 minutos  
-**🎯 Objetivo**: Configurar Application Insights, dashboards y alertas para observabilidad completa de la solución
-
----
-
-## 📋 Objetivos de aprendizaje
-
-1. ✅ Configurar queries en Application Insights
-2. ✅ Crear dashboards de monitoreo
-3. ✅ Configurar alertas críticas
-4. ✅ Entender métricas clave (latency, availability, errors)
-5. ✅ Revisar diagnostic logs
+**⏱️ Duración estimada**: 20 minutos 
+** Objetivo**: Configurar Application Insights, dashboards y alertas para observabilidad completa de la solución
 
 ---
 
-## 🔍 Paso 1: Explorar Application Insights
+## Objetivos de aprendizaje
+
+1. Configurar queries en Application Insights
+2. Crear dashboards de monitoreo
+3. Configurar alertas críticas
+4. Entender métricas clave (latency, availability, errors)
+5. Revisar diagnostic logs
+
+---
+
+## Paso 1: Explorar Application Insights
 
 ### 1.1 Acceder a Application Insights
 
 ```bash
 # Obtener URL de Application Insights
 az monitor app-insights component show \
-  --app appi-kitten-missions-dev \
-  --resource-group rg-kitten-missions-dev \
-  --query "id" -o tsv
+ --app appi-kitten-missions-dev \
+ --resource-group rg-kitten-missions-dev \
+ --query "id" -o tsv
 ```
 
 **En Azure Portal**:
@@ -42,7 +42,7 @@ az monitor app-insights component show \
 
 ---
 
-## 📈 Paso 2: Queries KQL Esenciales
+## Paso 2: Queries KQL Esenciales
 
 ### 2.1 Solicitar queries al agente
 
@@ -86,7 +86,7 @@ requests
 requests
 | where timestamp > ago(1h)
 | summarize TotalRequests = count(), 
-            FailedRequests = countif(success == false)
+ FailedRequests = countif(success == false)
 | extend ErrorRate = (FailedRequests * 100.0) / TotalRequests
 | project ErrorRate, TotalRequests, FailedRequests
 ```
@@ -117,10 +117,10 @@ Dame los pasos para crearlo en Azure Portal o JSON ARM template.
 1. Dashboard → Create → Blank dashboard
 2. Nombre: "Kitten Missions - Dev"
 3. Add tiles:
-   - **Metrics chart** (App Service response time)
-   - **Metrics chart** (SQL Database DTU usage)
-   - **Log Analytics query** (error rate)
-   - **Application Insights** (availability)
+ - **Metrics chart** (App Service response time)
+ - **Metrics chart** (SQL Database DTU usage)
+ - **Log Analytics query** (error rate)
+ - **Application Insights** (availability)
 
 ---
 
@@ -135,24 +135,24 @@ Genera comandos Azure CLI o ARM template para configurar estas alertas
 en Application Insights:
 
 1. **High Error Rate**
-   - Condición: HTTP 5xx > 10 en 5 minutos
-   - Severity: Critical (Sev 0)
-   - Action: Email [tu-email]
+ - Condición: HTTP 5xx > 10 en 5 minutos
+ - Severity: Critical (Sev 0)
+ - Action: Email [tu-email]
 
 2. **High Response Time**
-   - Condición: p95 response time > 500ms por 10 minutos
-   - Severity: Warning (Sev 2)
-   - Action: Email
+ - Condición: p95 response time > 500ms por 10 minutos
+ - Severity: Warning (Sev 2)
+ - Action: Email
 
 3. **Availability Drop**
-   - Condición: Availability < 99% en 15 minutos
-   - Severity: Critical (Sev 0)
-   - Action: Email + SMS (opcional)
+ - Condición: Availability < 99% en 15 minutos
+ - Severity: Critical (Sev 0)
+ - Action: Email + SMS (opcional)
 
 4. **High SQL DTU**
-   - Condición: SQL Database DTU > 80% por 10 minutos
-   - Severity: Warning (Sev 2)
-   - Action: Email
+ - Condición: SQL Database DTU > 80% por 10 minutos
+ - Severity: Warning (Sev 2)
+ - Action: Email
 
 Resource Group: rg-kitten-missions-dev
 ```
@@ -162,10 +162,10 @@ Resource Group: rg-kitten-missions-dev
 ```bash
 # Action Group para notificaciones
 az monitor action-group create \
-  --name "ag-kitten-missions-dev" \
-  --resource-group "rg-kitten-missions-dev" \
-  --short-name "KittenOps" \
-  --email-receiver "admin" "[tu-email]"
+ --name "ag-kitten-missions-dev" \
+ --resource-group "rg-kitten-missions-dev" \
+ --short-name "KittenOps" \
+ --email-receiver "admin" "[tu-email]"
 ```
 
 ### 4.3 Crear alerta de ejemplo
@@ -173,50 +173,50 @@ az monitor action-group create \
 ```bash
 # Alerta: High error rate
 az monitor metrics alert create \
-  --name "High-Error-Rate" \
-  --resource-group "rg-kitten-missions-dev" \
-  --scopes [APP-INSIGHTS-RESOURCE-ID] \
-  --condition "count failed requests > 10" \
-  --window-size 5m \
-  --evaluation-frequency 1m \
-  --action [ACTION-GROUP-ID] \
-  --severity 0
+ --name "High-Error-Rate" \
+ --resource-group "rg-kitten-missions-dev" \
+ --scopes [APP-INSIGHTS-RESOURCE-ID] \
+ --condition "count failed requests > 10" \
+ --window-size 5m \
+ --evaluation-frequency 1m \
+ --action [ACTION-GROUP-ID] \
+ --severity 0
 ```
 
 ---
 
-## 📝 Paso 5: Diagnostic Settings
+## Paso 5: Diagnostic Settings
 
 ### 5.1 Verificar diagnostic settings
 
 ```bash
 # Listar diagnostic settings de App Service
 az monitor diagnostic-settings list \
-  --resource [APP-SERVICE-RESOURCE-ID] \
-  | jq '.value[].logs'
+ --resource [APP-SERVICE-RESOURCE-ID] \
+ | jq '.value[].logs'
 ```
 
 ### 5.2 Logs importantes habilitados
 
 Verificar que estos logs están habilitados:
-- ✅ AppServiceHTTPLogs
-- ✅ AppServiceConsoleLogs
-- ✅ AppServiceAppLogs
-- ✅ AppServicePlatformLogs
+- AppServiceHTTPLogs
+- AppServiceConsoleLogs
+- AppServiceAppLogs
+- AppServicePlatformLogs
 
 ---
 
-## ✅ Entregables
+## Entregables
 
-- ✅ Queries KQL guardadas en Application Insights
-- ✅ Dashboard creado con métricas clave
-- ✅ 3-4 alertas configuradas
-- ✅ Action Group para notificaciones
-- ✅ Diagnostic settings verificados
+- Queries KQL guardadas en Application Insights
+- Dashboard creado con métricas clave
+- 3-4 alertas configuradas
+- Action Group para notificaciones
+- Diagnostic settings verificados
 
 ---
 
-## 💡 Tips Pro de Observability
+## Tips Pro de Observability
 
 ### SRE Golden Signals
 
@@ -240,15 +240,16 @@ dependencies
 ```kql
 dependencies
 | where type == "SQL"
-| where duration > 1000  // > 1 segundo
+| where duration > 1000 // > 1 segundo
 | project timestamp, name, duration, success
 | order by timestamp desc
 ```
 
 ---
 
-## 🚀 Siguiente Paso
+## Siguiente Paso
 
 **➡️ [Actividad 8: Testing y Validación](./activity-08-testing.md)**
 
 En la última actividad desplegarás una API simple de prueba y ejecutarás smoke tests completos.
+

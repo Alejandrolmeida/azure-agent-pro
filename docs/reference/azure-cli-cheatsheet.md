@@ -1,4 +1,4 @@
-# Azure CLI Cheatsheet 🚀
+# Azure CLI Cheatsheet 
 
 Una guía completa de comandos Azure CLI organizados por categorías con ejemplos prácticos y mejores prácticas.
 
@@ -86,7 +86,7 @@ az account list-locations --query '[].{Name:name, DisplayName:displayName}' -o t
 
 ---
 
-## 📦 Grupos de Recursos
+## Grupos de Recursos
 
 ### Operaciones Básicas
 ```bash
@@ -123,18 +123,18 @@ az group show --name myResourceGroup --query tags
 
 ---
 
-## 💻 Compute (VMs)
+## Compute (VMs)
 
 ### Virtual Machines
 ```bash
 # Crear VM
 az vm create \
-  --resource-group myResourceGroup \
-  --name myVM \
-  --image Ubuntu2204 \
-  --admin-username azureuser \
-  --generate-ssh-keys \
-  --size Standard_B1s
+ --resource-group myResourceGroup \
+ --name myVM \
+ --image Ubuntu2204 \
+ --admin-username azureuser \
+ --generate-ssh-keys \
+ --size Standard_B1s
 
 # Listar VMs
 az vm list
@@ -164,12 +164,12 @@ az vm resize --resource-group myResourceGroup --name myVM --size Standard_B2s
 ```bash
 # Crear VM Scale Set
 az vmss create \
-  --resource-group myResourceGroup \
-  --name myScaleSet \
-  --image Ubuntu2204 \
-  --upgrade-policy-mode automatic \
-  --admin-username azureuser \
-  --generate-ssh-keys
+ --resource-group myResourceGroup \
+ --name myScaleSet \
+ --image Ubuntu2204 \
+ --upgrade-policy-mode automatic \
+ --admin-username azureuser \
+ --generate-ssh-keys
 
 # Escalar manualmente
 az vmss scale --resource-group myResourceGroup --name myScaleSet --new-capacity 5
@@ -186,10 +186,10 @@ az vmss list-instances --resource-group myResourceGroup --name myScaleSet
 ```bash
 # Crear storage account
 az storage account create \
-  --name mystorageaccount \
-  --resource-group myResourceGroup \
-  --location eastus \
-  --sku Standard_LRS
+ --name mystorageaccount \
+ --resource-group myResourceGroup \
+ --location eastus \
+ --sku Standard_LRS
 
 # Listar storage accounts
 az storage account list
@@ -211,20 +211,20 @@ az storage container create --name mycontainer --account-name mystorageaccount
 
 # Subir archivo
 az storage blob upload \
-  --account-name mystorageaccount \
-  --container-name mycontainer \
-  --name myblob \
-  --file /path/to/file
+ --account-name mystorageaccount \
+ --container-name mycontainer \
+ --name myblob \
+ --file /path/to/file
 
 # Listar blobs
 az storage blob list --account-name mystorageaccount --container-name mycontainer
 
 # Descargar blob
 az storage blob download \
-  --account-name mystorageaccount \
-  --container-name mycontainer \
-  --name myblob \
-  --file /path/to/download
+ --account-name mystorageaccount \
+ --container-name mycontainer \
+ --name myblob \
+ --file /path/to/download
 ```
 
 ---
@@ -235,18 +235,18 @@ az storage blob download \
 ```bash
 # Crear VNet
 az network vnet create \
-  --resource-group myResourceGroup \
-  --name myVNet \
-  --address-prefix 10.0.0.0/16 \
-  --subnet-name mySubnet \
-  --subnet-prefix 10.0.1.0/24
+ --resource-group myResourceGroup \
+ --name myVNet \
+ --address-prefix 10.0.0.0/16 \
+ --subnet-name mySubnet \
+ --subnet-prefix 10.0.1.0/24
 
 # Crear subnet adicional
 az network vnet subnet create \
-  --resource-group myResourceGroup \
-  --vnet-name myVNet \
-  --name mySubnet2 \
-  --address-prefix 10.0.2.0/24
+ --resource-group myResourceGroup \
+ --vnet-name myVNet \
+ --name mySubnet2 \
+ --address-prefix 10.0.2.0/24
 
 # Listar VNets
 az network vnet list
@@ -259,56 +259,56 @@ az network nsg create --resource-group myResourceGroup --name myNSG
 
 # Crear regla NSG
 az network nsg rule create \
-  --resource-group myResourceGroup \
-  --nsg-name myNSG \
-  --name AllowHTTP \
-  --protocol tcp \
-  --priority 1000 \
-  --destination-port-range 80 \
-  --access allow
+ --resource-group myResourceGroup \
+ --nsg-name myNSG \
+ --name AllowHTTP \
+ --protocol tcp \
+ --priority 1000 \
+ --destination-port-range 80 \
+ --access allow
 
 # Asociar NSG a subnet
 az network vnet subnet update \
-  --resource-group myResourceGroup \
-  --vnet-name myVNet \
-  --name mySubnet \
-  --network-security-group myNSG
+ --resource-group myResourceGroup \
+ --vnet-name myVNet \
+ --name mySubnet \
+ --network-security-group myNSG
 ```
 
 ### Load Balancer
 ```bash
 # Crear Load Balancer público
 az network lb create \
-  --resource-group myResourceGroup \
-  --name myLoadBalancer \
-  --public-ip-address myPublicIP \
-  --frontend-ip-name myFrontEnd \
-  --backend-pool-name myBackEndPool
+ --resource-group myResourceGroup \
+ --name myLoadBalancer \
+ --public-ip-address myPublicIP \
+ --frontend-ip-name myFrontEnd \
+ --backend-pool-name myBackEndPool
 
 # Crear health probe
 az network lb probe create \
-  --resource-group myResourceGroup \
-  --lb-name myLoadBalancer \
-  --name myHealthProbe \
-  --protocol tcp \
-  --port 80
+ --resource-group myResourceGroup \
+ --lb-name myLoadBalancer \
+ --name myHealthProbe \
+ --protocol tcp \
+ --port 80
 
 # Crear regla de balanceo
 az network lb rule create \
-  --resource-group myResourceGroup \
-  --lb-name myLoadBalancer \
-  --name myHTTPRule \
-  --protocol tcp \
-  --frontend-port 80 \
-  --backend-port 80 \
-  --frontend-ip-name myFrontEnd \
-  --backend-pool-name myBackEndPool \
-  --probe-name myHealthProbe
+ --resource-group myResourceGroup \
+ --lb-name myLoadBalancer \
+ --name myHTTPRule \
+ --protocol tcp \
+ --frontend-port 80 \
+ --backend-port 80 \
+ --frontend-ip-name myFrontEnd \
+ --backend-pool-name myBackEndPool \
+ --probe-name myHealthProbe
 ```
 
 ---
 
-## 👥 Azure Active Directory
+## Azure Active Directory
 
 ### Service Principals
 ```bash
@@ -323,9 +323,9 @@ az ad sp delete --id <object-id>
 
 # Asignar rol a service principal
 az role assignment create \
-  --assignee <app-id> \
-  --role Contributor \
-  --scope /subscriptions/<subscription-id>/resourceGroups/myResourceGroup
+ --assignee <app-id> \
+ --role Contributor \
+ --scope /subscriptions/<subscription-id>/resourceGroups/myResourceGroup
 ```
 
 ### Roles y Permisos
@@ -335,18 +335,18 @@ az role definition list
 
 # Crear asignación de rol
 az role assignment create \
-  --assignee user@domain.com \
-  --role "Virtual Machine Contributor" \
-  --resource-group myResourceGroup
+ --assignee user@domain.com \
+ --role "Virtual Machine Contributor" \
+ --resource-group myResourceGroup
 
 # Listar asignaciones de rol
 az role assignment list --assignee user@domain.com
 
 # Eliminar asignación de rol
 az role assignment delete \
-  --assignee user@domain.com \
-  --role "Virtual Machine Contributor" \
-  --resource-group myResourceGroup
+ --assignee user@domain.com \
+ --role "Virtual Machine Contributor" \
+ --resource-group myResourceGroup
 ```
 
 ---
@@ -357,15 +357,15 @@ az role assignment delete \
 ```bash
 # Crear Key Vault
 az keyvault create \
-  --name myKeyVault \
-  --resource-group myResourceGroup \
-  --location eastus
+ --name myKeyVault \
+ --resource-group myResourceGroup \
+ --location eastus
 
 # Establecer política de acceso
 az keyvault set-policy \
-  --name myKeyVault \
-  --upn user@domain.com \
-  --secret-permissions get list set delete
+ --name myKeyVault \
+ --upn user@domain.com \
+ --secret-permissions get list set delete
 
 # Crear secret
 az keyvault secret set --vault-name myKeyVault --name mySecret --value mySecretValue
@@ -387,28 +387,28 @@ az keyvault key create --vault-name myKeyVault --name myKey --protection softwar
 
 # Crear certificado
 az keyvault certificate create \
-  --vault-name myKeyVault \
-  --name myCertificate \
-  --policy "$(az keyvault certificate get-default-policy)"
+ --vault-name myKeyVault \
+ --name myCertificate \
+ --policy "$(az keyvault certificate get-default-policy)"
 
 # Importar certificado
 az keyvault certificate import \
-  --vault-name myKeyVault \
-  --name myCertificate \
-  --file /path/to/cert.pfx
+ --vault-name myKeyVault \
+ --name myCertificate \
+ --file /path/to/cert.pfx
 ```
 
 ---
 
-## 📦 Container Services
+## Container Services
 
 ### Azure Container Registry
 ```bash
 # Crear ACR
 az acr create \
-  --resource-group myResourceGroup \
-  --name myRegistry \
-  --sku Basic
+ --resource-group myResourceGroup \
+ --name myRegistry \
+ --sku Basic
 
 # Login a ACR
 az acr login --name myRegistry
@@ -427,11 +427,11 @@ az acr repository show-tags --name myRegistry --repository myapp
 ```bash
 # Crear container instance
 az container create \
-  --resource-group myResourceGroup \
-  --name mycontainer \
-  --image nginx \
-  --dns-name-label myapp \
-  --ports 80
+ --resource-group myResourceGroup \
+ --name mycontainer \
+ --image nginx \
+ --dns-name-label myapp \
+ --ports 80
 
 # Mostrar logs
 az container logs --resource-group myResourceGroup --name mycontainer
@@ -444,11 +444,11 @@ az container exec --resource-group myResourceGroup --name mycontainer --exec-com
 ```bash
 # Crear cluster AKS
 az aks create \
-  --resource-group myResourceGroup \
-  --name myAKSCluster \
-  --node-count 1 \
-  --enable-addons monitoring \
-  --generate-ssh-keys
+ --resource-group myResourceGroup \
+ --name myAKSCluster \
+ --node-count 1 \
+ --enable-addons monitoring \
+ --generate-ssh-keys
 
 # Obtener credenciales
 az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
@@ -468,29 +468,29 @@ az aks upgrade --resource-group myResourceGroup --name myAKSCluster --kubernetes
 ```bash
 # Crear App Service Plan
 az appservice plan create \
-  --name myAppServicePlan \
-  --resource-group myResourceGroup \
-  --sku B1
+ --name myAppServicePlan \
+ --resource-group myResourceGroup \
+ --sku B1
 
 # Crear Web App
 az webapp create \
-  --resource-group myResourceGroup \
-  --plan myAppServicePlan \
-  --name myWebApp \
-  --runtime "NODE|18-lts"
+ --resource-group myResourceGroup \
+ --plan myAppServicePlan \
+ --name myWebApp \
+ --runtime "NODE|18-lts"
 
 # Deploy desde Git
 az webapp deployment source config \
-  --resource-group myResourceGroup \
-  --name myWebApp \
-  --repo-url https://github.com/user/repo \
-  --branch main
+ --resource-group myResourceGroup \
+ --name myWebApp \
+ --repo-url https://github.com/user/repo \
+ --branch main
 
 # Configurar app settings
 az webapp config appsettings set \
-  --resource-group myResourceGroup \
-  --name myWebApp \
-  --settings KEY1=value1 KEY2=value2
+ --resource-group myResourceGroup \
+ --name myWebApp \
+ --settings KEY1=value1 KEY2=value2
 
 # Ver logs
 az webapp log tail --resource-group myResourceGroup --name myWebApp
@@ -498,69 +498,69 @@ az webapp log tail --resource-group myResourceGroup --name myWebApp
 
 ---
 
-## ⚡ Azure Functions
+## Azure Functions
 
 ### Function Apps
 ```bash
 # Crear Function App
 az functionapp create \
-  --resource-group myResourceGroup \
-  --consumption-plan-location eastus \
-  --runtime node \
-  --runtime-version 18 \
-  --functions-version 4 \
-  --name myFunctionApp \
-  --storage-account mystorageaccount
+ --resource-group myResourceGroup \
+ --consumption-plan-location eastus \
+ --runtime node \
+ --runtime-version 18 \
+ --functions-version 4 \
+ --name myFunctionApp \
+ --storage-account mystorageaccount
 
 # Deploy función
 az functionapp deployment source config \
-  --resource-group myResourceGroup \
-  --name myFunctionApp \
-  --repo-url https://github.com/user/function-repo \
-  --branch main
+ --resource-group myResourceGroup \
+ --name myFunctionApp \
+ --repo-url https://github.com/user/function-repo \
+ --branch main
 
 # Configurar app settings
 az functionapp config appsettings set \
-  --resource-group myResourceGroup \
-  --name myFunctionApp \
-  --settings KEY1=value1
+ --resource-group myResourceGroup \
+ --name myFunctionApp \
+ --settings KEY1=value1
 ```
 
 ---
 
-## 📊 Monitoring y Logging
+## Monitoring y Logging
 
 ### Application Insights
 ```bash
 # Crear Application Insights
 az monitor app-insights component create \
-  --app myAppInsights \
-  --location eastus \
-  --resource-group myResourceGroup
+ --app myAppInsights \
+ --location eastus \
+ --resource-group myResourceGroup
 
 # Obtener instrumentation key
 az monitor app-insights component show \
-  --app myAppInsights \
-  --resource-group myResourceGroup \
-  --query instrumentationKey
+ --app myAppInsights \
+ --resource-group myResourceGroup \
+ --query instrumentationKey
 ```
 
 ### Log Analytics
 ```bash
 # Crear workspace
 az monitor log-analytics workspace create \
-  --resource-group myResourceGroup \
-  --workspace-name myWorkspace
+ --resource-group myResourceGroup \
+ --workspace-name myWorkspace
 
 # Query logs
 az monitor log-analytics query \
-  --workspace myWorkspace \
-  --analytics-query "AzureActivity | limit 10"
+ --workspace myWorkspace \
+ --analytics-query "AzureActivity | limit 10"
 ```
 
 ---
 
-## 🚀 DevOps
+## DevOps
 
 ### Azure DevOps
 ```bash
@@ -582,7 +582,7 @@ az repos create --name myRepo --project myProject
 
 ---
 
-## 🎯 Mejores Prácticas
+## Mejores Prácticas
 
 ### Seguridad
 ```bash
@@ -597,14 +597,14 @@ az keyvault secret set --vault-name myKeyVault --name connectionString --value "
 
 # Configurar Network Security Groups restrictivos
 az network nsg rule create \
-  --resource-group myResourceGroup \
-  --nsg-name myNSG \
-  --name DenyAll \
-  --priority 4096 \
-  --access Deny \
-  --protocol "*" \
-  --source-address-prefix "*" \
-  --destination-port-range "*"
+ --resource-group myResourceGroup \
+ --nsg-name myNSG \
+ --name DenyAll \
+ --priority 4096 \
+ --access Deny \
+ --protocol "*" \
+ --source-address-prefix "*" \
+ --destination-port-range "*"
 ```
 
 ### Performance y Costo
@@ -617,11 +617,11 @@ az vm auto-shutdown -g myResourceGroup -n myVM --time 1800
 
 # Usar spot instances para cargas de trabajo tolerantes a fallos
 az vm create \
-  --resource-group myResourceGroup \
-  --name mySpotVM \
-  --image Ubuntu2204 \
-  --priority Spot \
-  --max-price 0.01
+ --resource-group myResourceGroup \
+ --name mySpotVM \
+ --image Ubuntu2204 \
+ --priority Spot \
+ --max-price 0.01
 ```
 
 ### Automatización
@@ -631,7 +631,7 @@ VM_ID=$(az vm show --resource-group myResourceGroup --name myVM --query id -o ts
 
 # Usar loops para operaciones en batch
 for vm in $(az vm list --query '[].name' -o tsv); do
-  az vm stop --resource-group myResourceGroup --name $vm --no-wait
+ az vm stop --resource-group myResourceGroup --name $vm --no-wait
 done
 
 # Usar --no-wait para operaciones asíncronas
@@ -659,7 +659,7 @@ az deployment operation group list --resource-group myResourceGroup --name myDep
 
 ---
 
-## 🔧 Comandos de Utilidad
+## Comandos de Utilidad
 
 ### Información del Sistema
 ```bash
@@ -700,7 +700,7 @@ az vm list --query "[?contains(name, 'web')]"
 
 ---
 
-## 📚 Recursos Adicionales
+## Recursos Adicionales
 
 - [Azure CLI Documentation](https://docs.microsoft.com/en-us/cli/azure/)
 - [Azure CLI GitHub](https://github.com/Azure/azure-cli)
@@ -709,4 +709,4 @@ az vm list --query "[?contains(name, 'web')]"
 
 ---
 
-💡 **Tip**: Usa `az interactive` para una experiencia mejorada con autocompletado y ayuda contextual.
+ **Tip**: Usa `az interactive` para una experiencia mejorada con autocompletado y ayuda contextual.

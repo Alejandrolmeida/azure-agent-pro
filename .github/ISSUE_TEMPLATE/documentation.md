@@ -1,12 +1,12 @@
 ---
-name: 📚 Documentation Issue
+name: Documentation Issue
 about: Reportar problemas con la documentación o sugerir mejoras
 title: '[DOCS] '
 labels: ['documentation', 'needs-review']
 assignees: ''
 ---
 
-## 📚 Tipo de Issue de Documentación
+## Tipo de Issue de Documentación
 
 - [ ] Error en la documentación existente
 - [ ] Documentación faltante
@@ -31,7 +31,7 @@ assignees: ''
 
 Describe qué está mal con la documentación actual o qué está faltando.
 
-## ✅ Mejora Propuesta
+## Mejora Propuesta
 
 Describe cómo debería ser la documentación corregida o mejorada.
 
@@ -43,7 +43,7 @@ Si tienes contenido específico que sugerir, inclúyelo aquí:
 <!-- Tu contenido de documentación sugerido aquí -->
 ```
 
-## 👥 Audiencia Objetivo
+## Audiencia Objetivo
 
 ¿Quién se beneficiaría más de esta mejora en la documentación?
 
@@ -54,13 +54,13 @@ Si tienes contenido específico que sugerir, inclúyelo aquí:
 - [ ] Usuarios finales
 - [ ] Otro: ___________
 
-## 🔗 Referencias
+## Referencias
 
 - Enlaces a documentación oficial de Azure
 - Recursos externos útiles
 - Issues o PRs relacionados
 
-## ✅ Checklist
+## Checklist
 
 - [ ] He revisado la documentación existente
 - [ ] He verificado que este issue no existe ya

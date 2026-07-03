@@ -1,12 +1,12 @@
 ---
-name: 🔧 Azure Infrastructure Issue
+name: Azure Infrastructure Issue
 about: Problemas específicos con la infraestructura de Azure o plantillas Bicep
 title: '[AZURE] '
 labels: ['azure', 'infrastructure', 'needs-investigation']
 assignees: ''
 ---
 
-## 🔧 Tipo de Problema Azure
+## Tipo de Problema Azure
 
 - [ ] Error en plantilla Bicep
 - [ ] Problema de deployment
@@ -52,17 +52,17 @@ Una descripción clara del problema con la infraestructura Azure.
 2. En el ambiente: `...`
 3. Observar error: `...`
 
-## ❌ Error/Resultado Actual
+## Error/Resultado Actual
 
 ```bash
 # Pega aquí el error completo de Azure CLI o el deployment
 ```
 
-## ✅ Resultado Esperado
+## Resultado Esperado
 
 Describe qué debería suceder en lugar del error.
 
-## 🛠️ Plantilla Bicep Relacionada
+## Plantilla Bicep Relacionada
 
 **Archivo:** `bicep/...`
 
@@ -70,7 +70,7 @@ Describe qué debería suceder en lugar del error.
 // Si es relevante, pega aquí la sección problemática de la plantilla Bicep
 ```
 
-## 🔧 Configuración Azure
+## Configuración Azure
 
 **Suscripción:** `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (solo últimos 4 dígitos)
 **Región:** `[ej. East US]`
@@ -80,7 +80,7 @@ Describe qué debería suceder en lugar del error.
 # Output de az account show (sin información sensible)
 ```
 
-## 📋 Logs y Diagnostics
+## Logs y Diagnostics
 
 **Azure CLI output:**
 ```bash
@@ -92,7 +92,7 @@ Describe qué debería suceder en lugar del error.
 # Cualquier error visible en el portal de Azure
 ```
 
-## 🔍 Investigación Realizada
+## Investigación Realizada
 
 - [ ] Verificado permisos en Azure
 - [ ] Revisado logs en Azure Portal
@@ -101,7 +101,7 @@ Describe qué debería suceder en lugar del error.
 - [ ] Verificado quotas y límites
 - [ ] Otro: ___________
 
-## 💡 Solución Propuesta
+## Solución Propuesta
 
 Si tienes una idea de cómo solucionarlo:
 
@@ -115,7 +115,7 @@ o
 # Comandos Azure CLI propuestos
 ```
 
-## ✅ Checklist
+## Checklist
 
 - [ ] He verificado que los permisos son correctos
 - [ ] He revisado los logs de deployment en Azure

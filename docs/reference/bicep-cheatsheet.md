@@ -1,4 +1,4 @@
-# Bicep Cheatsheet 🏗️
+# Bicep Cheatsheet 
 
 Guía completa de Azure Bicep con sintaxis, funciones, mejores prácticas y ejemplos listos para usar.
 
@@ -20,7 +20,7 @@ Guía completa de Azure Bicep con sintaxis, funciones, mejores prácticas y ejem
 
 ---
 
-## 🔧 Sintaxis Básica
+## Sintaxis Básica
 
 ### Estructura de Archivo
 ```bicep
@@ -37,15 +37,15 @@ param resourceName string
 
 // Variables
 var resourceTags = {
-  Environment: 'dev'
-  Project: 'myapp'
+ Environment: 'dev'
+ Project: 'myapp'
 }
 
 // Recursos
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: resourceName
-  location: resourceGroup().location
-  // propiedades...
+ name: resourceName
+ location: resourceGroup().location
+ // propiedades...
 }
 
 // Outputs
@@ -69,8 +69,8 @@ param allowedLocations array = ['eastus', 'westus']
 
 // Object
 param tags object = {
-  Environment: 'dev'
-  Owner: 'team'
+ Environment: 'dev'
+ Owner: 'team'
 }
 
 // Secure string (para passwords)
@@ -80,7 +80,7 @@ param adminPassword string
 
 ---
 
-## 📝 Parámetros
+## Parámetros
 
 ### Decoradores de Parámetros
 ```bicep
@@ -94,9 +94,9 @@ param storageAccountName string
 param instanceCount int = 2
 
 @allowed([
-  'dev'
-  'test'
-  'prod'
+ 'dev'
+ 'test'
+ 'prod'
 ])
 param environment string = 'dev'
 
@@ -106,8 +106,8 @@ param adminPassword string
 
 // Metadata personalizada
 @metadata({
-  description: 'The location for resources'
-  strongType: 'location'
+ description: 'The location for resources'
+ strongType: 'location'
 })
 param location string = resourceGroup().location
 ```
@@ -117,22 +117,22 @@ param location string = resourceGroup().location
 // Array con validación
 @description('List of allowed IP ranges')
 param allowedIpRanges array = [
-  '10.0.0.0/8'
-  '172.16.0.0/12'
-  '192.168.0.0/16'
+ '10.0.0.0/8'
+ '172.16.0.0/12'
+ '192.168.0.0/16'
 ]
 
 // Object con estructura específica
 @description('VM configuration')
 param vmConfig object = {
-  size: 'Standard_B2s'
-  diskSizeGB: 128
-  osDisk: {
-    createOption: 'FromImage'
-    managedDisk: {
-      storageAccountType: 'Premium_LRS'
-    }
-  }
+ size: 'Standard_B2s'
+ diskSizeGB: 128
+ osDisk: {
+ createOption: 'FromImage'
+ managedDisk: {
+ storageAccountType: 'Premium_LRS'
+ }
+ }
 }
 
 // Parámetro condicional
@@ -151,17 +151,17 @@ var storageAccountName = '${prefix}${uniqueString(resourceGroup().id)}'
 
 // Complex objects
 var networkConfig = {
-  vnetName: '${prefix}-vnet'
-  subnets: [
-    {
-      name: 'default'
-      addressPrefix: '10.0.1.0/24'
-    }
-    {
-      name: 'app'
-      addressPrefix: '10.0.2.0/24'
-    }
-  ]
+ vnetName: '${prefix}-vnet'
+ subnets: [
+ {
+ name: 'default'
+ addressPrefix: '10.0.1.0/24'
+ }
+ {
+ name: 'app'
+ addressPrefix: '10.0.2.0/24'
+ }
+ ]
 }
 
 // Conditional variables
@@ -177,80 +177,80 @@ var resourceSuffix = substring(uniqueString(resourceGroup().id), 0, 5)
 
 // Complex logic
 var storageConfig = {
-  name: '${prefix}st${resourceSuffix}'
-  sku: environment == 'prod' ? {
-    name: 'Standard_GRS'
-    tier: 'Standard'
-  } : {
-    name: 'Standard_LRS'
-    tier: 'Standard'
-  }
-  properties: {
-    supportsHttpsTrafficOnly: true
-    minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: environment != 'prod'
-  }
+ name: '${prefix}st${resourceSuffix}'
+ sku: environment == 'prod' ? {
+ name: 'Standard_GRS'
+ tier: 'Standard'
+ } : {
+ name: 'Standard_LRS'
+ tier: 'Standard'
+ }
+ properties: {
+ supportsHttpsTrafficOnly: true
+ minimumTlsVersion: 'TLS1_2'
+ allowBlobPublicAccess: environment != 'prod'
+ }
 }
 ```
 
 ---
 
-## 🏗️ Recursos
+## Recursos
 
 ### Sintaxis de Recursos
 ```bicep
 // Sintaxis básica
 resource resourceName 'resourceType@apiVersion' = {
-  name: 'resource-name'
-  location: location
-  properties: {
-    // propiedades específicas del recurso
-  }
-  tags: tags
+ name: 'resource-name'
+ location: location
+ properties: {
+ // propiedades específicas del recurso
+ }
+ tags: tags
 }
 
 // Con dependencias explícitas
 resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
-  name: vmName
-  location: location
-  dependsOn: [
-    networkInterface
-    storageAccount
-  ]
-  properties: {
-    // configuración de VM
-  }
+ name: vmName
+ location: location
+ dependsOn: [
+ networkInterface
+ storageAccount
+ ]
+ properties: {
+ // configuración de VM
+ }
 }
 ```
 
 ### Recursos Anidados
 ```bicep
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  
-  // Recurso anidado
-  resource blobService 'blobServices' = {
-    name: 'default'
-    properties: {
-      deleteRetentionPolicy: {
-        enabled: true
-        days: 7
-      }
-    }
-    
-    // Recurso anidado dentro de anidado
-    resource container 'containers' = {
-      name: 'data'
-      properties: {
-        publicAccess: 'None'
-      }
-    }
-  }
+ name: storageAccountName
+ location: location
+ sku: {
+ name: 'Standard_LRS'
+ }
+ kind: 'StorageV2'
+ 
+ // Recurso anidado
+ resource blobService 'blobServices' = {
+ name: 'default'
+ properties: {
+ deleteRetentionPolicy: {
+ enabled: true
+ days: 7
+ }
+ }
+ 
+ // Recurso anidado dentro de anidado
+ resource container 'containers' = {
+ name: 'data'
+ properties: {
+ publicAccess: 'None'
+ }
+ }
+ }
 }
 ```
 
@@ -258,17 +258,17 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 ```bicep
 // Referenciar recurso existente
 resource existingVnet 'Microsoft.Network/virtualNetworks@2023-05-01' existing = {
-  name: vnetName
-  scope: resourceGroup(vnetResourceGroup)
+ name: vnetName
+ scope: resourceGroup(vnetResourceGroup)
 }
 
 // Usar en otro recurso
 resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-05-01' = {
-  parent: existingVnet
-  name: 'new-subnet'
-  properties: {
-    addressPrefix: '10.0.3.0/24'
-  }
+ parent: existingVnet
+ name: 'new-subnet'
+ properties: {
+ addressPrefix: '10.0.3.0/24'
+ }
 }
 ```
 
@@ -294,21 +294,21 @@ output storageKey string = storageAccount.listKeys().keys[0].value
 // Object output
 @description('Network configuration details')
 output networkInfo object = {
-  vnetId: virtualNetwork.id
-  vnetName: virtualNetwork.name
-  subnets: [for (subnet, index) in subnets: {
-    name: virtualNetwork.properties.subnets[index].name
-    id: virtualNetwork.properties.subnets[index].id
-    addressPrefix: virtualNetwork.properties.subnets[index].properties.addressPrefix
-  }]
+ vnetId: virtualNetwork.id
+ vnetName: virtualNetwork.name
+ subnets: [for (subnet, index) in subnets: {
+ name: virtualNetwork.properties.subnets[index].name
+ id: virtualNetwork.properties.subnets[index].id
+ addressPrefix: virtualNetwork.properties.subnets[index].properties.addressPrefix
+ }]
 }
 
 // Array output
 @description('List of created resource IDs')
 output resourceIds array = [
-  storageAccount.id
-  virtualNetwork.id
-  keyVault.id
+ storageAccount.id
+ virtualNetwork.id
+ keyVault.id
 ]
 
 // Conditional output
@@ -318,7 +318,7 @@ output publicIp string = createPublicLoadBalancer ? publicIP.properties.ipAddres
 
 ---
 
-## 📦 Módulos
+## Módulos
 
 ### Definición de Módulo
 ```bicep
@@ -333,12 +333,12 @@ param location string = resourceGroup().location
 param sku string = 'Standard_LRS'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: sku
-  }
-  kind: 'StorageV2'
+ name: storageAccountName
+ location: location
+ sku: {
+ name: sku
+ }
+ kind: 'StorageV2'
 }
 
 output storageAccountId string = storageAccount.id
@@ -349,26 +349,26 @@ output primaryEndpoints object = storageAccount.properties.primaryEndpoints
 ```bicep
 // main.bicep
 module storageModule 'modules/storage.bicep' = {
-  name: 'storageDeployment'
-  params: {
-    storageAccountName: 'mystorageaccount'
-    location: location
-    sku: 'Standard_GRS'
-  }
+ name: 'storageDeployment'
+ params: {
+ storageAccountName: 'mystorageaccount'
+ location: location
+ sku: 'Standard_GRS'
+ }
 }
 
 // Usar outputs del módulo
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
-  name: 'myapp'
-  location: location
-  properties: {
-    connectionStrings: {
-      DefaultConnection: {
-        value: 'DefaultEndpointsProtocol=https;AccountName=${storageModule.outputs.storageAccountName}'
-        type: 'Custom'
-      }
-    }
-  }
+ name: 'myapp'
+ location: location
+ properties: {
+ connectionStrings: {
+ DefaultConnection: {
+ value: 'DefaultEndpointsProtocol=https;AccountName=${storageModule.outputs.storageAccountName}'
+ type: 'Custom'
+ }
+ }
+ }
 }
 ```
 
@@ -376,23 +376,23 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
 ```bicep
 // Deploy a diferentes scopes
 module rgModule 'modules/resourcegroup.bicep' = {
-  name: 'rgDeployment'
-  scope: subscription()
-  params: {
-    resourceGroupName: 'my-rg'
-    location: 'eastus'
-  }
+ name: 'rgDeployment'
+ scope: subscription()
+ params: {
+ resourceGroupName: 'my-rg'
+ location: 'eastus'
+ }
 }
 
 module storageModule 'modules/storage.bicep' = {
-  name: 'storageDeployment'
-  scope: resourceGroup('my-rg')
-  dependsOn: [
-    rgModule
-  ]
-  params: {
-    storageAccountName: 'mystorageaccount'
-  }
+ name: 'storageDeployment'
+ scope: resourceGroup('my-rg')
+ dependsOn: [
+ rgModule
+ ]
+ params: {
+ storageAccountName: 'mystorageaccount'
+ }
 }
 ```
 
@@ -434,14 +434,14 @@ var secondaryLocations = skip(locations, 2)
 ```bicep
 // Object operations
 param config object = {
-  database: {
-    tier: 'Basic'
-    size: '2GB'
-  }
-  storage: {
-    type: 'Premium_LRS'
-    size: '100GB'
-  }
+ database: {
+ tier: 'Basic'
+ size: '2GB'
+ }
+ storage: {
+ type: 'Premium_LRS'
+ size: '100GB'
+ }
 }
 
 var dbTier = config.database.tier
@@ -450,8 +450,8 @@ var hasDatabase = contains(config, 'database')
 
 // Union objects
 var defaultConfig = {
-  environment: 'dev'
-  monitoring: true
+ environment: 'dev'
+ monitoring: true
 }
 var finalConfig = union(defaultConfig, config)
 ```
@@ -486,57 +486,57 @@ param createPublicIP bool = false
 
 // Conditional resource creation
 resource publicIP 'Microsoft.Network/publicIPAddresses@2023-05-01' = if (createPublicIP) {
-  name: '${resourcePrefix}-pip'
-  location: location
-  properties: {
-    publicIPAllocationMethod: 'Static'
-  }
+ name: '${resourcePrefix}-pip'
+ location: location
+ properties: {
+ publicIPAllocationMethod: 'Static'
+ }
 }
 
 // Use conditional resource
 resource loadBalancer 'Microsoft.Network/loadBalancers@2023-05-01' = {
-  name: '${resourcePrefix}-lb'
-  location: location
-  properties: {
-    frontendIPConfigurations: [
-      {
-        name: 'frontendConfig'
-        properties: createPublicIP ? {
-          publicIPAddress: {
-            id: publicIP.id
-          }
-        } : {
-          subnet: {
-            id: subnetId
-          }
-          privateIPAllocationMethod: 'Dynamic'
-        }
-      }
-    ]
-  }
+ name: '${resourcePrefix}-lb'
+ location: location
+ properties: {
+ frontendIPConfigurations: [
+ {
+ name: 'frontendConfig'
+ properties: createPublicIP ? {
+ publicIPAddress: {
+ id: publicIP.id
+ }
+ } : {
+ subnet: {
+ id: subnetId
+ }
+ privateIPAllocationMethod: 'Dynamic'
+ }
+ }
+ ]
+ }
 }
 ```
 
 ### Propiedades Condicionales
 ```bicep
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: environment == 'prod' ? 'Standard_GRS' : 'Standard_LRS'
-  }
-  properties: {
-    supportsHttpsTrafficOnly: true
-    minimumTlsVersion: 'TLS1_2'
-    // Conditional property
-    networkAcls: enableNetworkRestrictions ? {
-      defaultAction: 'Deny'
-      virtualNetworkRules: virtualNetworkRules
-      ipRules: ipRules
-    } : {
-      defaultAction: 'Allow'
-    }
-  }
+ name: storageAccountName
+ location: location
+ sku: {
+ name: environment == 'prod' ? 'Standard_GRS' : 'Standard_LRS'
+ }
+ properties: {
+ supportsHttpsTrafficOnly: true
+ minimumTlsVersion: 'TLS1_2'
+ // Conditional property
+ networkAcls: enableNetworkRestrictions ? {
+ defaultAction: 'Deny'
+ virtualNetworkRules: virtualNetworkRules
+ ipRules: ipRules
+ } : {
+ defaultAction: 'Allow'
+ }
+ }
 }
 ```
 
@@ -548,36 +548,36 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 ```bicep
 @description('List of storage accounts to create')
 param storageAccounts array = [
-  {
-    name: 'storage1'
-    sku: 'Standard_LRS'
-  }
-  {
-    name: 'storage2'
-    sku: 'Standard_GRS'
-  }
+ {
+ name: 'storage1'
+ sku: 'Standard_LRS'
+ }
+ {
+ name: 'storage2'
+ sku: 'Standard_GRS'
+ }
 ]
 
 // Create multiple resources
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = [for (storage, index) in storageAccounts: {
-  name: '${storage.name}${uniqueString(resourceGroup().id, string(index))}'
-  location: location
-  sku: {
-    name: storage.sku
-  }
-  kind: 'StorageV2'
+ name: '${storage.name}${uniqueString(resourceGroup().id, string(index))}'
+ location: location
+ sku: {
+ name: storage.sku
+ }
+ kind: 'StorageV2'
 }]
 
 // Use index in loop
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2023-03-01' = [for i in range(0, vmCount): {
-  name: '${vmNamePrefix}-${i}'
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: vmSize
-    }
-    // más configuración...
-  }
+ name: '${vmNamePrefix}-${i}'
+ location: location
+ properties: {
+ hardwareProfile: {
+ vmSize: vmSize
+ }
+ // más configuración...
+ }
 }]
 ```
 
@@ -585,30 +585,30 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2023-03-01' = [for i 
 ```bicep
 @description('Subnets configuration')
 param subnets object = {
-  frontend: {
-    addressPrefix: '10.0.1.0/24'
-    nsg: true
-  }
-  backend: {
-    addressPrefix: '10.0.2.0/24'
-    nsg: true
-  }
-  data: {
-    addressPrefix: '10.0.3.0/24'
-    nsg: false
-  }
+ frontend: {
+ addressPrefix: '10.0.1.0/24'
+ nsg: true
+ }
+ backend: {
+ addressPrefix: '10.0.2.0/24'
+ nsg: true
+ }
+ data: {
+ addressPrefix: '10.0.3.0/24'
+ nsg: false
+ }
 }
 
 // Create subnets from object
 resource subnet 'Microsoft.Network/virtualNetworks/subnets@2023-05-01' = [for (config, name) in items(subnets): {
-  parent: virtualNetwork
-  name: name
-  properties: {
-    addressPrefix: config.addressPrefix
-    networkSecurityGroup: config.nsg ? {
-      id: networkSecurityGroup[name].id
-    } : null
-  }
+ parent: virtualNetwork
+ name: name
+ properties: {
+ addressPrefix: config.addressPrefix
+ networkSecurityGroup: config.nsg ? {
+ id: networkSecurityGroup[name].id
+ } : null
+ }
 }]
 
 // items() function converts object to array of key-value pairs
@@ -620,40 +620,40 @@ var subnetArray = items(subnets)
 ```bicep
 @description('Virtual networks configuration')
 param vnets array = [
-  {
-    name: 'vnet1'
-    addressSpace: '10.0.0.0/16'
-    subnets: [
-      { name: 'subnet1', prefix: '10.0.1.0/24' }
-      { name: 'subnet2', prefix: '10.0.2.0/24' }
-    ]
-  }
-  {
-    name: 'vnet2'
-    addressSpace: '10.1.0.0/16'
-    subnets: [
-      { name: 'subnet1', prefix: '10.1.1.0/24' }
-    ]
-  }
+ {
+ name: 'vnet1'
+ addressSpace: '10.0.0.0/16'
+ subnets: [
+ { name: 'subnet1', prefix: '10.0.1.0/24' }
+ { name: 'subnet2', prefix: '10.0.2.0/24' }
+ ]
+ }
+ {
+ name: 'vnet2'
+ addressSpace: '10.1.0.0/16'
+ subnets: [
+ { name: 'subnet1', prefix: '10.1.1.0/24' }
+ ]
+ }
 ]
 
 // Flatten array for all subnets across all vnets
 var allSubnets = flatten([for vnet in vnets: [for subnet in vnet.subnets: {
-  vnetName: vnet.name
-  subnetName: subnet.name
-  addressPrefix: subnet.prefix
+ vnetName: vnet.name
+ subnetName: subnet.name
+ addressPrefix: subnet.prefix
 }]])
 
 // Create NSG for each subnet
 resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = [for subnet in allSubnets: {
-  name: 'nsg-${subnet.vnetName}-${subnet.subnetName}'
-  location: location
+ name: 'nsg-${subnet.vnetName}-${subnet.subnetName}'
+ location: location
 }]
 ```
 
 ---
 
-## 🎯 Scope y Targeting
+## Scope y Targeting
 
 ### Deployment Scopes
 ```bicep
@@ -664,16 +664,16 @@ param resourceGroupName string = 'my-rg'
 param location string = 'eastus'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: resourceGroupName
-  location: location
+ name: resourceGroupName
+ location: location
 }
 
 module storageModule 'modules/storage.bicep' = {
-  name: 'storageDeployment'
-  scope: resourceGroup
-  params: {
-    storageAccountName: 'mystorageaccount'
-  }
+ name: 'storageDeployment'
+ scope: resourceGroup
+ params: {
+ storageAccountName: 'mystorageaccount'
+ }
 }
 ```
 
@@ -682,13 +682,13 @@ module storageModule 'modules/storage.bicep' = {
 targetScope = 'managementGroup'
 
 resource policy 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
-  name: 'my-policy'
-  properties: {
-    displayName: 'My Custom Policy'
-    policyType: 'Custom'
-    mode: 'All'
-    // policy definition...
-  }
+ name: 'my-policy'
+ properties: {
+ displayName: 'My Custom Policy'
+ policyType: 'Custom'
+ mode: 'All'
+ // policy definition...
+ }
 }
 ```
 
@@ -697,10 +697,10 @@ resource policy 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
 targetScope = 'tenant'
 
 resource managementGroup 'Microsoft.Management/managementGroups@2021-04-01' = {
-  name: 'my-mg'
-  properties: {
-    displayName: 'My Management Group'
-  }
+ name: 'my-mg'
+ properties: {
+ displayName: 'My Management Group'
+ }
 }
 ```
 
@@ -708,34 +708,34 @@ resource managementGroup 'Microsoft.Management/managementGroups@2021-04-01' = {
 ```bicep
 // Reference resource in different scope
 resource existingKeyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
-  name: keyVaultName
-  scope: resourceGroup(keyVaultResourceGroupName)
+ name: keyVaultName
+ scope: resourceGroup(keyVaultResourceGroupName)
 }
 
 // Use across scopes
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: webAppName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
+ name: webAppName
+ location: location
+ identity: {
+ type: 'SystemAssigned'
+ }
 }
 
 // Grant access to key vault in different RG
 resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01' = {
-  parent: existingKeyVault
-  name: 'add'
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: webApp.identity.principalId
-        permissions: {
-          secrets: ['get', 'list']
-        }
-      }
-    ]
-  }
+ parent: existingKeyVault
+ name: 'add'
+ properties: {
+ accessPolicies: [
+ {
+ tenantId: subscription().tenantId
+ objectId: webApp.identity.principalId
+ permissions: {
+ secrets: ['get', 'list']
+ }
+ }
+ ]
+ }
 }
 ```
 
@@ -754,12 +754,12 @@ param environment string
 
 @description('Location abbreviation mapping')
 var locationAbbreviations = {
-  eastus: 'eus'
-  westus: 'wus'
-  centralus: 'cus'
-  eastus2: 'eus2'
-  westeurope: 'weu'
-  northeurope: 'neu'
+ eastus: 'eus'
+ westus: 'wus'
+ centralus: 'cus'
+ eastus2: 'eus2'
+ westeurope: 'weu'
+ northeurope: 'neu'
 }
 
 var locationAbbr = locationAbbreviations[location]
@@ -767,14 +767,14 @@ var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 5)
 
 // Consistent naming pattern
 var namingConvention = {
-  resourceGroup: '${prefix}-${environment}-${locationAbbr}-rg'
-  storageAccount: '${prefix}${environment}${locationAbbr}st${uniqueSuffix}'
-  keyVault: '${prefix}-${environment}-${locationAbbr}-kv-${uniqueSuffix}'
-  appServicePlan: '${prefix}-${environment}-${locationAbbr}-asp'
-  webApp: '${prefix}-${environment}-${locationAbbr}-web'
-  virtualNetwork: '${prefix}-${environment}-${locationAbbr}-vnet'
-  subnet: '${prefix}-${environment}-${locationAbbr}-subnet'
-  nsg: '${prefix}-${environment}-${locationAbbr}-nsg'
+ resourceGroup: '${prefix}-${environment}-${locationAbbr}-rg'
+ storageAccount: '${prefix}${environment}${locationAbbr}st${uniqueSuffix}'
+ keyVault: '${prefix}-${environment}-${locationAbbr}-kv-${uniqueSuffix}'
+ appServicePlan: '${prefix}-${environment}-${locationAbbr}-asp'
+ webApp: '${prefix}-${environment}-${locationAbbr}-web'
+ virtualNetwork: '${prefix}-${environment}-${locationAbbr}-vnet'
+ subnet: '${prefix}-${environment}-${locationAbbr}-subnet'
+ nsg: '${prefix}-${environment}-${locationAbbr}-nsg'
 }
 ```
 
@@ -782,30 +782,30 @@ var namingConvention = {
 ```bicep
 @description('Environment-specific configuration')
 var environmentConfig = {
-  dev: {
-    skuName: 'F1'
-    skuTier: 'Free'
-    instanceCount: 1
-    storageReplication: 'Standard_LRS'
-    backupEnabled: false
-    monitoringEnabled: false
-  }
-  test: {
-    skuName: 'S1'
-    skuTier: 'Standard'
-    instanceCount: 1
-    storageReplication: 'Standard_LRS'
-    backupEnabled: true
-    monitoringEnabled: true
-  }
-  prod: {
-    skuName: 'P1V2'
-    skuTier: 'PremiumV2'
-    instanceCount: 3
-    storageReplication: 'Standard_GRS'
-    backupEnabled: true
-    monitoringEnabled: true
-  }
+ dev: {
+ skuName: 'F1'
+ skuTier: 'Free'
+ instanceCount: 1
+ storageReplication: 'Standard_LRS'
+ backupEnabled: false
+ monitoringEnabled: false
+ }
+ test: {
+ skuName: 'S1'
+ skuTier: 'Standard'
+ instanceCount: 1
+ storageReplication: 'Standard_LRS'
+ backupEnabled: true
+ monitoringEnabled: true
+ }
+ prod: {
+ skuName: 'P1V2'
+ skuTier: 'PremiumV2'
+ instanceCount: 3
+ storageReplication: 'Standard_GRS'
+ backupEnabled: true
+ monitoringEnabled: true
+ }
 }
 
 var currentConfig = environmentConfig[environment]
@@ -815,47 +815,47 @@ var currentConfig = environmentConfig[environment]
 ```bicep
 // Define standard resource configurations
 var resourceDefaults = {
-  tags: {
-    Environment: environment
-    Project: projectName
-    CostCenter: costCenter
-    CreatedBy: 'bicep'
-    CreatedDate: utcNow('yyyy-MM-dd')
-  }
-  storageAccount: {
-    sku: currentConfig.storageReplication
-    kind: 'StorageV2'
-    properties: {
-      supportsHttpsTrafficOnly: true
-      minimumTlsVersion: 'TLS1_2'
-      allowBlobPublicAccess: false
-      encryption: {
-        keySource: 'Microsoft.Storage'
-        services: {
-          blob: { enabled: true }
-          file: { enabled: true }
-        }
-      }
-    }
-  }
+ tags: {
+ Environment: environment
+ Project: projectName
+ CostCenter: costCenter
+ CreatedBy: 'bicep'
+ CreatedDate: utcNow('yyyy-MM-dd')
+ }
+ storageAccount: {
+ sku: currentConfig.storageReplication
+ kind: 'StorageV2'
+ properties: {
+ supportsHttpsTrafficOnly: true
+ minimumTlsVersion: 'TLS1_2'
+ allowBlobPublicAccess: false
+ encryption: {
+ keySource: 'Microsoft.Storage'
+ services: {
+ blob: { enabled: true }
+ file: { enabled: true }
+ }
+ }
+ }
+ }
 }
 
 // Apply defaults to resources
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: namingConvention.storageAccount
-  location: location
-  tags: resourceDefaults.tags
-  sku: {
-    name: resourceDefaults.storageAccount.sku
-  }
-  kind: resourceDefaults.storageAccount.kind
-  properties: resourceDefaults.storageAccount.properties
+ name: namingConvention.storageAccount
+ location: location
+ tags: resourceDefaults.tags
+ sku: {
+ name: resourceDefaults.storageAccount.sku
+ }
+ kind: resourceDefaults.storageAccount.kind
+ properties: resourceDefaults.storageAccount.properties
 }
 ```
 
 ---
 
-## ✅ Mejores Prácticas
+## Mejores Prácticas
 
 ### Estructura y Organización
 ```bicep
@@ -867,18 +867,18 @@ metadata version = '1.0.0'
 // 2. Group related parameters
 @description('Application Configuration')
 param appConfig object = {
-  name: 'myapp'
-  version: '1.0.0'
-  environment: 'dev'
+ name: 'myapp'
+ version: '1.0.0'
+ environment: 'dev'
 }
 
 @description('Network Configuration')
 param networkConfig object = {
-  addressSpace: '10.0.0.0/16'
-  subnets: [
-    { name: 'web', prefix: '10.0.1.0/24' }
-    { name: 'data', prefix: '10.0.2.0/24' }
-  ]
+ addressSpace: '10.0.0.0/16'
+ subnets: [
+ { name: 'web', prefix: '10.0.1.0/24' }
+ { name: 'data', prefix: '10.0.2.0/24' }
+ ]
 }
 
 // 3. Use descriptive variable names
@@ -900,49 +900,49 @@ param applicationSecrets object
 
 // 2. Use Key Vault references
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
-  name: keyVaultName
-  scope: resourceGroup(keyVaultResourceGroup)
+ name: keyVaultName
+ scope: resourceGroup(keyVaultResourceGroup)
 }
 
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: webAppName
-  location: location
-  properties: {
-    siteConfig: {
-      appSettings: [
-        {
-          name: 'DatabaseConnectionString'
-          value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=db-connection)'
-        }
-      ]
-    }
-  }
+ name: webAppName
+ location: location
+ properties: {
+ siteConfig: {
+ appSettings: [
+ {
+ name: 'DatabaseConnectionString'
+ value: '@Microsoft.KeyVault(VaultName=${keyVault.name};SecretName=db-connection)'
+ }
+ ]
+ }
+ }
 }
 
 // 3. Use Managed Identity
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: webAppName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
+ name: webAppName
+ location: location
+ identity: {
+ type: 'SystemAssigned'
+ }
 }
 
 // Grant Key Vault access
 resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01' = {
-  parent: keyVault
-  name: 'add'
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: webApp.identity.principalId
-        permissions: {
-          secrets: ['get']
-        }
-      }
-    ]
-  }
+ parent: keyVault
+ name: 'add'
+ properties: {
+ accessPolicies: [
+ {
+ tenantId: subscription().tenantId
+ objectId: webApp.identity.principalId
+ permissions: {
+ secrets: ['get']
+ }
+ }
+ ]
+ }
 }
 ```
 
@@ -950,39 +950,39 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-
 ```bicep
 // 1. Use appropriate SKUs based on environment
 var skuMapping = {
-  dev: 'Basic'
-  test: 'Standard'
-  prod: 'Premium'
+ dev: 'Basic'
+ test: 'Standard'
+ prod: 'Premium'
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
-  name: appServicePlanName
-  location: location
-  sku: {
-    name: skuMapping[environment]
-    tier: skuMapping[environment]
-  }
+ name: appServicePlanName
+ location: location
+ sku: {
+ name: skuMapping[environment]
+ tier: skuMapping[environment]
+ }
 }
 
 // 2. Implement cost controls
 resource budgetAlert 'Microsoft.Consumption/budgets@2021-10-01' = if (environment == 'prod') {
-  name: 'monthly-budget'
-  properties: {
-    timeGrain: 'Monthly'
-    timePeriod: {
-      startDate: utcNow('yyyy-MM-01')
-    }
-    amount: 1000
-    category: 'Cost'
-    notifications: {
-      actual: {
-        enabled: true
-        operator: 'GreaterThan'
-        threshold: 80
-        contactEmails: ['admin@company.com']
-      }
-    }
-  }
+ name: 'monthly-budget'
+ properties: {
+ timeGrain: 'Monthly'
+ timePeriod: {
+ startDate: utcNow('yyyy-MM-01')
+ }
+ amount: 1000
+ category: 'Cost'
+ notifications: {
+ actual: {
+ enabled: true
+ operator: 'GreaterThan'
+ threshold: 80
+ contactEmails: ['admin@company.com']
+ }
+ }
+ }
 }
 ```
 
@@ -991,10 +991,10 @@ resource budgetAlert 'Microsoft.Consumption/budgets@2021-10-01' = if (environmen
 // 1. Validate parameters
 @description('VM size must be appropriate for environment')
 @allowed([
-  'Standard_B1s'
-  'Standard_B2s'
-  'Standard_D2s_v3'
-  'Standard_D4s_v3'
+ 'Standard_B1s'
+ 'Standard_B2s'
+ 'Standard_D2s_v3'
+ 'Standard_D4s_v3'
 ])
 param vmSize string = environment == 'prod' ? 'Standard_D2s_v3' : 'Standard_B1s'
 
@@ -1003,9 +1003,9 @@ var storageAccountExists = !empty(filter(existingStorageAccounts, account => acc
 var useExistingStorage = storageAccountExists && reuseExistingResources
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = if (!useExistingStorage) {
-  name: storageAccountName
-  location: location
-  // properties...
+ name: storageAccountName
+ location: location
+ // properties...
 }
 
 // 3. Provide meaningful error messages through validation
@@ -1029,18 +1029,18 @@ var validatedSubnetPrefix = isValidCidr && isValidSuffix ? subnetAddressPrefix :
 // 1. Use outputs for debugging
 @description('Debug: Show computed values')
 output debugInfo object = {
-  computedStorageName: storageAccountName
-  environmentConfig: currentConfig
-  namingConvention: namingConvention
-  resourceGroup: {
-    id: resourceGroup().id
-    location: resourceGroup().location
-    name: resourceGroup().name
-  }
-  deployment: {
-    name: deployment().name
-    timestamp: utcNow()
-  }
+ computedStorageName: storageAccountName
+ environmentConfig: currentConfig
+ namingConvention: namingConvention
+ resourceGroup: {
+ id: resourceGroup().id
+ location: resourceGroup().location
+ name: resourceGroup().name
+ }
+ deployment: {
+ name: deployment().name
+ timestamp: utcNow()
+ }
 }
 
 // 2. Conditional debugging outputs
@@ -1048,28 +1048,28 @@ output debugInfo object = {
 param enableDebug bool = false
 
 output debugDetails object = enableDebug ? {
-  allVariables: {
-    prefix: prefix
-    environment: environment
-    uniqueSuffix: uniqueSuffix
-    locationAbbr: locationAbbr
-  }
-  computedNames: namingConvention
-  environmentConfig: currentConfig
+ allVariables: {
+ prefix: prefix
+ environment: environment
+ uniqueSuffix: uniqueSuffix
+ locationAbbr: locationAbbr
+ }
+ computedNames: namingConvention
+ environmentConfig: currentConfig
 } : {}
 
 // 3. Validation outputs
 output validation object = {
-  parametersValid: {
-    environmentIsValid: contains(['dev', 'test', 'prod'], environment)
-    locationIsSupported: contains(keys(locationAbbreviations), location)
-    prefixLength: length(prefix)
-  }
-  resourceNamesLength: {
-    storageAccount: length(namingConvention.storageAccount)
-    keyVault: length(namingConvention.keyVault)
-    webApp: length(namingConvention.webApp)
-  }
+ parametersValid: {
+ environmentIsValid: contains(['dev', 'test', 'prod'], environment)
+ locationIsSupported: contains(keys(locationAbbreviations), location)
+ prefixLength: length(prefix)
+ }
+ resourceNamesLength: {
+ storageAccount: length(namingConvention.storageAccount)
+ keyVault: length(namingConvention.keyVault)
+ webApp: length(namingConvention.webApp)
+ }
 }
 ```
 
@@ -1081,32 +1081,32 @@ output validation object = {
 
 // 2. Fail early with clear messages
 var errorChecks = {
-  storageNameTooLong: length(namingConvention.storageAccount) > 24
-  keyVaultNameTooLong: length(namingConvention.keyVault) > 24
-  invalidEnvironment: !contains(['dev', 'test', 'prod'], environment)
+ storageNameTooLong: length(namingConvention.storageAccount) > 24
+ keyVaultNameTooLong: length(namingConvention.keyVault) > 24
+ invalidEnvironment: !contains(['dev', 'test', 'prod'], environment)
 }
 
 var hasErrors = errorChecks.storageNameTooLong || errorChecks.keyVaultNameTooLong || errorChecks.invalidEnvironment
 
 // Use in resource conditions
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = if (!hasErrors) {
-  name: namingConvention.storageAccount
-  // properties...
+ name: namingConvention.storageAccount
+ // properties...
 }
 
 // Output error information
 output deploymentErrors object = hasErrors ? {
-  errors: [for (error, key) in items(errorChecks): error ? 'Error: ${key}' : '']
-  suggestions: {
-    shortenPrefix: errorChecks.storageNameTooLong ? 'Use shorter prefix (current: ${length(prefix)} chars)' : ''
-    validEnvironments: errorChecks.invalidEnvironment ? 'Use: dev, test, or prod' : ''
-  }
+ errors: [for (error, key) in items(errorChecks): error ? 'Error: ${key}' : '']
+ suggestions: {
+ shortenPrefix: errorChecks.storageNameTooLong ? 'Use shorter prefix (current: ${length(prefix)} chars)' : ''
+ validEnvironments: errorChecks.invalidEnvironment ? 'Use: dev, test, or prod' : ''
+ }
 } : {}
 ```
 
 ---
 
-## 🚀 Comandos CLI de Bicep
+## Comandos CLI de Bicep
 
 ### Compilación y Validación
 ```bash
@@ -1133,27 +1133,27 @@ az bicep lint --file main.bicep
 ```bash
 # Deploy con validación previa
 az deployment group validate \
-  --resource-group myRG \
-  --template-file main.bicep \
-  --parameters @params.json
+ --resource-group myRG \
+ --template-file main.bicep \
+ --parameters @params.json
 
 # Deploy real
 az deployment group create \
-  --resource-group myRG \
-  --template-file main.bicep \
-  --parameters @params.json \
-  --mode Incremental
+ --resource-group myRG \
+ --template-file main.bicep \
+ --parameters @params.json \
+ --mode Incremental
 
 # What-if deployment
 az deployment group what-if \
-  --resource-group myRG \
-  --template-file main.bicep \
-  --parameters @params.json
+ --resource-group myRG \
+ --template-file main.bicep \
+ --parameters @params.json
 ```
 
 ---
 
-## 📚 Recursos Adicionales
+## Recursos Adicionales
 
 - [Bicep Documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
 - [Bicep GitHub Repository](https://github.com/Azure/bicep)
@@ -1163,4 +1163,4 @@ az deployment group what-if \
 
 ---
 
-💡 **Tip**: Usa VS Code con la extensión Bicep para autocompletado, validación en tiempo real y snippets útiles.
+ **Tip**: Usa VS Code con la extensión Bicep para autocompletado, validación en tiempo real y snippets útiles.

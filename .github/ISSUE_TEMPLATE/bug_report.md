@@ -16,11 +16,11 @@ Una descripción clara y concisa del error.
 2. Ejecuta el comando '...'
 3. Observa el error
 
-## ✅ Comportamiento Esperado
+## Comportamiento Esperado
 
 Una descripción clara de lo que esperabas que sucediera.
 
-## ❌ Comportamiento Actual
+## Comportamiento Actual
 
 Una descripción clara de lo que está sucediendo actualmente.
 
@@ -43,13 +43,13 @@ az --version
 az bicep version
 ```
 
-## 📋 Logs/Errores
+## Logs/Errores
 
 ```bash
 # Pega aquí los logs relevantes o mensajes de error
 ```
 
-## 🔧 Solución Propuesta
+## Solución Propuesta
 
 Si tienes una idea de cómo solucionarlo, compártela aquí.
 
@@ -57,7 +57,7 @@ Si tienes una idea de cómo solucionarlo, compártela aquí.
 
 Cualquier otra información sobre el problema.
 
-## ✅ Checklist
+## Checklist
 
 - [ ] He buscado en los issues existentes antes de crear este nuevo
 - [ ] He proporcionado toda la información del entorno

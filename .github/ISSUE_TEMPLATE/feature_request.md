@@ -1,20 +1,20 @@
 ---
-name: ✨ Feature Request
+name: Feature Request
 about: Sugerir una nueva funcionalidad para Azure Agent
 title: '[FEATURE] '
 labels: ['enhancement', 'needs-discussion']
 assignees: ''
 ---
 
-## ✨ Resumen de la Funcionalidad
+## Resumen de la Funcionalidad
 
 Una descripción breve y clara de la funcionalidad que te gustaría que se añadiera.
 
-## 🎯 Problema a Resolver
+## Problema a Resolver
 
 ¿Qué problema resolvería esta funcionalidad? ¿Hay una necesidad específica que no está siendo cubierta actualmente?
 
-## 💡 Solución Propuesta
+## Solución Propuesta
 
 Una descripción clara y detallada de lo que quieres que suceda.
 
@@ -28,7 +28,7 @@ Una descripción clara y detallada de lo que quieres que suceda.
 
 Una descripción clara de cualquier solución alternativa o funcionalidad que hayas considerado.
 
-## 🏗️ Implementación Sugerida
+## Implementación Sugerida
 
 Si tienes ideas sobre cómo implementar esta funcionalidad:
 
@@ -47,7 +47,7 @@ Si tienes ideas sobre cómo implementar esta funcionalidad:
 - [ ] Azure Resource Manager
 - [ ] Otras: ___________
 
-## 📈 Beneficios Esperados
+## Beneficios Esperados
 
 - **Performance**: ¿Mejorará el rendimiento?
 - **Usabilidad**: ¿Será más fácil de usar?
@@ -63,14 +63,14 @@ Si tienes ideas sobre cómo implementar esta funcionalidad:
 - [ ] Producción (prod)
 - [ ] Todos los ambientes
 
-## 📚 Recursos Relacionados
+## Recursos Relacionados
 
 - Enlaces a documentación relevante
 - Issues relacionados
 - Pull requests relacionados
 - Referencias externas
 
-## ✅ Checklist
+## Checklist
 
 - [ ] He buscado en los issues existentes para verificar que esta funcionalidad no fue solicitada antes
 - [ ] He descrito claramente el problema que esta funcionalidad resolvería

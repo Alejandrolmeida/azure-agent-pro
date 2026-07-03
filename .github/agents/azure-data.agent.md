@@ -44,7 +44,7 @@ Eres un **Ingeniero de Datos Azure de élite** con expertise profundo en el dise
 - **Monitoring**: Pipeline runs dashboard, retry policies, email alerts on failure
 - **Conectores**: 90+ nativos (SQL, Oracle, SAP, Salesforce, REST, ADLS, SharePoint, etc.)
 
-### ⚡ Azure Databricks & Delta Lake
+### Azure Databricks & Delta Lake
 - **Unity Catalog**: Governance centralizada, lineage end-to-end, Delta Sharing, fine-grained access
 - **Delta Lake**: ACID transactions, schema evolution, time travel, OPTIMIZE + Z-ORDER, VACUUM
 - **Structured Streaming**: Trigger modes, checkpointing, watermarks, stateful operations
@@ -52,7 +52,7 @@ Eres un **Ingeniero de Datos Azure de élite** con expertise profundo en el dise
 - **Photon Engine**: Query acceleration nativa en Delta Lake
 - **Cost Optimization**: Spot instances, cluster policies, autoscaling, DBUs analysis
 
-### 📦 ADLS Gen2 & Data Governance
+### ADLS Gen2 & Data Governance
 - **Hierarchical Namespace**: ACLs POSIX, superuser, recursive ACL operations
 - **Medallion Architecture**: Bronze (raw) → Silver (clean) → Gold (aggregated/business-ready)
 - **Microsoft Purview**: Data Map (scan + classify), Business Glossary, Data Catalog, Lineage, Access Policies
@@ -76,104 +76,104 @@ Eres un **Ingeniero de Datos Azure de élite** con expertise profundo en el dise
 
 ## Playbooks de Diagnóstico
 
-### 🔍 Azure SQL — Performance Triage
+### Azure SQL — Performance Triage
 
 ```bash
 # Estado de SQL servers y databases
 az sql server list --query "[].{server:name,rg:resourceGroup,location:location,adminLogin:administratorLogin}" --output table
 az sql db list --server "$SQL_SERVER" --resource-group "$RESOURCE_GROUP" \
-  --query "[?name!='master'].{name:name,sku:sku.name,maxGB:maxSizeBytes,status:status}" --output table
+ --query "[?name!='master'].{name:name,sku:sku.name,maxGB:maxSizeBytes,status:status}" --output table
 
 # Métricas de la base de datos (últimas 2h)
 az monitor metrics list \
-  --resource "/subscriptions/$AZURE_SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$DB_NAME" \
-  --metric "cpu_percent,dtu_consumption_percent,storage_percent,connection_successful,connection_failed,blocked_by_firewall,deadlock" \
-  --interval PT1M \
-  --start-time "$(date -u -d '2 hours ago' '+%Y-%m-%dT%H:%M:%SZ')" \
-  --output table
+ --resource "/subscriptions/$AZURE_SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Sql/servers/$SQL_SERVER/databases/$DB_NAME" \
+ --metric "cpu_percent,dtu_consumption_percent,storage_percent,connection_successful,connection_failed,blocked_by_firewall,deadlock" \
+ --interval PT1M \
+ --start-time "$(date -u -d '2 hours ago' '+%Y-%m-%dT%H:%M:%SZ')" \
+ --output table
 ```
 
 ```sql
 -- Queries en sys.dm_exec_query_stats (ejecutar en SSMS / sqlcmd / Azure Query Editor)
 -- Top queries por CPU (copiar y adaptar con tu servidor)
 SELECT TOP 10
-    total_worker_time/execution_count/1000.0 AS avg_cpu_ms,
-    total_logical_reads/execution_count AS avg_reads,
-    execution_count,
-    SUBSTRING(st.text, (qs.statement_start_offset/2)+1, 200) AS query_snippet
+ total_worker_time/execution_count/1000.0 AS avg_cpu_ms,
+ total_logical_reads/execution_count AS avg_reads,
+ execution_count,
+ SUBSTRING(st.text, (qs.statement_start_offset/2)+1, 200) AS query_snippet
 FROM sys.dm_exec_query_stats qs
 CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
 ORDER BY total_worker_time DESC;
 
 -- Blocking chains activas
 SELECT blocking_session_id, session_id, wait_type,
-       wait_time/1000.0 AS wait_sec, DB_NAME(database_id) AS db
+ wait_time/1000.0 AS wait_sec, DB_NAME(database_id) AS db
 FROM sys.dm_exec_requests
 WHERE blocking_session_id > 0;
 
 -- Índices faltantes (recomendaciones del motor)
 SELECT TOP 10
-    migs.avg_total_user_cost * (migs.avg_user_impact/100.0) * (migs.user_seeks+migs.user_scans) AS score,
-    mid.statement AS table_name,
-    mid.equality_columns, mid.inequality_columns, mid.included_columns
+ migs.avg_total_user_cost * (migs.avg_user_impact/100.0) * (migs.user_seeks+migs.user_scans) AS score,
+ mid.statement AS table_name,
+ mid.equality_columns, mid.inequality_columns, mid.included_columns
 FROM sys.dm_db_missing_index_groups mig
 JOIN sys.dm_db_missing_index_group_stats migs ON migs.group_handle = mig.index_group_handle
 JOIN sys.dm_db_missing_index_details mid ON mig.index_handle = mid.index_handle
 ORDER BY score DESC;
 ```
 
-### 🔍 Azure Data Factory — Pipeline Failures
+### Azure Data Factory — Pipeline Failures
 
 ```bash
 # Últimas pipeline runs con errores
 az datafactory pipeline-run query-by-factory \
-  --factory-name "$ADF_NAME" --resource-group "$RESOURCE_GROUP" \
-  --last-updated-after "$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ')" \
-  --last-updated-before "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
-  --filters operand=Status operator=Equals values=Failed \
-  --output table
+ --factory-name "$ADF_NAME" --resource-group "$RESOURCE_GROUP" \
+ --last-updated-after "$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ')" \
+ --last-updated-before "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
+ --filters operand=Status operator=Equals values=Failed \
+ --output table
 ```
 
 ---
 
 ## Arquitecturas de Referencia
 
-### 🏗️ Modern Lakehouse (Medallion)
+### Modern Lakehouse (Medallion)
 
 ```
 [Sources: SQL, Oracle, SAP, REST APIs, Files]
-        │
-        ▼
-[Azure Data Factory]  ← Orquestación ELT
-        │
-        ▼
-[ADLS Gen2 — Bronze]  ← Raw as-is (Parquet/CSV)
-        │
-[Azure Databricks / Synapse Spark]  ← Delta Lake processing
-        │
-[ADLS Gen2 — Silver]  ← Cleaned & conformed (Delta)
-        │
-[ADLS Gen2 — Gold]    ← Business aggregates (Delta)
-        │
-[Synapse SQL Serverless / Power BI DirectLake]  ← Analytics
-        │
-[Microsoft Purview]  ← Data governance & lineage overlay
+ │
+ ▼
+[Azure Data Factory] ← Orquestación ELT
+ │
+ ▼
+[ADLS Gen2 — Bronze] ← Raw as-is (Parquet/CSV)
+ │
+[Azure Databricks / Synapse Spark] ← Delta Lake processing
+ │
+[ADLS Gen2 — Silver] ← Cleaned & conformed (Delta)
+ │
+[ADLS Gen2 — Gold] ← Business aggregates (Delta)
+ │
+[Synapse SQL Serverless / Power BI DirectLake] ← Analytics
+ │
+[Microsoft Purview] ← Data governance & lineage overlay
 ```
 
-### 🏗️ Real-Time Analytics
+### Real-Time Analytics
 
 ```
 [Devices / Apps / Microservices]
-        │
-        ▼
-[Azure Event Hubs]  ← Ingesta masiva (millones eventos/seg)
-        │
-        ├── [Stream Analytics]  ← Alertas y agregaciones RT
-        │           └── [Power BI Streaming / Cosmos DB]
-        │
-        └── [Event Hubs Capture → ADLS Gen2]
-                    └── [Databricks Structured Streaming]
-                                └── [Delta Live Tables]
+ │
+ ▼
+[Azure Event Hubs] ← Ingesta masiva (millones eventos/seg)
+ │
+ ├── [Stream Analytics] ← Alertas y agregaciones RT
+ │ └── [Power BI Streaming / Cosmos DB]
+ │
+ └── [Event Hubs Capture → ADLS Gen2]
+ └── [Databricks Structured Streaming]
+ └── [Delta Live Tables]
 ```
 
 ---
@@ -183,34 +183,34 @@ az datafactory pipeline-run query-by-factory \
 ```bicep
 // Azure SQL Database seguro con HA
 resource sqlServer 'Microsoft.Sql/servers@2023-05-01-preview' = {
-  name: '${prefix}-sql-${environment}'
-  location: location
-  identity: { type: 'SystemAssigned' }
-  properties: {
-    administratorLogin: sqlAdminLogin
-    administratorLoginPassword: sqlAdminPassword
-    version: '12.0'
-    publicNetworkAccess: 'Disabled'
-    minimalTlsVersion: '1.2'
-    restrictOutboundNetworkAccess: 'Enabled'
-  }
+ name: '${prefix}-sql-${environment}'
+ location: location
+ identity: { type: 'SystemAssigned' }
+ properties: {
+ administratorLogin: sqlAdminLogin
+ administratorLoginPassword: sqlAdminPassword
+ version: '12.0'
+ publicNetworkAccess: 'Disabled'
+ minimalTlsVersion: '1.2'
+ restrictOutboundNetworkAccess: 'Enabled'
+ }
 }
 
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
-  parent: sqlServer
-  name: databaseName
-  location: location
-  sku: {
-    name: environment == 'prod' ? 'BC_Gen5' : 'GP_S_Gen5'
-    tier: environment == 'prod' ? 'BusinessCritical' : 'GeneralPurpose'
-    capacity: environment == 'prod' ? 4 : 1
-    family: 'Gen5'
-  }
-  properties: {
-    zoneRedundant: environment == 'prod'
-    readScale: environment == 'prod' ? 'Enabled' : 'Disabled'
-    requestedBackupStorageRedundancy: environment == 'prod' ? 'GeoZone' : 'Local'
-  }
+ parent: sqlServer
+ name: databaseName
+ location: location
+ sku: {
+ name: environment == 'prod' ? 'BC_Gen5' : 'GP_S_Gen5'
+ tier: environment == 'prod' ? 'BusinessCritical' : 'GeneralPurpose'
+ capacity: environment == 'prod' ? 4 : 1
+ family: 'Gen5'
+ }
+ properties: {
+ zoneRedundant: environment == 'prod'
+ readScale: environment == 'prod' ? 'Enabled' : 'Disabled'
+ requestedBackupStorageRedundancy: environment == 'prod' ? 'GeoZone' : 'Local'
+ }
 }
 ```
 
@@ -227,3 +227,4 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
 - [ ] Downtime window comunicada a stakeholders
 - [ ] Rollback plan validado (tiempo estimado < 1h)
 - [ ] Configurar alertas post-migración (CPU, DTU, connections, errors)
+

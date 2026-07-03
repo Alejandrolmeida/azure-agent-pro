@@ -10,31 +10,31 @@ This guide explains how to connect and query Azure SQL Database using the provid
 **Location**: `scripts/agents/sql-dba/sql-query.py`
 
 Full-featured Python script with support for:
-- ✅ Azure AD authentication (via Azure CLI tokens)
-- ✅ SQL authentication (username/password)
-- ✅ Multiple output formats (table, json)
-- ✅ Proper ODBC Driver 18 integration
-- ✅ Handles long Azure AD tokens correctly
+- Azure AD authentication (via Azure CLI tokens)
+- SQL authentication (username/password)
+- Multiple output formats (table, json)
+- Proper ODBC Driver 18 integration
+- Handles long Azure AD tokens correctly
 
 **Usage:**
 
 ```bash
 # SQL Authentication
 python3 scripts/agents/sql-dba/sql-query.py \
-  -s your-server.database.windows.net \
-  -d your-database \
-  -u your-username \
-  -p your-password \
-  -q "SELECT @@VERSION" \
-  -o table
+ -s your-server.database.windows.net \
+ -d your-database \
+ -u your-username \
+ -p your-password \
+ -q "SELECT @@VERSION" \
+ -o table
 
 # Azure AD Authentication
 python3 scripts/agents/sql-dba/sql-query.py \
-  -s your-server.database.windows.net \
-  -d your-database \
-  --aad \
-  -q "SELECT @@VERSION" \
-  -o json
+ -s your-server.database.windows.net \
+ -d your-database \
+ --aad \
+ -q "SELECT @@VERSION" \
+ -o json
 ```
 
 **Parameters:**
@@ -68,11 +68,11 @@ export AZURE_SQL_PASSWORD="your-password"
 
 ```bash
 ./scripts/agents/sql-dba/sql-connect.sh \
-  -s your-server.database.windows.net \
-  -d your-database \
-  -u your-username \
-  -p your-password \
-  -q "SELECT @@VERSION"
+ -s your-server.database.windows.net \
+ -d your-database \
+ -u your-username \
+ -p your-password \
+ -q "SELECT @@VERSION"
 ```
 
 ## Prerequisites
@@ -106,9 +106,9 @@ export AZURE_SQL_PASSWORD="your-password"
 ```
 
 **Pros:**
-- ✅ Simple and direct
-- ✅ No Azure CLI required
-- ✅ Works everywhere
+- Simple and direct
+- No Azure CLI required
+- Works everywhere
 
 **Cons:**
 - ⚠️ Password management required
@@ -121,10 +121,10 @@ az login --tenant your-tenant-id
 ```
 
 **Pros:**
-- ✅ No password storage
-- ✅ Uses Azure AD identity
-- ✅ Supports MFA
-- ✅ Audit trail via Azure AD
+- No password storage
+- Uses Azure AD identity
+- Supports MFA
+- Audit trail via Azure AD
 
 **Cons:**
 - ⚠️ User must exist in database with proper permissions
@@ -155,15 +155,15 @@ source ~/.azure-sql-env
 ```bash
 # Store password in Key Vault
 az keyvault secret set \
-  --vault-name your-keyvault \
-  --name sql-password \
-  --value "your-password"
+ --vault-name your-keyvault \
+ --name sql-password \
+ --value "your-password"
 
 # Retrieve in script
 PASSWORD=$(az keyvault secret show \
-  --vault-name your-keyvault \
-  --name sql-password \
-  --query value -o tsv)
+ --vault-name your-keyvault \
+ --name sql-password \
+ --query value -o tsv)
 ```
 
 ## Common Queries
@@ -172,9 +172,9 @@ PASSWORD=$(az keyvault secret show \
 ```bash
 ./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT 
-    DB_NAME() as DatabaseName,
-    CAST(SUM(CAST(FILEPROPERTY(name, 'SpaceUsed') AS bigint) * 8192. / 1024 / 1024 / 1024) AS DECIMAL(10,2)) as UsedSpaceGB,
-    CAST(SUM(CAST(size AS bigint) * 8192. / 1024 / 1024 / 1024) AS DECIMAL(10,2)) as AllocatedSpaceGB
+ DB_NAME() as DatabaseName,
+ CAST(SUM(CAST(FILEPROPERTY(name, 'SpaceUsed') AS bigint) * 8192. / 1024 / 1024 / 1024) AS DECIMAL(10,2)) as UsedSpaceGB,
+ CAST(SUM(CAST(size AS bigint) * 8192. / 1024 / 1024 / 1024) AS DECIMAL(10,2)) as AllocatedSpaceGB
 FROM sys.database_files WHERE type = 0
 "
 ```
@@ -183,9 +183,9 @@ FROM sys.database_files WHERE type = 0
 ```bash
 ./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT TOP 10
-    SCHEMA_NAME(t.schema_id) + '.' + t.name as TableName,
-    CAST(SUM(p.rows) AS DECIMAL(18,0)) as TotalRows,
-    CAST(SUM(a.total_pages) * 8 / 1024.0 / 1024.0 AS DECIMAL(10,2)) as SizeGB
+ SCHEMA_NAME(t.schema_id) + '.' + t.name as TableName,
+ CAST(SUM(p.rows) AS DECIMAL(18,0)) as TotalRows,
+ CAST(SUM(a.total_pages) * 8 / 1024.0 / 1024.0 AS DECIMAL(10,2)) as SizeGB
 FROM sys.tables t
 INNER JOIN sys.indexes i ON t.object_id = i.object_id
 INNER JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
@@ -199,8 +199,8 @@ ORDER BY SUM(a.total_pages) DESC
 ```bash
 ./scripts/agents/sql-dba/sql-connect.sh -q "
 SELECT 
-    COUNT(*) as TotalConnections,
-    COUNT(CASE WHEN status = 'running' THEN 1 END) as ActiveQueries
+ COUNT(*) as TotalConnections,
+ COUNT(CASE WHEN status = 'running' THEN 1 END) as ActiveQueries
 FROM sys.dm_exec_sessions
 WHERE is_user_process = 1
 "
@@ -215,11 +215,11 @@ WHERE is_user_process = 1
 ```bash
 # Add your IP to firewall
 az sql server firewall-rule create \
-  --resource-group your-resource-group \
-  --server your-server \
-  --name "AllowMyIP-$(date +%Y%m%d)" \
-  --start-ip-address YOUR_IP \
-  --end-ip-address YOUR_IP
+ --resource-group your-resource-group \
+ --server your-server \
+ --name "AllowMyIP-$(date +%Y%m%d)" \
+ --start-ip-address YOUR_IP \
+ --end-ip-address YOUR_IP
 ```
 
 ### Issue: Login Failed (Azure AD)
@@ -292,3 +292,4 @@ OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY
 - [ODBC Driver for SQL Server](https://docs.microsoft.com/sql/connect/odbc/)
 - [Azure SQL Performance Best Practices](https://docs.microsoft.com/azure/azure-sql/database/performance-guidance)
 - [DMVs Reference](https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/)
+

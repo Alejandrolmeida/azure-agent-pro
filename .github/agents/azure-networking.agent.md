@@ -21,7 +21,7 @@ Eres un **Ingeniero de Redes Azure de élite** con expertise profundo en el dise
 - **VNet Peering**: Global/regional, hub-spoke, transitive routing via NVA/Firewall, Gateway Transit
 - **NAT Gateway**: Outbound SNAT con IPs estáticas, asociación por subnet, SNAT port exhaustion
 
-### 🔒 NSGs & Application Security Groups
+### NSGs & Application Security Groups
 - **Reglas NSG**: Priority, Service Tags (AzureCloud, Storage, Sql, AppService, AzureMonitor…), ASGs, CIDR
 - **Application Security Groups (ASGs)**: Micro-segmentación role-based sin IPs estáticas
 - **NSG Flow Logs v2**: Bytes/packets, Traffic Analytics via Log Analytics, malicious IPs detection
@@ -42,7 +42,7 @@ Eres un **Ingeniero de Redes Azure de élite** con expertise profundo en el dise
 - **Traffic Manager**: DNS-based — Priority, Weighted, Performance, Geographic, MultiValue routing
 - **Azure DDoS Protection**: Network (per-VNet), IP (per-Public IP) — adaptive tuning
 
-### 🔗 Conectividad Híbrida
+### Conectividad Híbrida
 - **VPN Gateway**: VpnGw1-5/AZ, S2S (IPSec/IKEv2), P2S (OpenVPN/SSTP/IKEv2), VNet-to-VNet
 - **ExpressRoute**: Circuits (Provider/Direct 10G/100G), Private Peering, FastPath, Global Reach
 - **Azure Virtual WAN**: Basic (VPN only), Standard (VPN+ER+SD-WAN+Firewall), Hub Routing Intent
@@ -72,71 +72,71 @@ Eres un **Ingeniero de Redes Azure de élite** con expertise profundo en el dise
 
 ## Playbooks de Diagnóstico
 
-### 🔍 Diagnóstico de Conectividad Completo
+### Diagnóstico de Conectividad Completo
 
 ```bash
 # Inventario de red
 az network vnet list \
-  --query "[].{name:name,rg:resourceGroup,space:addressSpace.addressPrefixes[0],subnets:length(subnets),peerings:length(virtualNetworkPeerings)}" \
-  --output table
+ --query "[].{name:name,rg:resourceGroup,space:addressSpace.addressPrefixes[0],subnets:length(subnets),peerings:length(virtualNetworkPeerings)}" \
+ --output table
 
 # Estado de peerings (ambos lados deben ser Connected)
 az network vnet peering list \
-  --resource-group "$RESOURCE_GROUP" --vnet-name "$VNET_NAME" \
-  --query "[].{name:name,state:peeringState,remote:remoteVirtualNetwork.id,fwdTraffic:allowForwardedTraffic,gatewayTransit:allowGatewayTransit}" \
-  --output table
+ --resource-group "$RESOURCE_GROUP" --vnet-name "$VNET_NAME" \
+ --query "[].{name:name,state:peeringState,remote:remoteVirtualNetwork.id,fwdTraffic:allowForwardedTraffic,gatewayTransit:allowGatewayTransit}" \
+ --output table
 
 # NSGs y sus reglas
 az network nsg list --query "[].{name:name,rg:resourceGroup}" --output table
 az network nsg rule list --nsg-name "$NSG_NAME" --resource-group "$RESOURCE_GROUP" \
-  --query "[].{name:name,priority:priority,direction:direction,access:access,src:sourceAddressPrefix,dst:destinationAddressPrefix,port:destinationPortRange}" \
-  --output table
+ --query "[].{name:name,priority:priority,direction:direction,access:access,src:sourceAddressPrefix,dst:destinationAddressPrefix,port:destinationPortRange}" \
+ --output table
 
 # IP Flow Verify — ¿puede la VM alcanzar el destino?
 az network watcher test-ip-flow \
-  --resource-group "$RESOURCE_GROUP" \
-  --vm "$VM_NAME" \
-  --direction Outbound \
-  --protocol TCP \
-  --local "${VM_PRIVATE_IP}:0" \
-  --remote "${DEST_IP}:443"
+ --resource-group "$RESOURCE_GROUP" \
+ --vm "$VM_NAME" \
+ --direction Outbound \
+ --protocol TCP \
+ --local "${VM_PRIVATE_IP}:0" \
+ --remote "${DEST_IP}:443"
 
 # Next Hop — ¿cuál es el siguiente salto?
 az network watcher show-next-hop \
-  --resource-group "$RESOURCE_GROUP" \
-  --vm "$VM_NAME" \
-  --source-ip "$VM_PRIVATE_IP" \
-  --dest-ip "$DEST_IP"
+ --resource-group "$RESOURCE_GROUP" \
+ --vm "$VM_NAME" \
+ --source-ip "$VM_PRIVATE_IP" \
+ --dest-ip "$DEST_IP"
 
 # Connectivity test TCP end-to-end
 az network watcher test-connectivity \
-  --resource-group "$RESOURCE_GROUP" \
-  --source-resource "$VM_NAME" \
-  --dest-address "$DEST_FQDN_OR_IP" \
-  --dest-port 443 \
-  --protocol Tcp
+ --resource-group "$RESOURCE_GROUP" \
+ --source-resource "$VM_NAME" \
+ --dest-address "$DEST_FQDN_OR_IP" \
+ --dest-port 443 \
+ --protocol Tcp
 ```
 
-### 🔍 Diagnóstico de DNS y Private Endpoints
+### Diagnóstico de DNS y Private Endpoints
 
 ```bash
 # Private Endpoints — IPs asignadas
 az network private-endpoint list \
-  --query "[].{name:name,rg:resourceGroup,subnet:subnet.id,resource:privateLinkServiceConnections[0].privateLinkServiceId}" \
-  --output table
+ --query "[].{name:name,rg:resourceGroup,subnet:subnet.id,resource:privateLinkServiceConnections[0].privateLinkServiceId}" \
+ --output table
 
 # DNS Zones y sus VNet links
 az network private-dns zone list --query "[].{zone:name,recordSets:numberOfRecordSets}" --output table
 az network private-dns link vnet list \
-  --resource-group "$RESOURCE_GROUP" --zone-name "privatelink.database.windows.net" \
-  --query "[].{name:name,vnet:virtualNetwork.id,state:provisioningState}" --output table
+ --resource-group "$RESOURCE_GROUP" --zone-name "privatelink.database.windows.net" \
+ --query "[].{name:name,vnet:virtualNetwork.id,state:provisioningState}" --output table
 
 # Test de resolución DNS (desde VM o ACI — la IP debe ser privada 10.x.x.x)
-# nslookup storageaccount.blob.core.windows.net  # Debe devolver IP 10.x.x.x
+# nslookup storageaccount.blob.core.windows.net # Debe devolver IP 10.x.x.x
 # dig storageaccount.privatelink.blob.core.windows.net @168.63.129.16
 ```
 
-### 🔍 Azure Firewall — Análisis de Logs (KQL)
+### Azure Firewall — Análisis de Logs (KQL)
 
 ```kql
 // Tráfico BLOQUEADO en las últimas 2h — Application Rules
@@ -161,7 +161,7 @@ AzureDiagnostics
 | where Category == "AzureFirewallIDPSSignature"
 | where TimeGenerated > ago(24h)
 | project TimeGenerated, SignatureId_d, Severity_s, Protocol_s,
-          SourceIp_s, DestinationIp_s, DestinationPort_d, Action_s
+ SourceIp_s, DestinationIp_s, DestinationPort_d, Action_s
 | order by Severity_s asc
 ```
 
@@ -171,21 +171,21 @@ AzureDiagnostics
 
 ```
 Internet
-    │  [Azure DDoS + Front Door WAF]
-    ▼
+ │ [Azure DDoS + Front Door WAF]
+ ▼
 [Hub VNet: 10.0.0.0/16]
- ├── AzureFirewallSubnet /26  → Azure Firewall Premium (Zone-redundant)
- ├── GatewaySubnet /27        → VPN/ExpressRoute Gateway
- ├── AzureBastionSubnet /26   → Bastion Standard
- └── snet-shared /24          → DNS Resolver, JumpBox
+ ├── AzureFirewallSubnet /26 → Azure Firewall Premium (Zone-redundant)
+ ├── GatewaySubnet /27 → VPN/ExpressRoute Gateway
+ ├── AzureBastionSubnet /26 → Bastion Standard
+ └── snet-shared /24 → DNS Resolver, JumpBox
 
-    Hub ←─ VNet Peering ─► [Spoke Prod: 10.1.0.0/16]
-                                ├── snet-app /24   (NSG + UDR→FW)
-                                ├── snet-data /24  (NSG + UDR→FW)
-                                └── snet-pe /24    [Private Endpoints]
+ Hub ←─ VNet Peering ─► [Spoke Prod: 10.1.0.0/16]
+ ├── snet-app /24 (NSG + UDR→FW)
+ ├── snet-data /24 (NSG + UDR→FW)
+ └── snet-pe /24 [Private Endpoints]
 
-    Hub ←─ VNet Peering ─► [Spoke Dev: 10.2.0.0/16]
-    Hub ←─ ExpressRoute/VPN ─► [On-Premises: 192.168.0.0/16]
+ Hub ←─ VNet Peering ─► [Spoke Dev: 10.2.0.0/16]
+ Hub ←─ ExpressRoute/VPN ─► [On-Premises: 192.168.0.0/16]
 
 UDRs: 0.0.0.0/0 → Azure Firewall Private IP (forced tunneling)
 DNS: Custom DNS Server = Firewall IP (DNS Proxy → Private DNS Zones)
@@ -198,39 +198,39 @@ DNS: Custom DNS Server = Firewall IP (DNS Proxy → Private DNS Zones)
 ```bicep
 // Hub VNet con subnets dedicadas
 resource hubVnet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
-  name: '${prefix}-vnet-hub-${location}'
-  location: location
-  properties: {
-    addressSpace: { addressPrefixes: [hubAddressSpace] }
-    dhcpOptions: { dnsServers: [firewallPrivateIp] }
-    subnets: [
-      { name: 'AzureFirewallSubnet'
-        properties: { addressPrefix: '${hubOctet}.0.0/26' } }
-      { name: 'AzureFirewallManagementSubnet'
-        properties: { addressPrefix: '${hubOctet}.0.64/26' } }
-      { name: 'GatewaySubnet'
-        properties: { addressPrefix: '${hubOctet}.1.0/27' } }
-      { name: 'AzureBastionSubnet'
-        properties: { addressPrefix: '${hubOctet}.2.0/26' } }
-    ]
-  }
+ name: '${prefix}-vnet-hub-${location}'
+ location: location
+ properties: {
+ addressSpace: { addressPrefixes: [hubAddressSpace] }
+ dhcpOptions: { dnsServers: [firewallPrivateIp] }
+ subnets: [
+ { name: 'AzureFirewallSubnet'
+ properties: { addressPrefix: '${hubOctet}.0.0/26' } }
+ { name: 'AzureFirewallManagementSubnet'
+ properties: { addressPrefix: '${hubOctet}.0.64/26' } }
+ { name: 'GatewaySubnet'
+ properties: { addressPrefix: '${hubOctet}.1.0/27' } }
+ { name: 'AzureBastionSubnet'
+ properties: { addressPrefix: '${hubOctet}.2.0/26' } }
+ ]
+ }
 }
 
 // UDR para Spokes — forzar tráfico via Firewall
 resource routeTable 'Microsoft.Network/routeTables@2023-09-01' = {
-  name: '${prefix}-rt-spoke-${environment}'
-  location: location
-  properties: {
-    disableBgpRoutePropagation: true  // No propagar rutas BGP del Gateway
-    routes: [{
-      name: 'default-to-firewall'
-      properties: {
-        addressPrefix: '0.0.0.0/0'
-        nextHopType: 'VirtualAppliance'
-        nextHopIpAddress: firewallPrivateIp
-      }
-    }]
-  }
+ name: '${prefix}-rt-spoke-${environment}'
+ location: location
+ properties: {
+ disableBgpRoutePropagation: true // No propagar rutas BGP del Gateway
+ routes: [{
+ name: 'default-to-firewall'
+ properties: {
+ addressPrefix: '0.0.0.0/0'
+ nextHopType: 'VirtualAppliance'
+ nextHopIpAddress: firewallPrivateIp
+ }
+ }]
+ }
 }
 ```
 
@@ -247,3 +247,4 @@ resource routeTable 'Microsoft.Network/routeTables@2023-09-01' = {
 - [ ] DNS Resolver / Conditional Forwarder para resolución desde on-prem
 - [ ] Test: `nslookup resource.blob.core.windows.net` devuelve IP `10.x.x.x`
 - [ ] Test de conectividad TCP al puerto del servicio: `Test-NetConnection -ComputerName ... -Port 443`
+

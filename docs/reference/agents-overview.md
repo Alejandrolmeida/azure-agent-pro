@@ -1,24 +1,24 @@
-# 🤖 Agentes Especializados — Azure Agent Pro v2
+# Agentes Especializados — Azure Agent Pro v2
 
 Azure Agent Pro v2 incluye **7 sub-agentes especializados** que cubren todos los dominios de Azure. Cada agente tiene instrucciones profundas, playbooks de diagnóstico y code templates para su área específica.
 
 ---
 
-## 📋 Tabla de Agentes
+## Tabla de Agentes
 
 | Agente | Archivo | Dominio | Nivel |
 |--------|---------|---------|-------|
-| [Azure_Architect_Pro](#-azure_architect_pro) | `azure-architect.agent.md` | Arquitectura global, Bicep IaC, DevOps | ⭐⭐⭐ Orquestador |
-| [Azure_Admin_Pro](#-azure_admin_pro) | `azure-admin.agent.md` | Governance, Policy, RBAC, Cost | ⭐⭐⭐ Avanzado |
-| [Azure_Data_Pro](#-azure_data_pro) | `azure-data.agent.md` | SQL, Cosmos, Synapse, ADF, Databricks | ⭐⭐⭐ Avanzado |
-| [Azure_AppServices_Pro](#-azure_appservices_pro) | `azure-app-services.agent.md` | App Service, Functions, AKS, APIM | ⭐⭐⭐ Avanzado |
-| [Azure_Foundry_Pro](#-azure_foundry_pro) | `azure-foundry.agent.md` | OpenAI, AI Foundry, RAG, ML | ⭐⭐⭐ Avanzado |
-| [Azure_Networking_Pro](#-azure_networking_pro) | `azure-networking.agent.md` | VNets, Firewall, VPN, Private Link | ⭐⭐⭐ Avanzado |
-| [Azure_SQL_DBA](#-azure_sql_dba) | `Azure_SQL_DBA.agent.md` | SQL DBA — performance, migration | ⭐⭐⭐ Avanzado |
+| [Azure_Architect_Pro](#azure_architect_pro) | `azure-architect.agent.md` | Arquitectura global, Bicep IaC, DevOps | Orquestador |
+| [Azure_Admin_Pro](#azure_admin_pro) | `azure-admin.agent.md` | Governance, Policy, RBAC, Cost | Avanzado |
+| [Azure_Data_Pro](#azure_data_pro) | `azure-data.agent.md` | SQL, Cosmos, Synapse, ADF, Databricks | Avanzado |
+| [Azure_AppServices_Pro](#azure_appservices_pro) | `azure-app-services.agent.md` | App Service, Functions, AKS, APIM | Avanzado |
+| [Azure_Foundry_Pro](#azure_foundry_pro) | `azure-foundry.agent.md` | OpenAI, AI Foundry, RAG, ML | Avanzado |
+| [Azure_Networking_Pro](#azure_networking_pro) | `azure-networking.agent.md` | VNets, Firewall, VPN, Private Link | Avanzado |
+| [Azure_SQL_DBA](#azure_sql_dba) | `Azure_SQL_DBA.agent.md` | SQL DBA — performance, migration | Avanzado |
 
 ---
 
-## 🏗️ Azure_Architect_Pro
+## Azure_Architect_Pro
 
 **El orquestador** — punto de entrada para cualquier trabajo arquitectónico en Azure.
 
@@ -50,7 +50,7 @@ y un pipeline GitHub Actions con OIDC.
 
 ---
 
-## 🛡️ Azure_Admin_Pro
+## Azure_Admin_Pro
 
 **El administrador de governance** — gestión de subscriptions, policies, identidades y cumplimiento.
 
@@ -118,7 +118,7 @@ Cosmos DB con 100M de documentos de IoT? Patrón de acceso:
 
 ---
 
-## 🚀 Azure_AppServices_Pro
+## Azure_AppServices_Pro
 
 **El ingeniero cloud-native** — aplicaciones PaaS, serverless, containers y mensajería.
 
@@ -152,7 +152,7 @@ health checks y rollback automático.
 
 ---
 
-## 🤖 Azure_Foundry_Pro
+## Azure_Foundry_Pro
 
 **El ingeniero de IA** — soluciones GenAI enterprise con Azure OpenAI, RAG y AI Foundry.
 
@@ -236,7 +236,7 @@ Problemas de rendimiento SQL, consultas lentas, bloqueos, gestión de índices, 
 
 ---
 
-## 🚀 Cómo Usar los Agentes en VS Code
+## Cómo Usar los Agentes en VS Code
 
 ### Activar un agente en Copilot Chat
 
@@ -245,13 +245,13 @@ Problemas de rendimiento SQL, consultas lentas, bloqueos, gestión de índices, 
 3. El agente cargará automáticamente sus instrucciones especializadas
 
 ```
-@Azure_Architect_Pro    ← Orquestador principal
-@Azure_Admin_Pro        ← Governance
-@Azure_Data_Pro         ← Datos
-@Azure_AppServices_Pro  ← Apps PaaS
-@Azure_Foundry_Pro      ← IA/GenAI
-@Azure_Networking_Pro   ← Redes
-@Azure_SQL_DBA          ← SQL avanzado
+@Azure_Architect_Pro ← Orquestador principal
+@Azure_Admin_Pro ← Governance
+@Azure_Data_Pro ← Datos
+@Azure_AppServices_Pro ← Apps PaaS
+@Azure_Foundry_Pro ← IA/GenAI
+@Azure_Networking_Pro ← Redes
+@Azure_SQL_DBA ← SQL avanzado
 ```
 
 ### Buenas prácticas con agentes
@@ -277,7 +277,7 @@ para el entorno de producción con Zone Redundancy.
 
 ---
 
-## 📊 MCP Servers que usan los agentes
+## MCP Servers que usan los agentes
 
 | MCP Server | Package | Agentes que lo usan | Para qué |
 |------------|---------|---------------------|----------|
@@ -291,7 +291,7 @@ para el entorno de producción con Zone Redundancy.
 
 ---
 
-## 🔧 Añadir un nuevo agente
+## Añadir un nuevo agente
 
 ```bash
 # 1. Crear el archivo de agente

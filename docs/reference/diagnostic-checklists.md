@@ -14,12 +14,12 @@ Estos checklists aseguran que los diagnósticos están respaldados por evidencia
 
 Antes de comunicar CUALQUIER diagnóstico de causa raíz:
 
-1. **Recopilación de datos**: ✅ Completa
-2. **Correlación temporal**: ✅ Verificada
-3. **Contexto de plataforma**: ✅ Considerado (Azure SQL vs on-prem)
-4. **Hipótesis alternativas**: ✅ Listadas y descartadas con evidencia
-5. **Causalidad directa**: ✅ Demostrada (no solo correlación)
-6. **Checklist específico del tipo**: ✅ Ejecutado
+1. **Recopilación de datos**: Completa
+2. **Correlación temporal**: Verificada
+3. **Contexto de plataforma**: Considerado (Azure SQL vs on-prem)
+4. **Hipótesis alternativas**: Listadas y descartadas con evidencia
+5. **Causalidad directa**: Demostrada (no solo correlación)
+6. **Checklist específico del tipo**: Ejecutado
 
 ### Red Flags de Diagnóstico Prematuro
 
@@ -48,26 +48,26 @@ Si tienes dudas sobre el diagnóstico:
 
 ### Checkpoints Obligatorios
 
-#### ✅ Checkpoint 1: SQL Server Uptime
+#### Checkpoint 1: SQL Server Uptime
 
 ```sql
 SELECT sqlserver_start_time,
-       DATEDIFF(DAY, sqlserver_start_time, GETUTCDATE()) AS uptime_days,
-       DATEDIFF(MINUTE, sqlserver_start_time, GETUTCDATE()) AS uptime_minutes
+ DATEDIFF(DAY, sqlserver_start_time, GETUTCDATE()) AS uptime_days,
+ DATEDIFF(MINUTE, sqlserver_start_time, GETUTCDATE()) AS uptime_minutes
 FROM sys.dm_os_sys_info
 ```
 
 **Propósito**: Establecer línea base temporal del servidor.
 
-#### ✅ Checkpoint 2: Correlación Temporal
+#### Checkpoint 2: Correlación Temporal
 
 ```sql
 SELECT 
-    (SELECT sqlserver_start_time FROM sys.dm_os_sys_info) AS server_start,
-    MIN(transaction_begin_time) AS oldest_transaction,
-    DATEDIFF(MINUTE, 
-        (SELECT sqlserver_start_time FROM sys.dm_os_sys_info),
-        MIN(transaction_begin_time)) AS minutes_after_restart
+ (SELECT sqlserver_start_time FROM sys.dm_os_sys_info) AS server_start,
+ MIN(transaction_begin_time) AS oldest_transaction,
+ DATEDIFF(MINUTE, 
+ (SELECT sqlserver_start_time FROM sys.dm_os_sys_info),
+ MIN(transaction_begin_time)) AS minutes_after_restart
 FROM sys.dm_tran_active_transactions
 WHERE transaction_begin_time < DATEADD(DAY, -1, GETUTCDATE())
 ```
@@ -76,12 +76,12 @@ WHERE transaction_begin_time < DATEADD(DAY, -1, GETUTCDATE())
 - `minutes_after_restart < 10` → Transacciones de RECOVERY/SISTEMA
 - `minutes_after_restart > 60` → Investigar más (posible zombie)
 
-#### ✅ Checkpoint 3: Session Ownership
+#### Checkpoint 3: Session Ownership
 
 ```sql
 SELECT at.transaction_id, at.name, at.transaction_begin_time,
-       at.transaction_type, at.transaction_state,
-       st.session_id, es.login_name, es.host_name, es.program_name
+ at.transaction_type, at.transaction_state,
+ st.session_id, es.login_name, es.host_name, es.program_name
 FROM sys.dm_tran_active_transactions at
 LEFT JOIN sys.dm_tran_session_transactions st ON at.transaction_id = st.transaction_id
 LEFT JOIN sys.dm_exec_sessions es ON st.session_id = es.session_id
@@ -92,13 +92,13 @@ WHERE at.transaction_begin_time < DATEADD(DAY, -1, GETUTCDATE())
 - `session_id = NULL` → Transacción INTERNA (NO zombie)
 - `session_id > 0 + login_name` → Transacción de USUARIO (investigar)
 
-#### ✅ Checkpoint 4: PVS Stats
+#### Checkpoint 4: PVS Stats
 
 ```sql
 SELECT database_id, 
-       persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb,
-       current_aborted_transaction_count,
-       oldest_aborted_transaction_begin_time
+ persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb,
+ current_aborted_transaction_count,
+ oldest_aborted_transaction_begin_time
 FROM sys.dm_tran_persistent_version_store_stats
 WHERE database_id = DB_ID()
 ```
@@ -107,7 +107,7 @@ WHERE database_id = DB_ID()
 - `current_aborted_transaction_count = 0` → NO hay zombies bloqueando PVS
 - `current_aborted_transaction_count > 0` → SÍ hay bloqueadores
 
-#### ✅ Checkpoint 5: Proporción PVS vs Duración
+#### Checkpoint 5: Proporción PVS vs Duración
 
 ```sql
 -- Calcular ratio: actual PVS / esperado si bloqueado
@@ -117,7 +117,7 @@ WHERE database_id = DB_ID()
 
 ### Criterios de Decisión
 
-#### ✅ Zombie Transactions → SÍ, si:
+#### Zombie Transactions → SÍ, si:
 - session_id ≠ NULL (número específico)
 - login_name = usuario aplicación (no 'sa' o 'system')
 - Inicio >> restart (horas/días DESPUÉS del restart)
@@ -139,10 +139,10 @@ WHERE database_id = DB_ID()
 **Realidad**: Transacciones internas de PVS post-restart (Azure SQL Database)
 
 **Error cometido**:
-1. ❌ No verifiqué SQL Server uptime
-2. ❌ No correlacioné inicio de transacciones con restart (3 minutos después)
-3. ❌ No interpreté session_id=NULL como indicador de sistema
-4. ❌ No validé proporción PVS vs duración (246 GB << 7,050 GB esperados)
+1. No verifiqué SQL Server uptime
+2. No correlacioné inicio de transacciones con restart (3 minutos después)
+3. No interpreté session_id=NULL como indicador de sistema
+4. No validé proporción PVS vs duración (246 GB << 7,050 GB esperados)
 
 **Aprendizaje**:
 - **session_id = NULL es clear indicator de transacción de SISTEMA**
@@ -156,17 +156,17 @@ WHERE database_id = DB_ID()
 
 ### Checkpoints Obligatorios
 
-#### ✅ Checkpoint 1: Blocking Chain
+#### Checkpoint 1: Blocking Chain
 
 ```sql
 WITH BlockingChain AS (
-    SELECT session_id, blocking_session_id, wait_type, wait_time,
-           CAST(1 AS INT) AS level
-    FROM sys.dm_exec_requests WHERE blocking_session_id <> 0
-    UNION ALL
-    SELECT r.session_id, r.blocking_session_id, r.wait_type, r.wait_time, bc.level + 1
-    FROM sys.dm_exec_requests r
-    INNER JOIN BlockingChain bc ON r.session_id = bc.blocking_session_id
+ SELECT session_id, blocking_session_id, wait_type, wait_time,
+ CAST(1 AS INT) AS level
+ FROM sys.dm_exec_requests WHERE blocking_session_id <> 0
+ UNION ALL
+ SELECT r.session_id, r.blocking_session_id, r.wait_type, r.wait_time, bc.level + 1
+ FROM sys.dm_exec_requests r
+ INNER JOIN BlockingChain bc ON r.session_id = bc.blocking_session_id
 )
 SELECT bc.*, s.login_name, s.host_name, st.text
 FROM BlockingChain bc
@@ -177,12 +177,12 @@ ORDER BY bc.level, bc.wait_time DESC
 
 **Propósito**: Identificar blocker root (head of blocking chain).
 
-#### ✅ Checkpoint 2: Duración del Bloqueo
+#### Checkpoint 2: Duración del Bloqueo
 
 - Evaluar `wait_time` del blocked session
 - Determinar si es temporal (<1 min) o persistente (>5 min)
 
-#### ✅ Checkpoint 3: Impacto
+#### Checkpoint 3: Impacto
 
 - Contar sesiones bloqueadas
 - Identificar usuarios/aplicaciones afectadas
@@ -205,23 +205,23 @@ ORDER BY bc.level, bc.wait_time DESC
 
 ### Checkpoints Obligatorios
 
-#### ✅ Checkpoint 1: Tipo de Crecimiento
+#### Checkpoint 1: Tipo de Crecimiento
 
 ```sql
 -- Data vs Log vs TempDB vs PVS
 SELECT name, type_desc, 
-       size * 8 / 1024 AS size_mb,
-       CAST(FILEPROPERTY(name, 'SpaceUsed') AS INT) * 8 / 1024 AS used_mb
+ size * 8 / 1024 AS size_mb,
+ CAST(FILEPROPERTY(name, 'SpaceUsed') AS INT) * 8 / 1024 AS used_mb
 FROM sys.database_files
 ```
 
-#### ✅ Checkpoint 2: PVS Investigation
+#### Checkpoint 2: PVS Investigation
 
 ```sql
 SELECT database_id,
-       persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb,
-       current_aborted_transaction_count,
-       oldest_aborted_transaction_begin_time
+ persistent_version_store_size_kb / 1024 / 1024 AS pvs_gb,
+ current_aborted_transaction_count,
+ oldest_aborted_transaction_begin_time
 FROM sys.dm_tran_persistent_version_store_stats
 ```
 
@@ -229,14 +229,14 @@ FROM sys.dm_tran_persistent_version_store_stats
 - `pvs_gb > 50% storage` → Problema PVS
 - `oldest_aborted_age_min > 60` → Transacciones reteniendo PVS
 
-#### ✅ Checkpoint 3: Unallocated Space
+#### Checkpoint 3: Unallocated Space
 
 ```sql
 SELECT SUM(unallocated_extent_page_count) * 8 / 1024 / 1024 AS unallocated_gb
 FROM sys.dm_db_file_space_usage
 ```
 
-#### ✅ Checkpoint 4: Growth Rate
+#### Checkpoint 4: Growth Rate
 
 - Ejecutar monitoreo de 1 hora (mínimo)
 - Calcular GB/día actual
@@ -255,7 +255,7 @@ FROM sys.dm_db_file_space_usage
 
 ### Checkpoints Obligatorios
 
-#### ✅ Checkpoint 1: Wait Stats
+#### Checkpoint 1: Wait Stats
 
 ```sql
 SELECT TOP 50 wait_type, wait_time_ms, waiting_tasks_count
@@ -271,26 +271,26 @@ ORDER BY wait_time_ms DESC
 - `CXPACKET` → Paralelismo
 - `SOS_SCHEDULER_YIELD` → CPU pressure
 
-#### ✅ Checkpoint 2: Top Queries
+#### Checkpoint 2: Top Queries
 
 ```sql
 SELECT TOP 20 
-    qs.execution_count,
-    qs.total_worker_time / qs.execution_count AS avg_cpu,
-    SUBSTRING(st.text, (qs.statement_start_offset/2)+1,
-      ((CASE qs.statement_end_offset WHEN -1 THEN DATALENGTH(st.text)
-        ELSE qs.statement_end_offset END - qs.statement_start_offset)/2) + 1) AS query_text
+ qs.execution_count,
+ qs.total_worker_time / qs.execution_count AS avg_cpu,
+ SUBSTRING(st.text, (qs.statement_start_offset/2)+1,
+ ((CASE qs.statement_end_offset WHEN -1 THEN DATALENGTH(st.text)
+ ELSE qs.statement_end_offset END - qs.statement_start_offset)/2) + 1) AS query_text
 FROM sys.dm_exec_query_stats qs
 CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
 ORDER BY qs.total_worker_time DESC
 ```
 
-#### ✅ Checkpoint 3: Query Store Regressions
+#### Checkpoint 3: Query Store Regressions
 
 ```sql
 -- Buscar queries con plan changes recientes
 SELECT TOP 20 qsq.query_id, qsqt.query_sql_text,
-       qsrs.count_executions, qsrs.avg_duration
+ qsrs.count_executions, qsrs.avg_duration
 FROM sys.query_store_query qsq
 INNER JOIN sys.query_store_query_text qsqt ON qsq.query_text_id = qsqt.query_text_id
 INNER JOIN sys.query_store_plan qsp ON qsq.query_id = qsp.query_id
@@ -299,7 +299,7 @@ WHERE qsrs.last_execution_time > DATEADD(HOUR, -24, GETUTCDATE())
 ORDER BY qsrs.avg_duration DESC
 ```
 
-#### ✅ Checkpoint 4: Index Analysis
+#### Checkpoint 4: Index Analysis
 
 - Missing indexes (DMVs)
 - Unused indexes
@@ -322,11 +322,11 @@ ORDER BY qsrs.avg_duration DESC
 
 Ejecutar checklist de auto-validación que verifica:
 
-1. ✅ Todas las queries diagnósticas ejecutadas
-2. ✅ Evidencia directa de causalidad (no solo correlación)
-3. ✅ Hipótesis alternativas consideradas y descartadas
-4. ✅ Contexto de plataforma verificado
-5. ✅ Checklist específico del problema completado
+1. Todas las queries diagnósticas ejecutadas
+2. Evidencia directa de causalidad (no solo correlación)
+3. Hipótesis alternativas consideradas y descartadas
+4. Contexto de plataforma verificado
+5. Checklist específico del problema completado
 
 ### Preguntas Críticas
 
@@ -346,15 +346,15 @@ Ejecutar checklist de auto-validación que verifica:
 ```bash
 # Con Azure AD authentication
 ./scripts/agents/sql-dba/pre-diagnosis-zombie-validation.sh \
-  -s myserver.database.windows.net \
-  -d mydb
+ -s myserver.database.windows.net \
+ -d mydb
 
 # Con SQL authentication
 ./scripts/agents/sql-dba/pre-diagnosis-zombie-validation.sh \
-  -s myserver.database.windows.net \
-  -d mydb \
-  -u myuser \
-  -p mypassword
+ -s myserver.database.windows.net \
+ -d mydb \
+ -u myuser \
+ -p mypassword
 ```
 
 ### Ejecutar Post-Diagnosis Validation
@@ -385,3 +385,4 @@ Para agregar nuevos checklists o mejorar existentes, seguir estructura:
 5. Referencias a documentación oficial
 
 **La calidad de los diagnósticos depende de la rigurosidad de estos checklists.**
+
