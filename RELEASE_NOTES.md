@@ -7,6 +7,7 @@
 
 ## Latest Releases
 
+- **[v2.0.0](docs/releases/v2.0.0.md)** (2026-07-03) - Azure Agent Pro v2: 7 specialized agents + hardened MCP config
 - **[v1.1.0](docs/releases/v1.1.0.md)** (2025-12-29) - Azure SQL DBA Agent & Infrastructure Reorganization
 - **[v1.0.0](docs/releases/v1.0.0.md)** (2025-12-09) - Initial Release
 
