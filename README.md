@@ -107,89 +107,73 @@ graph TB
 
 ```
 azure-agent-pro/
- .github/
- chatmodes/ # GitHub Copilot enhanced configurations
- azure-infrastructure-agent.md
- azure-devops-pipeline-agent.md
- azure-security-agent.md
- workflows/ # CI/CD Automation
- bicep-validation.yml # Infrastructure validation
- deploy-azure.yml # Multi-environment deployment
- code-quality.yml # Security & quality checks
- ISSUE_TEMPLATE/ # Structured issue templates
- CODEOWNERS # Automated code review assignments
- scripts/
- login/
- azure-login.sh # Enhanced authentication with MCP
- deploy/
- bicep-deploy.sh # Professional deployment automation
- config/
- azure-config.sh # Enterprise configuration management
- utils/
- azure-utils.sh # Advanced Azure CLI utilities
- bicep-utils.sh # Bicep development helpers
- setup/
- mcp-setup.sh # Model Context Protocol integration
- monitoring/
- azure-monitor.sh # Infrastructure monitoring
- bicep/
- main.bicep # Main infrastructure template
- modules/ # Reusable infrastructure components
- storage-account.bicep # Secure storage configuration
- virtual-network.bicep # Network security patterns
- key-vault.bicep # Secrets management
- app-service.bicep # Application hosting
- monitoring.bicep # Observability stack
- parameters/ # Environment-specific configurations
- dev.parameters.json # Development environment
- test.parameters.json # Testing environment
- stage.parameters.json # Staging environment
- prod.parameters.json # Production environment
- docs/ # Documentación completa
- README.md # Índice maestro de documentación
- getting-started/ # Setup inicial
- mcp-quickstart.md # Configurar MCP Servers (10-15 min)
- reference/ # Referencias rápidas
- azure-cli-cheatsheet.md # Comandos Azure CLI (711 líneas)
- bicep-cheatsheet.md # Sintaxis Bicep (1,165 líneas)
- mcp-servers-cheatsheet.md # MCP avanzado (1,059 líneas)
- workshop/ # Workshop principal
- kitten-space-missions/ # Workshop estrella (3,511 líneas)
- 8 actividades progresivas
- assets/workshop-hero.png
- archived/ # Contenido histórico
- .vscode/ # VS Code optimizations
- settings.json # Optimized settings for Azure development
- extensions.json # Recommended extensions
- bicep.code-snippets # Custom Bicep snippets
- scripts/ # Automation scripts
- deploy/
- bicep-deploy.sh # Deployment automation
- utils/
- azure-utils.sh # Azure utilities
- bicep-utils.sh # Bicep utilities
- setup/
- mcp-setup.sh # MCP servers configuration
- update/
- project-updater.sh # Project updater
- bicep/ # Infrastructure as Code
- main.bicep # Main template
- modules/ # Bicep modules
- storage-account.bicep # Storage Account
- virtual-network.bicep # Virtual Network
- key-vault.bicep # Key Vault
- parameters/
- dev.parameters.json # Development parameters
- prod.parameters.json # Production parameters
- .github/
- workflows/ # CI/CD workflows
- chatmodes/ # GitHub Copilot chat modes
- azure-infrastructure-agent.md
- azure-devops-pipeline-agent.md
- ISSUE_TEMPLATE/ # Issue templates
- PROJECT_CONTEXT.md # Research project context
- LEARNING_OBJECTIVES.md # Educational goals and outcomes
- README.md # This file
+├── .github/
+│   ├── agents/                          # Agentes especializados (v2)
+│   │   ├── azure-architect.agent.md     # Arquitecto principal (orquestador)
+│   │   ├── azure-admin.agent.md         # Administración y governance
+│   │   ├── azure-data.agent.md          # SQL, Cosmos DB, Storage
+│   │   ├── azure-app-services.agent.md  # App Service, Functions, Containers
+│   │   ├── azure-foundry.agent.md       # Azure AI Foundry y modelos LLM
+│   │   ├── azure-networking.agent.md    # VNet, NSG, Private Endpoints
+│   │   └── Azure_SQL_DBA.agent.md       # DBA especializado SQL Azure
+│   ├── chatmodes/                       # GitHub Copilot chat modes
+│   │   ├── azure-infrastructure-agent.md
+│   │   └── azure-devops-pipeline-agent.md
+│   ├── workflows/                       # CI/CD automation
+│   │   ├── bicep-validation.yml         # Infrastructure validation
+│   │   ├── deploy-azure.yml             # Multi-environment deployment
+│   │   └── code-quality.yml             # Security & quality checks
+│   ├── ISSUE_TEMPLATE/                  # Structured issue templates
+│   └── CODEOWNERS                       # Automated code review assignments
+├── bicep/                               # Infrastructure as Code
+│   ├── main.bicep                       # Main infrastructure template
+│   ├── modules/                         # Reusable infrastructure components
+│   │   ├── storage-account.bicep
+│   │   ├── virtual-network.bicep
+│   │   ├── key-vault.bicep
+│   │   └── sql-database.bicep
+│   └── parameters/                      # Environment-specific configurations
+│       ├── dev.parameters.json
+│       └── prod.parameters.json
+├── docs/                                # Documentación completa
+│   ├── README.md                        # Índice maestro
+│   ├── getting-started/
+│   │   └── mcp-quickstart.md            # Configurar MCP Servers (10-15 min)
+│   ├── reference/                       # Referencias rápidas
+│   │   ├── agents-overview.md           # Descripción de los 7 agentes
+│   │   ├── azure-cli-cheatsheet.md
+│   │   ├── bicep-cheatsheet.md
+│   │   └── mcp-servers-cheatsheet.md
+│   ├── releases/                        # Release notes por versión
+│   │   ├── v2.0.0.md
+│   │   └── v1.0.0.md
+│   └── workshop/
+│       └── kitten-space-missions/       # Workshop hands-on (8 actividades)
+│           ├── activity-01-setup.md
+│           ├── activity-02-first-conversation.md
+│           ├── activity-03-finops-analysis.md
+│           ├── activity-04-bicep-generation.md
+│           ├── activity-05-cicd-setup.md
+│           ├── activity-06-azure-deployment.md
+│           ├── activity-07-monitoring.md
+│           └── activity-08-testing.md
+├── scripts/                             # Automation scripts
+│   ├── agents/
+│   │   ├── architect/                   # Scripts del arquitecto
+│   │   └── sql-dba/                     # Scripts del DBA
+│   ├── common/                          # Utilidades compartidas
+│   │   ├── azure-login.sh
+│   │   ├── azure-config.sh
+│   │   └── azure-utils.sh
+│   ├── setup/                           # Setup y configuración
+│   │   ├── setup-wsl.sh                 # Setup completo en WSL (recomendado)
+│   │   └── mcp-setup.sh                 # Configuración MCP servers
+│   └── update/
+│       └── project-updater.sh
+├── mcp.json                             # Configuración MCP servers
+├── .env.example                         # Variables de entorno de ejemplo
+├── CHANGELOG.md
+└── README.md                            # Este archivo
 ```
 
 ## Empezar: Workshop Kitten Space Missions
