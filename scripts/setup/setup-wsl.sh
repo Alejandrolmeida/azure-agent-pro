@@ -180,7 +180,6 @@ if [[ -n "$SHELL_PROFILE" ]]; then
     if grep -q "$MARKER" "$SHELL_PROFILE" 2>/dev/null; then
         log_info "Carga automática ya configurada en $SHELL_PROFILE"
     else
-        echo -e "\nread -r -p \"¿Cargar .env automáticamente en nuevas sesiones de terminal? [$SHELL_PROFILE] [s/N] \" AUTO_LOAD"
         read -r -p "¿Cargar .env automáticamente en nuevas sesiones de terminal? [$SHELL_PROFILE] [s/N] " AUTO_LOAD
         if [[ "${AUTO_LOAD,,}" == "s" ]]; then
             cat >> "$SHELL_PROFILE" << EOF

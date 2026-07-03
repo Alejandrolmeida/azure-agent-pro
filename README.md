@@ -199,6 +199,8 @@ Una **API REST completa** en Azure con:
 
 **Todo generado automáticamente por Azure_Architect_Pro**. Tú solo describes lo que necesitas.
 
+> Nota: la plantilla Bicep de referencia incluida en `bicep/main.bicep` despliega actualmente el núcleo reutilizable del proyecto: Storage Account, Virtual Network y Key Vault. El workshop guía la generación incremental del resto de recursos de la API completa.
+
 ---
 
 ### Lo que aprenderás:

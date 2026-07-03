@@ -39,8 +39,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Azure CLI
-        uses: azure/setup-azure-cli@v2
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az version
 
       - name: Azure Login using OIDC
         uses: azure/login@v2
@@ -58,8 +60,9 @@ jobs:
       - name: Deploy Infrastructure
         run: |
           echo "🚀 Deploying to Development environment..."
+          RG_NAME="${{ env.PROJECT_NAME }}-dev-rg"
           az deployment group create \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group "$RG_NAME" \
             --template-file bicep/main.bicep \
             --parameters @bicep/parameters/dev.parameters.json \
             --parameters deploymentTimestamp="$(date -u +%Y%m%d-%H%M%S)" \
@@ -68,8 +71,9 @@ jobs:
       - name: Get Deployment Outputs
         run: |
           echo "📋 Getting deployment outputs..."
+          RG_NAME="${{ env.PROJECT_NAME }}-dev-rg"
           az deployment group show \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group "$RG_NAME" \
             --name "dev-deployment-${{ github.run_number }}" \
             --query properties.outputs
 
@@ -93,8 +97,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Azure CLI
-        uses: azure/setup-azure-cli@v2
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az version
 
       - name: Azure Login using OIDC
         uses: azure/login@v2
@@ -113,10 +119,10 @@ jobs:
           # Set location based on environment - customize as needed
           case $ENV in
             prod|stage)
-              echo "AZURE_LOCATION=${{ vars.PROD_LOCATION || 'eastus' }}" >> $GITHUB_ENV
+              echo "AZURE_LOCATION=eastus" >> $GITHUB_ENV
               ;;
             test)
-              echo "AZURE_LOCATION=${{ vars.TEST_LOCATION || 'westus2' }}" >> $GITHUB_ENV
+              echo "AZURE_LOCATION=westus2" >> $GITHUB_ENV
               ;;
             *)
               echo "AZURE_LOCATION=${{ env.AZURE_LOCATION }}" >> $GITHUB_ENV
@@ -125,26 +131,26 @@ jobs:
 
       - name: Create Resource Group
         run: |
-          az group create --name "${{ env.RESOURCE_GROUP }}" --location ${{ env.AZURE_LOCATION }}
+          az group create --name "$RESOURCE_GROUP" --location "$AZURE_LOCATION"
 
       - name: Pre-deployment Validation
         run: |
           echo "🔍 Running pre-deployment validation..."
           az deployment group validate \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group "$RESOURCE_GROUP" \
             --template-file bicep/main.bicep \
-            --parameters @bicep/parameters/${{ env.ENVIRONMENT }}.parameters.json \
+            --parameters @"bicep/parameters/${ENVIRONMENT}.parameters.json" \
             --parameters deploymentTimestamp="$(date -u +%Y%m%d-%H%M%S)"
 
       - name: Deploy Infrastructure
         run: |
-          echo "🚀 Deploying to ${{ env.ENVIRONMENT }} environment..."
+          echo "🚀 Deploying to $ENVIRONMENT environment..."
           az deployment group create \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group "$RESOURCE_GROUP" \
             --template-file bicep/main.bicep \
-            --parameters @bicep/parameters/${{ env.ENVIRONMENT }}.parameters.json \
+            --parameters @"bicep/parameters/${ENVIRONMENT}.parameters.json" \
             --parameters deploymentTimestamp="$(date -u +%Y%m%d-%H%M%S)" \
-            --name "${{ env.ENVIRONMENT }}-deployment-${{ github.run_number }}" \
+            --name "${ENVIRONMENT}-deployment-${{ github.run_number }}" \
             --verbose
 
       - name: Post-deployment Verification
@@ -153,8 +159,8 @@ jobs:
 
           # Check if resources were created successfully
           DEPLOYMENT_STATUS=$(az deployment group show \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --name "${{ env.ENVIRONMENT }}-deployment-${{ github.run_number }}" \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "${ENVIRONMENT}-deployment-${{ github.run_number }}" \
             --query properties.provisioningState -o tsv)
             
           if [ "$DEPLOYMENT_STATUS" != "Succeeded" ]; then
@@ -168,16 +174,16 @@ jobs:
         run: |
           echo "📋 Deployment outputs:"
           az deployment group show \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --name "${{ env.ENVIRONMENT }}-deployment-${{ github.run_number }}" \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "${ENVIRONMENT}-deployment-${{ github.run_number }}" \
             --query properties.outputs --output table
 
       - name: Tag Resources
         run: |
           echo "🏷️ Tagging resources..."
           az group update \
-            --name ${{ env.RESOURCE_GROUP }} \
-            --set tags.Environment=${{ env.ENVIRONMENT }} \
+            --name "$RESOURCE_GROUP" \
+            --set tags.Environment="$ENVIRONMENT" \
             tags.DeployedBy="GitHub-Actions" \
             tags.Repository="${{ github.repository }}" \
             tags.CommitSha="${{ github.sha }}" \

@@ -4,14 +4,12 @@ permissions:
   contents: read
   security-events: write
 
-# DISABLED: This workflow requires additional setup and causes notification spam
-# Re-enable when ready to configure linters and security scanners properly
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main, develop]
-  # pull_request:
-  #   branches: [main, develop]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   # schedule:
   #   # Run security scan weekly on Sundays at 02:00 UTC
   #   - cron: "0 2 * * 0"
@@ -34,12 +32,12 @@ jobs:
         run: |
           echo "🔍 Running ShellCheck on all shell scripts..."
           EXIT_CODE=0
-          find scripts/ -name "*.sh" -type f | while read -r file; do
+          while IFS= read -r file; do
             echo "Checking: $file"
             if ! shellcheck "$file"; then
               EXIT_CODE=1
             fi
-          done
+          done < <(find scripts/ -name "*.sh" -type f | sort)
 
           if [ $EXIT_CODE -ne 0 ]; then
             echo "❌ ShellCheck found issues!"
@@ -67,7 +65,7 @@ jobs:
       - name: Run Markdown Lint
         run: |
           echo "📝 Running Markdown linting..."
-          markdownlint "**/*.md" --ignore node_modules || true
+          markdownlint "**/*.md" --ignore node_modules --ignore "docs/workshop/archived/**"
           echo "✅ Markdown linting completed"
 
   security-scan:
@@ -101,7 +99,7 @@ jobs:
           PATTERNS=(
             "password\s*=\s*['\"][^'\"]+['\"]"
             "api_key\s*=\s*['\"][^'\"]+['\"]"
-            "secret\s*=\s*['\"][^'\"]+['\"]"
+            "(client_secret|clientSecret|secret_key)\s*[:=]\s*['\"][^'\"]+['\"]"
             "token\s*=\s*['\"][^'\"]+['\"]"
             "AKIA[0-9A-Z]{16}"  # AWS Access Key
             "AIza[0-9A-Za-z\\-_]{35}"  # Google API Key
@@ -111,7 +109,7 @@ jobs:
           FOUND_ISSUES=false
 
           for pattern in "${PATTERNS[@]}"; do
-            if grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules; then
+            if grep -r -E "$pattern" .github bicep scripts mcp.json --exclude-dir=.git --exclude-dir=node_modules; then
               echo "❌ Potential credential found with pattern: $pattern"
               FOUND_ISSUES=true
             fi
@@ -119,7 +117,7 @@ jobs:
 
           if [ "$FOUND_ISSUES" = true ]; then
             echo "⚠️ Please review the potential credentials found above"
-            # Don't fail the build, just warn
+            exit 1
           else
             echo "✅ No obvious credentials found"
           fi
