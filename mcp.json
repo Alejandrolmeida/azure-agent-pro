@@ -1,85 +1,50 @@
                                                                             {
-  "mcpServers": {
-    "azure-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@azure/mcp-server-azure"
-      ],
-      "env": {
-        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}",
-        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}"
-      },
-      "metadata": {
-        "description": "Acceso a recursos de Azure (VNETs, NSGs, VPN Gateway, Azure Firewall, etc.)",
-        "category": "cloud",
-        "requiredEnvVars": ["AZURE_SUBSCRIPTION_ID", "AZURE_TENANT_ID"]
-      }
-    },
-    "bicep-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-bicep"
-      ],
-      "metadata": {
-        "description": "Asistencia con plantillas Bicep para infraestructura como código",
-        "category": "iac"
-      }
-    },
-    "github-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
-      "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
-      },
-      "metadata": {
-        "description": "Acceso a repositorios GitHub, issues, PRs y documentación",
-        "category": "version-control",
-        "requiredEnvVars": ["GITHUB_TOKEN"]
-      }
-    },
-    "filesystem-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${workspaceFolder}"
-      ],
-      "metadata": {
-        "description": "Navegación optimizada del proyecto local",
-        "category": "filesystem"
-      }
-    },
-    "brave-search-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
-      "env": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
-      },
-      "metadata": {
-        "description": "Búsqueda web para documentación de Azure Networking",
-        "category": "search",
-        "requiredEnvVars": ["BRAVE_API_KEY"],
-        "optional": true
-      }
-    },
-    "memory-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
-      "metadata": {
-        "description": "Contexto persistente entre sesiones de Copilot",
-        "category": "memory"
-      }
-    }
-  }
-}
+                                                                              "_readme": "Azure Agent Pro v2 — MCP Server Configuration. Copy .env.example to .env and fill your values. Never commit .env!",
+                                                                              "_setup": "Run: source .env && code . — OR use scripts/setup/setup-wsl.sh for guided configuration.",
+                                                                              "mcpServers": {
+
+                                                                                "azure-mcp": {
+                                                                                  "command": "npx",
+                                                                                  "args": ["-y", "@azure/mcp@latest", "server", "start"],
+                                                                                  "env": {
+                                                                                    "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}",
+                                                                                    "AZURE_TENANT_ID": "${AZURE_TENANT_ID}"
+                                                                                  },
+                                                                                  "description": "Azure MCP oficial (Microsoft) — Gestión de VMs, Storage, SQL, Networking, Resource Groups, RBAC, Defender for Cloud. Auth via 'az login' ya realizado. REQUIERE: AZURE_SUBSCRIPTION_ID y AZURE_TENANT_ID en .env"
+                                                                                },
+
+                                                                                "github-mcp": {
+                                                                                  "command": "npx",
+                                                                                  "args": ["-y", "@modelcontextprotocol/server-github"],
+                                                                                  "env": {
+                                                                                    "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+                                                                                  },
+                                                                                  "description": "GitHub MCP — Acceso a repositorios, issues, PRs, workflows, secrets de environments, code search. REQUIERE: GITHUB_TOKEN en .env (scopes: repo, read:user)"
+                                                                                },
+
+                                                                                "filesystem-mcp": {
+                                                                                  "command": "npx",
+                                                                                  "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"],
+                                                                                  "description": "Filesystem MCP — Navegación inteligente del workspace azure-agent-pro: lectura de Bicep, scripts, configs, documentación. Sin credenciales adicionales."
+                                                                                },
+
+                                                                                "memory-mcp": {
+                                                                                  "command": "npx",
+                                                                                  "args": ["-y", "@modelcontextprotocol/server-memory"],
+                                                                                  "env": {
+                                                                                    "MEMORY_FILE_PATH": "${MEMORY_FILE_PATH}"
+                                                                                  },
+                                                                                  "description": "Memory MCP — Grafo de conocimiento persistente entre sesiones. Recuerda arquitecturas, decisiones, convenciones de naming del cliente. OPCIONAL: MEMORY_FILE_PATH (default: $HOME/.config/mcp/memory.json)"
+                                                                                },
+
+                                                                                "brave-search-mcp": {
+                                                                                  "command": "npx",
+                                                                                  "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+                                                                                  "env": {
+                                                                                    "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+                                                                                  },
+                                                                                  "description": "Brave Search MCP — Búsqueda web de documentación oficial Azure, blog posts, community best practices. OPCIONAL: BRAVE_API_KEY (free tier: 2000 queries/mes en brave.com/search/api)"
+                                                                                }
+
+                                                                              }
+                                                                            }

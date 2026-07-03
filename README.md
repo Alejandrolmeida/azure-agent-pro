@@ -22,34 +22,48 @@
                                          |___/                                  
 ```
 
-> **Proyecto Educativo de Vanguardia**: Aprende a construir infraestructura Azure enterprise usando **Vibe Coding** con el agente personalizado **Azure_Architect_Pro**, potenciado por 6 MCP Servers especializados. Sin escribir código manualmente. Sin memorizar sintaxis.
+> **Proyecto Educativo de Vanguardia v2**: Aprende a construir infraestructura Azure enterprise usando **Vibe Coding** con **7 agentes especializados** — Azure_Architect_Pro + 6 sub-agentes de dominio (Admin, Data, AppServices, AI Foundry, Networking, SQL DBA) — potenciados por 5 MCP Servers. Sin escribir código manualmente. Sin memorizar sintaxis.
 
 ## 🎯 Propósito del Proyecto
 
-**Azure Agent Pro** es un proyecto educativo que te enseña el **futuro del desarrollo cloud**: describir lo que necesitas en lenguaje natural y que un agente de IA especializado diseñe, implemente y despliegue infraestructura Azure siguiendo las mejores prácticas. No es Copilot estándar, es **Azure_Architect_Pro**: un agente con miles de líneas de instrucciones especializadas en Azure Well-Architected Framework, FinOps, seguridad y DevOps.
+**Azure Agent Pro** es un proyecto educativo que te enseña el **futuro del desarrollo cloud**: describir lo que necesitas en lenguaje natural y que agentes de IA especializados diseñen, implementen y desplieguen infraestructura Azure siguiendo las mejores prácticas. No es Copilot estándar — es un **ecosistema de 7 agentes con miles de líneas de instrucciones especializadas**.
 
 ### 🔌 ¿Qué son los MCP Servers?
 
-Los **Model Context Protocol (MCP) Servers** son herramientas especializadas que le dan superpoderes a GitHub Copilot. Azure Agent Pro usa **6 MCP Servers**:
+Los **Model Context Protocol (MCP) Servers** son herramientas especializadas que le dan superpoderes a GitHub Copilot. Azure Agent Pro v2 usa **5 MCP Servers**:
 
-1. **azure-mcp** - Acceso directo a recursos Azure (VNets, NSGs, Key Vaults...)
-2. **bicep-mcp** - Validación y generación de Bicep siguiendo best practices
-3. **github-mcp** - Gestión de repos, issues, PRs y workflows
-4. **filesystem-mcp** - Navegación inteligente del código del proyecto
-5. **brave-search-mcp** - Búsqueda de documentación oficial y comunidad
-6. **memory-mcp** - Contexto persistente entre sesiones
+| MCP Server | Package | Función |
+|------------|---------|---------|
+| **azure-mcp** | `@azure/mcp@latest` | Acceso directo a recursos Azure en tiempo real |
+| **github-mcp** | `@modelcontextprotocol/server-github` | Gestión de repos, issues, PRs y workflows |
+| **filesystem-mcp** | `@modelcontextprotocol/server-filesystem` | Navegación inteligente del workspace |
+| **memory-mcp** | `@modelcontextprotocol/server-memory` | **Contexto persistente entre sesiones** |
+| **brave-search-mcp** | `@modelcontextprotocol/server-brave-search` | Búsqueda de documentación Azure (opcional) |
 
-Es como tener un equipo de especialistas trabajando para ti.
+### 🤖 7 Agentes Especializados (Nuevo en v2)
+
+| Agente | Dominio | Capacidades clave |
+|--------|---------|-------------------|
+| **Azure_Architect_Pro** | Arquitectura global | Bicep IaC, WAF, DevOps OIDC, FinOps |
+| **Azure_Admin_Pro** 🆕 | Governance | Policy, RBAC/PIM, Defender, Cost Management |
+| **Azure_Data_Pro** 🆕 | Datos | SQL, Cosmos DB, Synapse, ADF, Databricks |
+| **Azure_AppServices_Pro** 🆕 | PaaS/Cloud-Native | App Service, Functions, AKS, APIM |
+| **Azure_Foundry_Pro** 🆕 | IA/GenAI | OpenAI, RAG, Prompt Flow, AI Search |
+| **Azure_Networking_Pro** 🆕 | Redes | VNets, Firewall, Private Link, VPN |
+| **Azure_SQL_DBA** | SQL DBA | Performance, blocking, indexing, migration |
+
+> 📖 **Ver todos los agentes**: [docs/reference/agents-overview.md](docs/reference/agents-overview.md)
 
 ### 🎓 ¿Qué Aprenderás?
 
 - **🗣️ Vibe Coding**: Comunicarte estratégicamente con agentes IA para infraestructura
-- **🤖 Azure_Architect_Pro**: Usar un agente personalizado que actúa como arquitecto senior
+- **🤖 Multi-Agent**: Orquestar 7 agentes especializados según el dominio
 - **🏗️ Well-Architected**: Diseñar arquitecturas siguiendo los 5 pilares de Azure
 - **💰 FinOps**: Análisis de costos ANTES de desplegar (no después)
 - **🔧 Bicep IaC**: Generar código modular sin escribir manualmente
 - **🚀 DevOps**: CI/CD con GitHub Actions y OIDC (secretless)
 - **🔒 Zero Trust**: Security by design con Private Endpoints y Managed Identities
+- **🧠 RAG & GenAI**: Azure OpenAI + AI Search para aplicaciones de IA enterprise
 - **📊 Observability**: Application Insights, KQL queries, dashboards automáticos
 
 ### 👥 ¿Para Quién es Este Proyecto?
@@ -68,10 +82,11 @@ Es como tener un equipo de especialistas trabajando para ti.
 - ❌ Experiencia previa con IaC
 
 **Solo necesitas:**
-- ✅ Curiosidad y ganas de aprender
 - ✅ GitHub Copilot (Individual, Business o Enterprise)
 - ✅ Azure subscription (free trial funciona)
-- ✅ VS Code instalado
+- ✅ VS Code + WSL (Ubuntu en Windows) o Linux/macOS
+- ✅ Node.js 18+ y Azure CLI
+
 
 ## 🏗️ Arquitectura del Proyecto
 
@@ -283,41 +298,67 @@ Incluye:
 
 ---
 
-## 🚀 Inicio Rápido
+## 🚀 Inicio Rápido (v2 — WSL Recomendado)
 
-### 1. Configuración Inicial
-
-Ejecuta el script de login para autenticarte con Azure:
+### Opción A: Setup guiado interactivo (Recomendado)
 
 ```bash
-cd scripts/login
-./azure-login.sh
+# 1. Clonar el repositorio
+git clone https://github.com/Alejandrolmeida/azure-agent-pro.git
+cd azure-agent-pro
+
+# 2. Ejecutar el setup interactivo — configura TODAS las variables
+chmod +x scripts/setup/setup-wsl.sh
+./scripts/setup/setup-wsl.sh
+
+# 3. Cargar variables en la sesión actual
+source .env
+
+# 4. Autenticar Azure CLI
+az login
+
+# 5. Abrir en VS Code
+code .
 ```
 
-Este script:
-- Verifica que Azure CLI esté instalado
-- Realiza el login a Azure
-- Te permite seleccionar la suscripción
-- Guarda la configuración en `config/azure-config.env`
-
-### 2. Verificar Configuración
+### Opción B: Setup manual
 
 ```bash
-cd scripts/config
-./azure-config.sh
+# 1. Copiar y editar el template de variables
+cp .env.example .env
+nano .env   # Rellenar con tus valores reales
+
+# Variables MÍNIMAS requeridas:
+#   AZURE_SUBSCRIPTION_ID=<tu-sub-id>   (az account show --query id -o tsv)
+#   AZURE_TENANT_ID=<tu-tenant-id>      (az account show --query tenantId -o tsv)
+#   GITHUB_TOKEN=<tu-pat>               (github.com/settings/tokens)
+
+# 2. Cargar variables
+source .env
+
+# 3. Abrir VS Code
+code .
 ```
 
-### 3. Desplegar Plantillas Bicep
+### 6. Usar los agentes en Copilot Chat
 
-```bash
-cd scripts/deploy
-
-# Validar una plantilla
-./bicep-deploy.sh validate ../../bicep/main.bicep
-
-# Desplegar la plantilla principal
-./bicep-deploy.sh deploy ../../bicep/main.bicep my-resource-group my-deployment ../../bicep/parameters/dev.parameters.json
 ```
+# Agente principal (orquestador)
+@Azure_Architect_Pro Analiza mi subscription Azure y dame un resumen de arquitectura
+
+# Sub-agentes especializados
+@Azure_Admin_Pro     Revisa el estado de governance y compliance de mi subscription
+@Azure_Data_Pro      Optimiza las queries lentas en mi Azure SQL Database
+@Azure_AppServices_Pro Diagnostica los cold starts en mi Function App
+@Azure_Foundry_Pro   Diseña un RAG con mis documentos PDF internos
+@Azure_Networking_Pro Tengo un problema de conectividad en mi hub-spoke
+@Azure_SQL_DBA       Analiza los bloqueos en la base de datos de producción
+```
+
+> 📖 **Documentación completa**: [docs/getting-started/mcp-quickstart.md](docs/getting-started/mcp-quickstart.md)
+> 🤖 **Guía de agentes**: [docs/reference/agents-overview.md](docs/reference/agents-overview.md)
+
+
 
 ## 📋 Scripts Disponibles
 
