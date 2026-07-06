@@ -40,6 +40,12 @@ Si es tu primera vez, necesitas configurar los MCP Servers:
 
 **Tiempo estimado:** 10-15 minutos
 
+### 📗 [Guía Jupyter + KQL para D365 F&O](./getting-started/d365fo-jupyter-kql-quickstart.md)
+
+**Tiempo estimado:** 15-25 minutos
+
+Starter incluido en el repo con notebook plantilla, consultas KQL y bootstrap Python/Jupyter.
+
 Los MCP (Model Context Protocol) Servers permiten al agente acceder a:
 - Recursos de Azure en tiempo real
 - Repositorios de GitHub

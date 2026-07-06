@@ -1,0 +1,11 @@
+availabilityResults
+| where timestamp > ago(30d)
+| extend DurationMs = todouble(duration)
+| summarize
+    Tests = count(),
+    SuccessfulTests = countif(success == true),
+    AvailabilityPercent = round(100.0 * countif(success == true) / count(), 3),
+    AvgDurationSeconds = round(avg(DurationMs) / 1000.0, 2),
+    P95DurationSeconds = round(percentile(DurationMs, 95) / 1000.0, 2)
+    by name
+| order by AvailabilityPercent asc

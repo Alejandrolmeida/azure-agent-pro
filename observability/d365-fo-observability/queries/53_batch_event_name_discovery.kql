@@ -1,0 +1,6 @@
+customEvents
+| where timestamp > ago(7d)
+| where name has_any ("Batch", "batch", "SysOperation", "AOS")
+| summarize Count = count() by name
+| order by Count desc
+| take 200

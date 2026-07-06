@@ -1,0 +1,5 @@
+pageViews
+| where timestamp > ago(7d)
+| where name !in ("SysOperationSandboxForm", "SysBoxForm", "Dialog")
+| summarize FormOpens = count() by FormName = name
+| top 30 by FormOpens desc

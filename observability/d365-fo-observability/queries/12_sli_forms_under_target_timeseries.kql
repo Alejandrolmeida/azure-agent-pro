@@ -1,0 +1,13 @@
+let _startTime = ago(7d);
+let _targetSeconds = 5.0;
+pageViews
+| where timestamp > _startTime
+| extend DurationMs = todouble(duration)
+| where DurationMs > 0
+| summarize
+    TotalFormLoads = count(),
+    GoodFormLoads = countif(DurationMs <= _targetSeconds * 1000),
+    P95Seconds = round(percentile(DurationMs, 95) / 1000.0, 2)
+    by bin(timestamp, 1h)
+| extend SLIFormsUnder5sPercent = round(100.0 * GoodFormLoads / TotalFormLoads, 2)
+| order by timestamp asc

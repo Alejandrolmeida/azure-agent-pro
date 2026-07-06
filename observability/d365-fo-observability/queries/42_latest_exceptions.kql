@@ -1,0 +1,13 @@
+exceptions
+| where timestamp > ago(24h)
+| project
+    timestamp,
+    user_Id,
+    session_Id,
+    operation_Id,
+    ExceptionType = type,
+    ProblemId = problemId,
+    OuterMessage = outerMessage,
+    Details = details
+| order by timestamp desc
+| take 100

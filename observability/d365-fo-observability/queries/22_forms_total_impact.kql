@@ -1,0 +1,13 @@
+pageViews
+| where timestamp > ago(7d)
+| extend DurationMs = todouble(duration)
+| where DurationMs > 0
+| where name !in ("SysOperationSandboxForm", "SysBoxForm", "Dialog")
+| summarize
+    FormOpens = count(),
+    TotalDurationMinutes = round(sum(DurationMs) / 1000.0 / 60.0, 2),
+    AvgDurationSeconds = round(avg(DurationMs) / 1000.0, 2),
+    P95DurationSeconds = round(percentile(DurationMs, 95) / 1000.0, 2)
+    by FormName = name
+| order by TotalDurationMinutes desc
+| take 30

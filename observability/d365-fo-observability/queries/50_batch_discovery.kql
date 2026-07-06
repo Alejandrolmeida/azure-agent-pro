@@ -1,0 +1,5 @@
+customEvents
+| where timestamp > ago(7d)
+| where name has_any ("Batch", "batch")
+| summarize Count = count() by name
+| order by Count desc

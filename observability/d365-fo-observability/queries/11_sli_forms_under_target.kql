@@ -1,0 +1,11 @@
+let _startTime = ago(7d);
+let _targetSeconds = 5.0;
+pageViews
+| where timestamp > _startTime
+| extend DurationMs = todouble(duration)
+| where DurationMs > 0
+| summarize
+    TotalFormLoads = count(),
+    GoodFormLoads = countif(DurationMs <= _targetSeconds * 1000)
+| extend SLIFormsUnderTargetPercent = round(100.0 * GoodFormLoads / TotalFormLoads, 2)
+| project TotalFormLoads, GoodFormLoads, SLIFormsUnderTargetPercent

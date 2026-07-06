@@ -1,0 +1,13 @@
+exceptions
+| where timestamp > ago(7d)
+| summarize
+    Occurrences = count(),
+    FirstSeen = min(timestamp),
+    LastSeen = max(timestamp),
+    ImpactedUsers = dcount(user_Id)
+    by
+    ExceptionType = type,
+    ProblemId = problemId,
+    OuterMessage = outerMessage
+| order by Occurrences desc
+| take 30

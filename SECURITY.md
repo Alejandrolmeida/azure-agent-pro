@@ -123,6 +123,22 @@ Todas las plantillas Bicep implementan:
 
 ## Security Tools
 
+## Pre-commit Anti-Secrets
+
+El repositorio incluye un hook local en [.githooks/pre-commit](.githooks/pre-commit) para bloquear commits con:
+
+- Archivos `.env` locales
+- `AZURE_CLIENT_SECRET`, `APPINSIGHTS_CONNECTION_STRING`, `APPINSIGHTS_RESOURCE_ID` y otros valores de cliente con datos reales
+- `InstrumentationKey` reales
+- Outputs sensibles guardados en notebooks
+
+Activacion en local (una vez por clon):
+
+1. `git config core.hooksPath .githooks`
+2. `chmod +x .githooks/pre-commit`
+
+Este control reduce la probabilidad de subir secretos por error, pero no sustituye la rotacion de credenciales ni el principio de minimo privilegio.
+
 ### Automated Scanning
 
 - **Trivy**: Vulnerability scanning

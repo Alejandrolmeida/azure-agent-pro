@@ -1,0 +1,29 @@
+let _startTime = ago(24h);
+let _endTime = now();
+let FormLoads =
+    pageViews
+    | where timestamp between (_startTime .. _endTime)
+    | extend DurationMs = todouble(duration)
+    | summarize
+        FormLoads = count(),
+        P95FormLoadSeconds = round(percentile(DurationMs, 95) / 1000.0, 2),
+        AvgFormLoadSeconds = round(avg(DurationMs) / 1000.0, 2);
+let Exceptions =
+    exceptions
+    | where timestamp between (_startTime .. _endTime)
+    | summarize Exceptions = count();
+let SlowQueries =
+    customEvents
+    | where timestamp between (_startTime .. _endTime)
+    | where name == "LongRunningQuery"
+    | summarize SlowQueries = count();
+FormLoads
+| extend JoinKey = 1
+| join kind=fullouter (Exceptions | extend JoinKey = 1) on JoinKey
+| join kind=fullouter (SlowQueries | extend JoinKey = 1) on JoinKey
+| project
+    FormLoads = coalesce(FormLoads, 0),
+    AvgFormLoadSeconds = coalesce(AvgFormLoadSeconds, 0.0),
+    P95FormLoadSeconds = coalesce(P95FormLoadSeconds, 0.0),
+    Exceptions = coalesce(Exceptions, 0),
+    SlowQueries = coalesce(SlowQueries, 0)

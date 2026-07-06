@@ -1,0 +1,57 @@
+name: Observability Assets Validation
+
+permissions:
+  contents: read
+
+"on":
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - "observability/**"
+      - "scripts/setup/d365fo-observability-bootstrap.sh"
+      - ".github/workflows/observability-validation.yml"
+
+jobs:
+  validate-observability-assets:
+    name: Validate notebook and KQL queries
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate notebook JSON
+        run: |
+          python3 -m json.tool observability/d365-fo-observability/notebooks/d365_fo_observability.ipynb >/dev/null
+          echo "Notebook JSON is valid"
+
+      - name: Validate query files
+        run: |
+          set -euo pipefail
+          QUERY_DIR="observability/d365-fo-observability/queries"
+
+          if [ ! -d "$QUERY_DIR" ]; then
+            echo "Query directory not found: $QUERY_DIR"
+            exit 1
+          fi
+
+          count=$(find "$QUERY_DIR" -maxdepth 1 -name "*.kql" -type f | wc -l)
+          if [ "$count" -lt 10 ]; then
+            echo "Expected at least 10 KQL files, found $count"
+            exit 1
+          fi
+
+          if grep -R -n -E '^(<<<<<<<|=======|>>>>>>>)' "$QUERY_DIR"; then
+            echo "Conflict markers found in KQL files"
+            exit 1
+          fi
+
+          echo "KQL files validation OK"
+
+      - name: Validate bootstrap script syntax
+        run: |
+          bash -n scripts/setup/d365fo-observability-bootstrap.sh
+          echo "Bootstrap script syntax OK"

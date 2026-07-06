@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+if [[ -z "${staged_files}" ]]; then
+  exit 0
+fi
+
+blocked=0
+
+print_header() {
+  if [[ "${blocked}" -eq 0 ]]; then
+    echo "[SECURITY] Commit bloqueado: se detectaron datos sensibles o configuracion de cliente en staged files."
+    echo ""
+  fi
+}
+
+report_match() {
+  local file="$1"
+  local reason="$2"
+  local lines="$3"
+
+  print_header
+  echo "- Archivo: ${file}"
+  echo "  Motivo: ${reason}"
+  echo "  Coincidencias:"
+  echo "${lines}" | sed 's/^/    /'
+  echo ""
+  blocked=1
+}
+
+check_regex() {
+  local file="$1"
+  local regex="$2"
+  local reason="$3"
+  local allow_regex="${4:-}"
+
+  local matches
+  matches="$(git show ":${file}" | grep -nE "${regex}" || true)"
+
+  if [[ -n "${allow_regex}" ]]; then
+    matches="$(printf '%s\n' "${matches}" | grep -Ev "${allow_regex}" || true)"
+  fi
+
+  if [[ -n "${matches}" ]]; then
+    report_match "${file}" "${reason}" "${matches}"
+  fi
+}
+
+while IFS= read -r file; do
+  [[ -z "${file}" ]] && continue
+
+  # Bloquea .env reales. Se permite .env.example para plantillas seguras.
+  if [[ "${file}" =~ (^|/)\.env$ ]] || [[ "${file}" =~ (^|/)\.env\.(local|development|test|production|staging)$ ]]; then
+    report_match "${file}" "No se permite versionar archivos .env con datos locales/sensibles." "1:${file}"
+    continue
+  fi
+
+  # Solo inspecciona contenido textual.
+  if ! git show ":${file}" | grep -Iq .; then
+    continue
+  fi
+
+  # Variables de configuracion sensibles con valor real (no vacio).
+  check_regex "${file}" '^[[:space:]]*(LAW_WORKSPACE_ID|APPINSIGHTS_RESOURCE_ID|APPINSIGHTS_CONNECTION_STRING|AZURE_TENANT_ID|AZURE_CLIENT_ID|AZURE_CLIENT_SECRET)[[:space:]]*=[[:space:]]*.+$' \
+    "Variables de cliente/sensibles con valores reales." \
+    '^[0-9]+:[[:space:]]*(LAW_WORKSPACE_ID|APPINSIGHTS_RESOURCE_ID|APPINSIGHTS_CONNECTION_STRING|AZURE_TENANT_ID|AZURE_CLIENT_ID|AZURE_CLIENT_SECRET)[[:space:]]*=[[:space:]]*(|""|<.*>|your-.*|example|placeholder|changeme|00000000-0000-0000-0000-000000000000)[[:space:]]*$'
+
+  # Connection strings reales de Application Insights.
+  check_regex "${file}" 'InstrumentationKey=[0-9a-fA-F-]{36}' \
+    "Se detecto InstrumentationKey real en texto versionado."
+
+  # Resource IDs reales de App Insights.
+  check_regex "${file}" '/subscriptions/[0-9a-fA-F-]{36}/resourceGroups/[^/]+/providers/Microsoft\.Insights/components/[^[:space:]"]+' \
+    "Se detecto APPINSIGHTS_RESOURCE_ID real en texto versionado."
+
+  # Output historico sensible en notebooks.
+  if [[ "${file}" == *.ipynb ]]; then
+    check_regex "${file}" 'Workspace ID:|AppInsights Resource ID:|Tenant ID \(opcional\):' \
+      "Notebook con output sensible guardado. Limpia outputs antes de commit."
+  fi
+done <<< "${staged_files}"
+
+if [[ "${blocked}" -ne 0 ]]; then
+  echo "Acciones recomendadas:"
+  echo "1) Elimina o anonimiza los valores sensibles."
+  echo "2) Limpia outputs de notebooks antes de commit."
+  echo "3) Usa archivos .env locales (ignorados) y .env.example sin valores reales."
+  exit 1
+fi
+
+exit 0

@@ -1,0 +1,4 @@
+exceptions
+| where timestamp > ago(7d)
+| summarize Exceptions = count() by bin(timestamp, 1h)
+| order by timestamp asc

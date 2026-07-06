@@ -138,7 +138,8 @@ azure-agent-pro/
 ├── docs/                                # Documentación completa
 │   ├── README.md                        # Índice maestro
 │   ├── getting-started/
-│   │   └── mcp-quickstart.md            # Configurar MCP Servers (10-15 min)
+│   │   ├── mcp-quickstart.md            # Configurar MCP Servers (10-15 min)
+│   │   └── d365fo-jupyter-kql-quickstart.md # Observabilidad D365 F&O con Jupyter + KQL
 │   ├── reference/                       # Referencias rápidas
 │   │   ├── agents-overview.md           # Descripción de los 7 agentes
 │   │   ├── azure-cli-cheatsheet.md
@@ -167,9 +168,12 @@ azure-agent-pro/
 │   │   └── azure-utils.sh
 │   ├── setup/                           # Setup y configuración
 │   │   ├── setup-wsl.sh                 # Setup completo en WSL (recomendado)
-│   │   └── mcp-setup.sh                 # Configuración MCP servers
+│   │   ├── mcp-setup.sh                 # Configuración MCP servers
+│   │   └── d365fo-observability-bootstrap.sh # Bootstrap Python/Jupyter para KQL
 │   └── update/
 │       └── project-updater.sh
+├── observability/
+│   └── d365-fo-observability/           # Starter Jupyter + queries KQL para D365 F&O
 ├── mcp.json                             # Configuración MCP servers
 ├── .env.example                         # Variables de entorno de ejemplo
 ├── CHANGELOG.md
@@ -265,6 +269,7 @@ Una **API REST completa** en Azure con:
 
 Incluye:
 - [Setup MCP Servers](docs/getting-started/mcp-quickstart.md) - 10-15 minutos
+- [Quick Start D365 F&O Observability](docs/getting-started/d365fo-jupyter-kql-quickstart.md) - Jupyter + KQL listo para usar
 - 📖 [Azure CLI Cheatsheet](docs/reference/azure-cli-cheatsheet.md) - 711 líneas
 - 📗 [Bicep Cheatsheet](docs/reference/bicep-cheatsheet.md) - 1,165 líneas
 - 📙 [MCP Servers Cheatsheet](docs/reference/mcp-servers-cheatsheet.md) - 1,059 líneas
