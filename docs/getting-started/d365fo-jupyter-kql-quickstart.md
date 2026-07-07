@@ -59,13 +59,13 @@ APPINSIGHTS_CONNECTION_STRING=
 Hay dos escenarios diferentes:
 
 1. Consultar telemetria existente (este starter):
-	- Configura el Workspace ID del cliente en observability/d365-fo-observability/.env.
-	- Variable usada: LAW_WORKSPACE_ID.
-	- No necesitas APPINSIGHTS_CONNECTION_STRING para consultas KQL con azure-monitor-query.
+  - Configura el Workspace ID del cliente en observability/d365-fo-observability/.env.
+  - Variable usada: LAW_WORKSPACE_ID.
+  - No necesitas APPINSIGHTS_CONNECTION_STRING para consultas KQL con azure-monitor-query.
 
 2. Instrumentar una aplicacion para enviar telemetria:
-	- Configura la cadena en APPINSIGHTS_CONNECTION_STRING (por ejemplo en .env o en App Settings del servicio).
-	- Esa variable no cambia las consultas KQL del notebook; solo aplica al emisor de telemetria.
+  - Configura la cadena en APPINSIGHTS_CONNECTION_STRING (por ejemplo en .env o en App Settings del servicio).
+  - Esa variable no cambia las consultas KQL del notebook; solo aplica al emisor de telemetria.
 
 ## Autenticacion Azure
 
