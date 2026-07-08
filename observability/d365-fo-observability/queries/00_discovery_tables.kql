@@ -1,0 +1,4 @@
+search *
+| where timestamp > ago(7d)
+| summarize Count = count() by $table
+| order by Count desc

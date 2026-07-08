@@ -1,0 +1,9 @@
+customEvents
+| where timestamp > ago(7d)
+| where name == "LongRunningQuery"
+| extend ExecutionTimeSeconds = todouble(customDimensions.ExecutionTimeSeconds)
+| summarize
+    SlowQueries = count(),
+    P95DurationSeconds = round(percentile(ExecutionTimeSeconds, 95), 2)
+    by bin(timestamp, 1h)
+| order by timestamp asc

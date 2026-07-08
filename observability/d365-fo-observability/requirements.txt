@@ -1,0 +1,11 @@
+azure-identity
+azure-monitor-query
+azure-core
+pandas
+matplotlib
+plotly
+openpyxl
+python-dotenv
+ipykernel
+jupyter
+notebook

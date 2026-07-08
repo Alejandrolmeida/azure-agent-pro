@@ -1,0 +1,4 @@
+customEvents
+| where timestamp > ago(7d)
+| summarize Count = count() by name
+| order by Count desc

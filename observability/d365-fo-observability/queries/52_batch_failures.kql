@@ -1,0 +1,28 @@
+customEvents
+| where timestamp > ago(7d)
+| where name == "BatchTaskFailure"
+| extend CustomDimensionsParsed = parse_json(customDimensions)
+| extend
+    BatchJobCaption = tostring(CustomDimensionsParsed.BatchJobCaption),
+    ActivityId = tostring(CustomDimensionsParsed.activityId),
+    ClassName = iif(tostring(CustomDimensionsParsed.ClassName) == "<empty>", "", tostring(CustomDimensionsParsed.ClassName)),
+    BatchJobId = tostring(CustomDimensionsParsed.BatchJobId),
+    BatchTaskId = tostring(CustomDimensionsParsed.BatchTaskId),
+    EventMessage = tostring(CustomDimensionsParsed.EventMessage),
+    ExceptionType = tostring(CustomDimensionsParsed.ExceptionType),
+    ExceptionMessage = tostring(CustomDimensionsParsed.ExceptionMessage),
+    CallStack = tostring(CustomDimensionsParsed.CallStack)
+| project
+    timestamp,
+    BatchJobCaption,
+    ActivityId,
+    ClassName,
+    BatchJobId,
+    BatchTaskId,
+    EventMessage,
+    ExceptionType,
+    ExceptionMessage,
+    CallStack,
+    customDimensions
+| order by timestamp desc
+| take 100

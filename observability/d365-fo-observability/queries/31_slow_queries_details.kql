@@ -1,0 +1,24 @@
+customEvents
+| where timestamp > ago(7d)
+| where name == "LongRunningQuery"
+| extend
+    LegalEntity = tostring(customDimensions.LegalEntity),
+    ExecutionMode = tostring(customDimensions.ExecutionMode),
+    ExecutionTimeSeconds = todouble(customDimensions.ExecutionTimeSeconds),
+    QueryType = tostring(customDimensions.QueryType),
+    JoinCount = toint(customDimensions.JoinCount),
+    ReturnedRowCount = toint(customDimensions.ReturnedRowCount),
+    CallStack = tostring(customDimensions.CallStack)
+| project
+    timestamp,
+    user_Id,
+    session_Id,
+    LegalEntity,
+    ExecutionMode,
+    QueryType,
+    ExecutionTimeSeconds,
+    JoinCount,
+    ReturnedRowCount,
+    CallStack
+| order by ExecutionTimeSeconds desc
+| take 100
